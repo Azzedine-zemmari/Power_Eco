@@ -541,6 +541,7 @@
     </div>
 </template>
 <script setup>
+import axios from 'axios'
 import { ref } from 'vue'
 
 const isModalOpen = ref(false)
@@ -548,31 +549,43 @@ const firstName = ref('')
 const lastName = ref('')
 const email = ref('')
 const password = ref('')
-const selectedRole = ref('') 
+const selectedRole = ref('')
 
 function openModal() {
-  isModalOpen.value = true
+    isModalOpen.value = true
 }
 
 function closeModal() {
-  isModalOpen.value = false
+    isModalOpen.value = false
 }
 
-function submitForm() {
-  if (!firstName.value || !lastName.value || !email.value || !password.value) {
-    alert('Please fill in all required fields.')
-    return
-  }
+async function submitForm() {
+    if (!firstName.value || !lastName.value || !email.value || !password.value) {
+        alert('Please fill in all required fields.')
+        return
+    }
+    const formData = {
+        firstName: firstName.value,
+        lastName: lastName.value,
+        email: email.value,
+        password: password.value,
+        selectedRole: selectedRole.value
+    }
+    try{
+        const response = await axios.post("http://localhost:8000/api/register",formData)
+        console.log(response.data)
+        alert(`User ${response.data.user.firstName} created successfully!`)
+    }catch(error){
+        console.error('Error creating user:', error)
+    }
 
-  alert(`User ${firstName.value} ${lastName.value} created successfully with role: ${selectedRole.value}`)
+    // Reset
+    firstName.value = ''
+    lastName.value = ''
+    email.value = ''
+    password.value = ''
+    selectedRole.value = ''
 
-  // Reset
-  firstName.value = ''
-  lastName.value = ''
-  email.value = ''
-  password.value = ''
-  selectedRole.value = ''
-
-  closeModal()
+    closeModal()
 }
 </script>
