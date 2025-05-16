@@ -29,4 +29,11 @@ class UserController extends Controller
         ],201);
 
     }
+    // to show the admin all the user that he register
+    public function show(){
+        $user = User::all();
+        return response()->json([
+            'user'=>$user
+        ]);
+    }
 }

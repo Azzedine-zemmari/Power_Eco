@@ -14,3 +14,4 @@ Route::get('/test',function(){
 });
 
 Route::post('/register',[UserController::class,'register']);
+Route::get('/Users',[UserController::class,'show']);
