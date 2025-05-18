@@ -396,11 +396,18 @@ function closeModal() {
     isModalOpen.value = false
 }
 
-onMounted(async()=>{
-    const response = await axios.get('http://localhost:8000/api/Users')
-    users.value = response.data.user
-    
+onMounted(async () => {
+    await fetchUsers()
 })
+
+async function fetchUsers() {
+    try {
+        const response = await axios.get('http://localhost:8000/api/Users')
+        users.value = response.data
+    } catch (error) {
+        console.error('Error fetching users:', error)
+    }
+}
 async function submitForm() {
     if (!firstName.value || !lastName.value || !email.value || !password.value) {
         alert('Please fill in all required fields.')
@@ -415,7 +422,8 @@ async function submitForm() {
     }
     try{
         const response = await axios.post("http://localhost:8000/api/register",formData)
-        console.log(response.data)
+        const newUser = response.data.user
+        users.value.push(newUser)
         alert(`User ${response.data.user.firstName} created successfully!`)
     }catch(error){
         console.error('Error creating user:', error)

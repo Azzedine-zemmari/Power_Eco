@@ -18,6 +18,13 @@ const routes = [
         meta:{
             title:"User Management"
         }
+    },
+    {
+        path:"/login",
+        component:() => import("./Pages/login.vue"),
+        meta:{
+            title:"Sign In"
+        }
     }
 ];
 
