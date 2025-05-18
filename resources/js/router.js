@@ -32,10 +32,54 @@ const routes = [
         meta:{
             title:"Create Account"
         }
-    }
+    },
+    {
+        path:"/productManager/dashboard",
+        component:() => import("./Pages/ProductManager/Dashboard.vue"),
+        meta:{
+            title:"Product Manager Dashboard",
+            requiresAuth: true,
+            role: "product-manager"
+        }
+    },
+    {
+        path:"/unauthorized",
+        component:()=>import('./Pages/Unauthorized.vue')
+    },
+    {
+        path:"/:pathMatch(.*)*",
+        component:()=>import('./Pages/NotFoundPage.vue')
+    },
+    {
+        path:"/productManager/Product/Category",
+        component:()=>import('./Pages/ProductManager/Categories.vue'),
+        meta:{
+            title:"Categories - Product Manager Dashboard",
+            requiresAuth:true,
+            role: "product-manager"
+        }
+    },
 ];
 
-export default createRouter({
+const router =  createRouter({
     history:createWebHistory(),
     routes
 })
+
+router.beforeEach((to,from,next)=>{
+    const token = localStorage.getItem('token')
+    const userRole = localStorage.getItem('role')
+
+    if(to.meta.requiresAuth){
+        if(!token){
+            return next("/login")
+        }
+        if(to.meta.role && to.meta.role !== userRole){
+            return next('/unauthorized');
+        }
+    }
+    next();
+
+})
+
+export default router;

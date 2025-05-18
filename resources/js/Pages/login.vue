@@ -122,9 +122,9 @@
 
             console.log(token)
 
-            // Optionally save token to localStorage for later requests
+            // save token and role to localStorage for later requests
             localStorage.setItem('token',token)
-
+            localStorage.setItem('role',role)
             
             switch (role) {
                 case 'admin':
@@ -134,8 +134,10 @@
                     router.push('/');
                     break;
                 case 'commercial':
-                case 'product-manager':
                     router.push('/test');
+                    break;
+                case 'product-manager':
+                    router.push('/productManager/dashboard');
                     break;
                 default:
                     console.log('unknown role');

@@ -20,6 +20,7 @@ async function logout() {
         })
 
         localStorage.removeItem('token')
+        localStorage.removeItem('role')
         router.push('/login')
     }catch(error){
         console.error('Logout failed: ',error)
