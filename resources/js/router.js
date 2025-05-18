@@ -5,7 +5,7 @@ const routes = [
         path:"/",
         component : () => import("./Pages/HomeRoute.vue"),
         meta:{
-            title:'Home'
+            title:'EcoMove - Sustainable Energy & Mobility'
         }
     },
     {
