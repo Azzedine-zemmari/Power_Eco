@@ -13,6 +13,8 @@ Route::get('/test',function(){
     return "Hello from laravel";
 });
 
-Route::post('/register',[UserController::class,'register']);
+Route::post('/register',[UserController::class,'createUser']);
 Route::get('/Users',[UserController::class,'show']);
 Route::post('/login',[UserController::class,'login']);
+Route::post('/UserRegister',[UserController::class,'UserRegistre']);
+Route::middleware('auth:sanctum')->post('/logout',[UserController::class,'logout']);

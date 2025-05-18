@@ -26,10 +26,7 @@
                                 class="border-green-300 text-white inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
                                 User Management
                             </a>
-                            <a href="admin-settings.html"
-                                class="border-transparent text-gray-100 hover:border-green-300 hover:text-white inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
-                                Settings
-                            </a>
+                            <LogoutButton/>
                         </div>
                     </div>
                     <div class="hidden sm:ml-6 sm:flex sm:items-center">
@@ -378,6 +375,7 @@
 <script setup>
 import axios from 'axios'
 import { ref,onMounted } from 'vue'
+import LogoutButton from '../../components/LogoutButton.vue'
 
 
 const isModalOpen = ref(false)

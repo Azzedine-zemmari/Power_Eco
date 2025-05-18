@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Hash;
 class UserController extends Controller
 {
     // for admin to create new unique users 
-    public function register(Request $request){
+    public function createUser(Request $request){
         $request->validate([
             'firstName'=>'required|string|max:255',
             'lastName'=>'required|string|max:255',
@@ -35,7 +35,7 @@ class UserController extends Controller
         $user = User::whereNotIn('selectedRole', ['user', 'admin'])->get();
         return response()->json($user);
     }
-    // to login as admin
+    // login for all type of users
     public function login(Request $request) {
     $request->validate([
         'email' => 'required|email',
@@ -63,4 +63,31 @@ class UserController extends Controller
     ], 200);
 }
 
+    public function UserRegistre(Request $request){
+        $request->validate([
+            'firstName'=>'required|string|max:255',
+            'lastName'=>'required|string|max:255',
+            'email'=>'required|email|unique:users,email',
+            'password'=>'required|string|min:6',
+        ]);
+
+        $user = User::create([
+            'firstName'=>$request->firstName,
+            'lastName'=>$request->lastName,
+            'email'=>$request->email,
+            'password' =>Hash::make($request->password),
+            'selectedRole' =>  'user'
+        ]);
+        
+        return response()->json([
+            'message' => 'Registration successful. Please log in.',
+        ],201);
+    }
+    public function logout(Request $request){
+        $request->user()->currentAccessToken()->delete();
+
+        return response()->json([
+            'message'=> 'logged out succesfully'
+    ]);
+    }
 }

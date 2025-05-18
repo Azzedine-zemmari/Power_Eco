@@ -25,6 +25,13 @@ const routes = [
         meta:{
             title:"Sign In"
         }
+    },
+    {
+        path:"/register",
+        component:() => import("./Pages/Register.vue"),
+        meta:{
+            title:"Create Account"
+        }
     }
 ];
 
