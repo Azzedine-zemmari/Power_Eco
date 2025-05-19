@@ -59,6 +59,10 @@ const routes = [
             role: "product-manager"
         }
     },
+    {
+        path:'/set-password/:token',
+        component:() => import('./Pages/SetPassword.vue')
+    }
 ];
 
 const router =  createRouter({

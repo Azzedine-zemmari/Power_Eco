@@ -152,15 +152,7 @@
                                                     </div>
                                                 </div>
 
-                                                <div class="sm:col-span-2">
-                                                    <label for="password"
-                                                        class="block text-sm font-medium text-gray-700">Password</label>
-                                                    <div class="mt-1">
-                                                        <input v-model="password" type="password" id="password"
-                                                            name="password" required
-                                                            class="shadow-sm focus:ring-green-500 focus:border-green-500 block w-full sm:text-sm border-gray-300 rounded-md">
-                                                    </div>
-                                                </div>
+                                                
                                             </div>
 
                                             <!-- Role Selection -->
@@ -382,7 +374,6 @@ const isModalOpen = ref(false)
 const firstName = ref('')
 const lastName = ref('')
 const email = ref('')
-const password = ref('')
 const selectedRole = ref('')
 const users = ref([])
 
@@ -407,7 +398,7 @@ async function fetchUsers() {
     }
 }
 async function submitForm() {
-    if (!firstName.value || !lastName.value || !email.value || !password.value) {
+    if (!firstName.value || !lastName.value || !email.value) {
         alert('Please fill in all required fields.')
         return
     }
@@ -415,7 +406,6 @@ async function submitForm() {
         firstName: firstName.value,
         lastName: lastName.value,
         email: email.value,
-        password: password.value,
         selectedRole: selectedRole.value
     }
     try{
@@ -427,13 +417,12 @@ async function submitForm() {
         console.error('Error creating user:', error)
     }
 
+    closeModal()
     // Reset
     firstName.value = ''
     lastName.value = ''
     email.value = ''
-    password.value = ''
     selectedRole.value = ''
 
-    closeModal()
 }
 </script>

@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 
 class UserController extends Controller
 {
@@ -14,22 +16,47 @@ class UserController extends Controller
             'firstName'=>'required|string|max:255',
             'lastName'=>'required|string|max:255',
             'email'=>'required|email|unique:users,email',
-            'password'=>'required|string|min:6',
             'selectedRole'=>'required'
         ]);
+        $token = Str::random(10);
         $user = User::create([
             'firstName'=>$request->firstName,
             'lastName'=>$request->lastName,
             'email'=>$request->email,
-            'password' =>Hash::make($request->password),
-            'selectedRole' =>  $request->selectedRole
+            'password' => Hash::make(Str::random(10)), // Temporary password
+            'selectedRole' =>  $request->selectedRole,
+            'set_password_token' => $token
         ]);
 
-        return response()->json([
-            'user'=>$user
-        ],201);
+        $url = url("/set-password/{$token}");
+
+        Mail::to($user->email)->send(new \App\Mail\SetPasswordMail($url));
+
+        return response()->json(['message' => 'User created and email sent.']);
+
 
     }
+    // to send the users created by the admin 
+    public function setPassword(Request $request)
+{
+    $request->validate([
+        'token' => 'required',
+        'password' => 'required|min:6',
+    ]);
+
+    $user = User::where('set_password_token', $request->token)->first();
+
+    if (!$user) {
+        return response()->json(['message' => 'Invalid or expired token'], 400);
+    }
+
+    $user->password = Hash::make($request->password);
+    $user->set_password_token = null; // Invalidate token
+    $user->save();
+
+    return response()->json(['message' => 'Password set successfully.']);
+}
+
     // to show the admin all the user that he register
     public function show(){
         $user = User::whereNotIn('selectedRole', ['user', 'admin'])->get();
