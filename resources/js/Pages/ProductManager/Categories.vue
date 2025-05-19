@@ -174,14 +174,16 @@
 
                                 <!-- Categories list -->
                                 <div class="mt-8 bg-white shadow overflow-hidden sm:rounded-md">
-                                    <ul class="divide-y divide-gray-200">
-                                        <li>
+                                    <div v-if="loading">Loading...</div>
+                                    <div v-else-if="error">{{ error }}</div>
+                                    <ul v-else class="divide-y divide-gray-200">
+                                        <li v-for="category in categories" :key="category.id">
                                             <div class="px-4 py-4 flex items-center sm:px-6">
                                                 <div class="min-w-0 flex-1 sm:flex sm:items-center sm:justify-between">
                                                     <div>
                                                         <div class="flex text-sm">
                                                             <p class="font-medium text-green-600 truncate">Electric
-                                                                Vehicles</p>
+                                                                {{ category.name }}</p>
                                                         </div>
                                                         <div class="mt-2 flex">
                                                             <div class="flex items-center text-sm text-gray-500">
@@ -191,7 +193,7 @@
                                                                     <path
                                                                         d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z" />
                                                                 </svg>
-                                                                12 products
+                                                                {{ category.description }}
                                                             </div>
                                                         </div>
                                                     </div>
@@ -200,154 +202,6 @@
                                                             <button type="button"
                                                                 class="inline-flex items-center px-3 py-1 border border-transparent text-sm leading-5 font-medium rounded-md text-green-700 bg-green-100 hover:bg-green-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
                                                                 Edit
-                                                            </button>
-                                                            <button type="button"
-                                                                class="inline-flex items-center px-3 py-1 border border-transparent text-sm leading-5 font-medium rounded-md text-red-700 bg-red-100 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
-                                                                Delete
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </li>
-
-                                        <li>
-                                            <div class="px-4 py-4 flex items-center sm:px-6">
-                                                <div class="min-w-0 flex-1 sm:flex sm:items-center sm:justify-between">
-                                                    <div>
-                                                        <div class="flex text-sm">
-                                                            <p class="font-medium text-green-600 truncate">Solar
-                                                                Products</p>
-                                                        </div>
-                                                        <div class="mt-2 flex">
-                                                            <div class="flex items-center text-sm text-gray-500">
-                                                                <svg class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
-                                                                    xmlns="http://www.w3.org/2000/svg"
-                                                                    viewBox="0 0 20 20" fill="currentColor">
-                                                                    <path
-                                                                        d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z" />
-                                                                </svg>
-                                                                8 products
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="mt-4 flex-shrink-0 sm:mt-0">
-                                                        <div class="flex space-x-4">
-                                                            <button type="button"
-                                                                class="inline-flex items-center px-3 py-1 border border-transparent text-sm leading-5 font-medium rounded-md text-green-700 bg-green-100 hover:bg-green-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
-                                                                Edit
-                                                            </button>
-                                                            <button type="button"
-                                                                class="inline-flex items-center px-3 py-1 border border-transparent text-sm leading-5 font-medium rounded-md text-red-700 bg-red-100 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
-                                                                Delete
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </li>
-
-                                        <li>
-                                            <div class="px-4 py-4 flex items-center sm:px-6">
-                                                <div class="min-w-0 flex-1 sm:flex sm:items-center sm:justify-between">
-                                                    <div>
-                                                        <div class="flex text-sm">
-                                                            <p class="font-medium text-green-600 truncate">Energy
-                                                                Efficient Appliances</p>
-                                                        </div>
-                                                        <div class="mt-2 flex">
-                                                            <div class="flex items-center text-sm text-gray-500">
-                                                                <svg class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
-                                                                    xmlns="http://www.w3.org/2000/svg"
-                                                                    viewBox="0 0 20 20" fill="currentColor">
-                                                                    <path
-                                                                        d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z" />
-                                                                </svg>
-                                                                6 products
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="mt-4 flex-shrink-0 sm:mt-0">
-                                                        <div class="flex space-x-4">
-                                                            <button type="button"
-                                                                class="inline-flex items-center px-3 py-1 border border-transparent text-sm leading-5 font-medium rounded-md text-green-700 bg-green-100 hover:bg-green-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
-                                                                Edit
-                                                            </button>
-                                                            <button type="button"
-                                                                class="inline-flex items-center px-3 py-1 border border-transparent text-sm leading-5 font-medium rounded-md text-red-700 bg-red-100 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
-                                                                Delete
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </li>
-
-                                        <li>
-                                            <div class="px-4 py-4 flex items-center sm:px-6">
-                                                <div class="min-w-0 flex-1 sm:flex sm:items-center sm:justify-between">
-                                                    <div>
-                                                        <div class="flex text-sm">
-                                                            <p class="font-medium text-green-600 truncate">Sustainable
-                                                                Home Products</p>
-                                                        </div>
-                                                        <div class="mt-2 flex">
-                                                            <div class="flex items-center text-sm text-gray-500">
-                                                                <svg class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
-                                                                    xmlns="http://www.w3.org/2000/svg"
-                                                                    viewBox="0 0 20 20" fill="currentColor">
-                                                                    <path
-                                                                        d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z" />
-                                                                </svg>
-                                                                9 products
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="mt-4 flex-shrink-0 sm:mt-0">
-                                                        <div class="flex space-x-4">
-                                                            <button type="button"
-                                                                class="inline-flex items-center px-3 py-1 border border-transparent text-sm leading-5 font-medium rounded-md text-green-700 bg-green-100 hover:bg-green-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
-                                                                Edit
-                                                            </button>
-                                                            <button type="button"
-                                                                class="inline-flex items-center px-3 py-1 border border-transparent text-sm leading-5 font-medium rounded-md text-red-700 bg-red-100 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
-                                                                Delete
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </li>
-
-                                        <li>
-                                            <div class="px-4 py-4 flex items-center sm:px-6">
-                                                <div class="min-w-0 flex-1 sm:flex sm:items-center sm:justify-between">
-                                                    <div>
-                                                        <div class="flex text-sm">
-                                                            <p class="font-medium text-green-600 truncate">Eco-Friendly
-                                                                Accessories</p>
-                                                        </div>
-                                                        <div class="mt-2 flex">
-                                                            <div class="flex items-center text-sm text-gray-500">
-                                                                <svg class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
-                                                                    xmlns="http://www.w3.org/2000/svg"
-                                                                    viewBox="0 0 20 20" fill="currentColor">
-                                                                    <path
-                                                                        d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z" />
-                                                                </svg>
-                                                                7 products
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="mt-4 flex-shrink-0 sm:mt-0">
-                                                        <div class="flex space-x-4">
-                                                            <button type="button"
-                                                                class="inline-flex items-center px-3 py-1 border border-transparent text-sm leading-5 font-medium rounded-md text-green-700 bg-green-100 hover:bg-green-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
-                                                                Edit
-                                                            </button>
-                                                            <button type="button"
-                                                                class="inline-flex items-center px-3 py-1 border border-transparent text-sm leading-5 font-medium rounded-md text-red-700 bg-red-100 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
-                                                                Delete
                                                             </button>
                                                         </div>
                                                     </div>
@@ -506,13 +360,16 @@
     </div>
 </template>
 <script setup>
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import axios from 'axios';
 
 const isOpen = ref(false);
 const name = ref('');
 const description = ref('');
 const errors = ref({});
+const categories = ref([])
+const loading = ref(true)
+const error = ref(null)
 
 function openModal() {
     isOpen.value = !isOpen.value;
@@ -546,6 +403,7 @@ async function submitCategory() {
         // Clear errors and close modal on success
         errors.value = {};
         openModal();
+        await fetchCategories();
 
     } catch (error) {
         if (error.response && error.response.data && error.response.data.errors) {
@@ -555,5 +413,26 @@ async function submitCategory() {
         }
     }
 }
+async function fetchCategories(){
+    try{
+        const response = await axios.get('http://localhost:8000/api/categories',{
+            withCredentials:true,
+            headers :{
+                Accept :'application/json',
+                Authorization : `Bearer ${token}`
+
+            }
+        })
+        categories.value = response.data.category || response.data;
+    }catch(error){
+        error.value = 'Failed to load categories'
+        console.error(error)
+    } finally{
+        loading.value = false;
+    }
+}
+onMounted(()=>{
+    fetchCategories();
+})
 </script>
 

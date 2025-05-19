@@ -22,3 +22,4 @@ Route::middleware('auth:sanctum')->post('/logout',[UserController::class,'logout
 Route::middleware('auth:sanctum')->post('/categories/create',[CategoryController::class,'createCategory']);
 Route::post('/set-password', [UserController::class, 'setPassword']);
 Route::delete('/users/{id}/archive', [UserController::class, 'archiveUser'])->middleware('auth:sanctum');
+Route::get('/categories',[CategoryController::class,'show'])->middleware('auth:sanctum');

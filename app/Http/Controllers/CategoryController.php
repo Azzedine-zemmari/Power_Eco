@@ -21,4 +21,8 @@ class CategoryController extends Controller
             'category' => $category,
         ], 201);
     }
+    public function show(){
+        $category = Category::all();
+        return response()->json($category);
+    }
 }
