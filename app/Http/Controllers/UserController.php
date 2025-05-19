@@ -62,6 +62,22 @@ class UserController extends Controller
         $user = User::whereNotIn('selectedRole', ['user', 'admin'])->get();
         return response()->json($user);
     }
+    // to soft delete a user by the admin 
+    public function archiveUser(Request $request , int $id){
+        $user = User::find($id);
+        if (!$user) {
+        return response()->json([
+            'message' => 'User not found.'
+        ], 404);
+        }
+
+        $user->delete();
+
+        return response()->json([
+            'message' => 'User archived successfully.',
+            'user' => $user
+        ], 200);
+    }
     // login for all type of users
     public function login(Request $request) {
     $request->validate([

@@ -294,8 +294,7 @@
                                         </span>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                        <a href="#" class="text-green-600 hover:text-green-900 mr-4">Edit</a>
-                                        <a href="#" class="text-red-600 hover:text-red-900">Delete</a>
+                                        <button @click="archiveUser(user.id)" class="text-red-600 hover:text-red-900">archive</button>
                                     </td>
                                 </tr>
                             </tbody>
@@ -424,5 +423,25 @@ async function submitForm() {
     email.value = ''
     selectedRole.value = ''
 
+}
+
+const token = localStorage.getItem('token')
+async function archiveUser(userId){
+    if(!confirm("Are you sure you want to archive this user ?"))return;
+
+    try{
+        await axios.delete(`http://localhost:8000/api/users/${userId}/archive`,{
+            headers:{
+                Authorization:`Bearer ${token}`,
+                Accept:'application/json'
+            }
+        })
+        // remove user from local state
+        users.value = users.value.filter(user => user.id !== userId);
+        alert('user archived successfully');
+    }catch(error){
+        console.error(error);
+        alert('failed to archive user.');
+    }
 }
 </script>
