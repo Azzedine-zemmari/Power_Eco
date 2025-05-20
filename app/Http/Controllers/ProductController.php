@@ -36,4 +36,9 @@ class ProductController extends Controller
             'product' => $product
         ], 201);
     }
+
+    public function show(){
+        $product = Product::all();
+        return response()->json($product);
+    }
 }

@@ -215,10 +215,9 @@
                                             <!-- Product card -->
                                             <div v-for="product in products" :key="product.id"
                                                 class="bg-white overflow-hidden shadow rounded-lg">
-                                                <div class="relative pb-2/3">
-                                                    <img class="absolute h-full w-full object-cover"
-                                                        :src="product.image || 'https://via.placeholder.com/300x200'"
-                                                        alt="Product image">
+                                                <div class="aspect-w-3 aspect-h-2">
+                                                    <img class="object-cover w-full h-full"
+                                                        :src="`/storage/${product.image}`" alt="Product image">
                                                 </div>
                                                 <div class="px-4 py-5 sm:p-6">
                                                     <h3 class="text-lg leading-6 font-medium text-gray-900">{{
@@ -638,7 +637,7 @@ async function fetchProducts() {
             }
         });
 
-        products.value = response.data.products || [];
+        products.value = response.data || [];
     } catch (err) {
         error.value = 'Failed to load products';
         console.error(err);
@@ -740,42 +739,5 @@ async function deleteProduct() {
 onMounted(() => {
     fetchProducts();
     fetchCategories();
-
-    // For demo purposes, add some sample products if none exist
-    if (products.value.length === 0) {
-        products.value = [
-            {
-                id: 1,
-                name: 'Electric Scooter X1',
-                description: 'Eco-friendly electric scooter with 30 mile range',
-                price: 599.99,
-                old_price: 699.99,
-                stock: 15,
-                category: 'Electric Vehicles',
-                category_id: 1,
-                image: 'https://via.placeholder.com/300x200?text=Electric+Scooter'
-            },
-            {
-                id: 2,
-                name: 'Solar Power Bank 20000mAh',
-                description: 'Charge your devices with solar energy',
-                price: 49.99,
-                stock: 42,
-                category: 'Solar Products',
-                category_id: 2,
-                image: 'https://via.placeholder.com/300x200?text=Solar+Power+Bank'
-            },
-            {
-                id: 3,
-                name: 'Energy Efficient LED Bulb Pack',
-                description: 'Pack of 4 energy-saving LED bulbs',
-                price: 19.99,
-                stock: 0,
-                category: 'Energy Efficient Appliances',
-                category_id: 3,
-                image: 'https://via.placeholder.com/300x200?text=LED+Bulbs'
-            }
-        ];
-    }
 });
 </script>

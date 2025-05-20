@@ -25,3 +25,4 @@ Route::post('/set-password', [UserController::class, 'setPassword']);
 Route::delete('/users/{id}/archive', [UserController::class, 'archiveUser'])->middleware('auth:sanctum');
 Route::get('/categories',[CategoryController::class,'show'])->middleware('auth:sanctum');
 Route::post('/products/create',[ProductController::class,'create']);
+Route::get('/products',[ProductController::class,'show']);
