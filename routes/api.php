@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -23,3 +24,4 @@ Route::middleware('auth:sanctum')->post('/categories/create',[CategoryController
 Route::post('/set-password', [UserController::class, 'setPassword']);
 Route::delete('/users/{id}/archive', [UserController::class, 'archiveUser'])->middleware('auth:sanctum');
 Route::get('/categories',[CategoryController::class,'show'])->middleware('auth:sanctum');
+Route::post('/products/create',[ProductController::class,'create']);

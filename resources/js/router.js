@@ -62,6 +62,15 @@ const routes = [
     {
         path:'/set-password/:token',
         component:() => import('./Pages/SetPassword.vue')
+    },
+    {
+        path:'/productManager/Products',
+        component:()=>import('./Pages/ProductManager/Products.vue'),
+        meta:{
+            title:"Products - Product Manager Dashboard",
+            requiresAuth:true,
+            role:"product-manager"
+        }
     }
 ];
 

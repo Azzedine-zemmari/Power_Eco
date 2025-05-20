@@ -42,7 +42,7 @@
                                 Categories
                             </a>
 
-                            <a href="product-manager-products.html"
+                            <a href="/productManager/Products"
                                 class="text-green-100 hover:bg-green-700 group flex items-center px-2 py-2 text-base font-medium rounded-md">
                                 <svg class="mr-3 h-6 w-6 text-green-300" xmlns="http://www.w3.org/2000/svg" fill="none"
                                     viewBox="0 0 24 24" stroke="currentColor">
