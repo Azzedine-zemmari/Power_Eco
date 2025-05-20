@@ -171,14 +171,24 @@
                                     </div>
                                     <div class="mt-3 sm:mt-0 sm:ml-4">
                                         <select
+                                            v-model="selectedCategoryFilter"
                                             class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm rounded-md">
-                                            <option value="">All Categories</option>
-                                            <option value="1">Electric Vehicles</option>
-                                            <option value="2">Solar Products</option>
-                                            <option value="3">Energy Efficient Appliances</option>
-                                            <option value="4">Sustainable Home Products</option>
+                                            <option value="" selected disabled>All Categories</option>
+                                            <option v-for="category in categories" :key="category.id"
+                                                :value="category.id">{{ category.name }}</option>
                                         </select>
                                     </div>
+                                    <button v-if="selectedCategoryFilter" @click="resetFilters"
+                                        class="ml-2 inline-flex items-center px-2 py-1 border border-transparent text-xs leading-4 font-medium rounded text-green-700 bg-green-100 hover:bg-green-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                                        <svg class="mr-1 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                                            fill="currentColor">
+                                            <path fill-rule="evenodd"
+                                                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                                clip-rule="evenodd" />
+                                        </svg>
+                                        Clear filter
+                                    </button>
+
                                 </div>
 
                                 <!-- Products list -->
@@ -213,7 +223,7 @@
                                         <!-- Grid view for products -->
                                         <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
                                             <!-- Product card -->
-                                            <div v-for="product in products" :key="product.id"
+                                            <div v-for="product in filteredProducts" :key="product.id"
                                                 class="bg-white overflow-hidden shadow rounded-lg">
                                                 <div class="aspect-w-3 aspect-h-2">
                                                     <img class="object-cover w-full h-full"
@@ -409,35 +419,35 @@
                                             <div class="mt-1 flex items-center">
                                                 <div v-if="isEditing">
                                                     <div v-if="productForm.imagePreview"
-                                                    class="flex-shrink-0 h-16 w-16 bg-gray-100 rounded-md overflow-hidden">
-                                                    <img :src="`/storage/${productForm.imagePreview}`" alt="Product preview"
-                                                        class="h-full w-full object-cover">
-                                                </div>
-                                                <div v-else
-                                                    class="flex-shrink-0 h-16 w-16 bg-gray-100 rounded-md flex items-center justify-center">
-                                                    <svg class="h-8 w-8 text-gray-300" fill="currentColor"
-                                                        viewBox="0 0 24 24">
-                                                        <path
-                                                            d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
-                                                    </svg>
-                                                </div>
+                                                        class="flex-shrink-0 h-16 w-16 bg-gray-100 rounded-md overflow-hidden">
+                                                        <img :src="`/storage/${productForm.imagePreview}`"
+                                                            alt="Product preview" class="h-full w-full object-cover">
+                                                    </div>
+                                                    <div v-else
+                                                        class="flex-shrink-0 h-16 w-16 bg-gray-100 rounded-md flex items-center justify-center">
+                                                        <svg class="h-8 w-8 text-gray-300" fill="currentColor"
+                                                            viewBox="0 0 24 24">
+                                                            <path
+                                                                d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
+                                                        </svg>
+                                                    </div>
                                                 </div>
                                                 <div v-else>
                                                     <div v-if="productForm.imagePreview"
-                                                    class="flex-shrink-0 h-16 w-16 bg-gray-100 rounded-md overflow-hidden">
-                                                    <img :src="productForm.imagePreview" alt="Product preview"
-                                                        class="h-full w-full object-cover">
+                                                        class="flex-shrink-0 h-16 w-16 bg-gray-100 rounded-md overflow-hidden">
+                                                        <img :src="productForm.imagePreview" alt="Product preview"
+                                                            class="h-full w-full object-cover">
+                                                    </div>
+                                                    <div v-else
+                                                        class="flex-shrink-0 h-16 w-16 bg-gray-100 rounded-md flex items-center justify-center">
+                                                        <svg class="h-8 w-8 text-gray-300" fill="currentColor"
+                                                            viewBox="0 0 24 24">
+                                                            <path
+                                                                d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
+                                                        </svg>
+                                                    </div>
                                                 </div>
-                                                <div v-else
-                                                    class="flex-shrink-0 h-16 w-16 bg-gray-100 rounded-md flex items-center justify-center">
-                                                    <svg class="h-8 w-8 text-gray-300" fill="currentColor"
-                                                        viewBox="0 0 24 24">
-                                                        <path
-                                                            d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
-                                                    </svg>
-                                                </div>
-                                                </div>
-                                                
+
                                                 <div class="ml-4 flex">
                                                     <div
                                                         class="relative bg-white py-2 px-3 border border-gray-300 rounded-md shadow-sm flex items-center cursor-pointer hover:bg-gray-50 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-green-500">
@@ -542,7 +552,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, reactive } from 'vue';
+import { ref, onMounted, reactive,computed } from 'vue';
 import axios from 'axios';
 
 // State variables
@@ -555,6 +565,7 @@ const products = ref([]);
 const categories = ref([]);
 const selectedProduct = ref(null);
 const errors = ref({});
+const selectedCategoryFilter = ref('');
 
 // Form state
 const productForm = reactive({
@@ -762,6 +773,25 @@ async function deleteProduct() {
     } catch (err) {
         console.error('Error deleting product:', err);
     }
+}
+// Create a computed property for filtered products
+const filteredProducts = computed(() => {
+  if (!selectedCategoryFilter.value || selectedCategoryFilter.value === '') {
+    // If no category is selected, return all products
+    return products.value;
+  }
+  
+  // Filter products by the selected category
+  return products.value.filter(product => {
+    // If you're filtering by category ID
+   return product.categorie_id === selectedCategoryFilter.value;
+  });
+});
+
+// Function to reset filters
+function resetFilters() {
+  selectedCategoryFilter.value = '';
+  // Reset any other filters you might add in the future
 }
 
 // Initialize
