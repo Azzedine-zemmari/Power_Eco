@@ -27,3 +27,4 @@ Route::get('/categories',[CategoryController::class,'show'])->middleware('auth:s
 Route::post('/products/create',[ProductController::class,'create']);
 Route::get('/products',[ProductController::class,'show']);
 Route::put('/products/{id}/update',[ProductController::class,'update']);
+Route::post('/products/{id}/delete',[ProductController::class,'destroy']);

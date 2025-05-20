@@ -407,7 +407,8 @@
                                         <div>
                                             <label class="block text-sm font-medium text-gray-700">Product Image</label>
                                             <div class="mt-1 flex items-center">
-                                                <div v-if="productForm.imagePreview"
+                                                <div v-if="isEditing">
+                                                    <div v-if="productForm.imagePreview"
                                                     class="flex-shrink-0 h-16 w-16 bg-gray-100 rounded-md overflow-hidden">
                                                     <img :src="`/storage/${productForm.imagePreview}`" alt="Product preview"
                                                         class="h-full w-full object-cover">
@@ -420,6 +421,23 @@
                                                             d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
                                                     </svg>
                                                 </div>
+                                                </div>
+                                                <div v-else>
+                                                    <div v-if="productForm.imagePreview"
+                                                    class="flex-shrink-0 h-16 w-16 bg-gray-100 rounded-md overflow-hidden">
+                                                    <img :src="productForm.imagePreview" alt="Product preview"
+                                                        class="h-full w-full object-cover">
+                                                </div>
+                                                <div v-else
+                                                    class="flex-shrink-0 h-16 w-16 bg-gray-100 rounded-md flex items-center justify-center">
+                                                    <svg class="h-8 w-8 text-gray-300" fill="currentColor"
+                                                        viewBox="0 0 24 24">
+                                                        <path
+                                                            d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
+                                                    </svg>
+                                                </div>
+                                                </div>
+                                                
                                                 <div class="ml-4 flex">
                                                     <div
                                                         class="relative bg-white py-2 px-3 border border-gray-300 rounded-md shadow-sm flex items-center cursor-pointer hover:bg-gray-50 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-green-500">
@@ -453,7 +471,6 @@
                                                     class="shadow-sm focus:ring-green-500 focus:border-green-500 block w-full sm:text-sm border-gray-300 rounded-md">
                                                     <option value="active">Active</option>
                                                     <option value="inactive">Inactive</option>
-                                                    <option value="draft">Draft</option>
                                                 </select>
                                                 <div v-if="errors.status" class="text-red-500 text-sm mt-1">{{
                                                     errors.status[0] }}</div>
@@ -732,7 +749,7 @@ async function deleteProduct() {
         // Get CSRF cookie from Laravel Sanctum
         await axios.get('http://localhost:8000/sanctum/csrf-cookie', { withCredentials: true });
 
-        await axios.delete(`http://localhost:8000/api/products/${selectedProduct.value.id}/delete`, {
+        await axios.post(`http://localhost:8000/api/products/${selectedProduct.value.id}/delete`, {
             headers: {
                 'Authorization': `Bearer ${token}`,
                 'Accept': 'application/json',
