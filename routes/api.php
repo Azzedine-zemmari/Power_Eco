@@ -26,3 +26,4 @@ Route::delete('/users/{id}/archive', [UserController::class, 'archiveUser'])->mi
 Route::get('/categories',[CategoryController::class,'show'])->middleware('auth:sanctum');
 Route::post('/products/create',[ProductController::class,'create']);
 Route::get('/products',[ProductController::class,'show']);
+Route::put('/products/{id}/update',[ProductController::class,'update']);

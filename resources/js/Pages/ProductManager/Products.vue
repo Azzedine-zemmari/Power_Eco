@@ -409,7 +409,7 @@
                                             <div class="mt-1 flex items-center">
                                                 <div v-if="productForm.imagePreview"
                                                     class="flex-shrink-0 h-16 w-16 bg-gray-100 rounded-md overflow-hidden">
-                                                    <img :src="productForm.imagePreview" alt="Product preview"
+                                                    <img :src="`/storage/${productForm.imagePreview}`" alt="Product preview"
                                                         class="h-full w-full object-cover">
                                                 </div>
                                                 <div v-else
@@ -428,7 +428,7 @@
                                                             <span>Change</span>
                                                             <span class="sr-only"> product image</span>
                                                         </label>
-                                                        <input id="product-image" name="product-image" type="file"
+                                                        <input id="product-image" name="image" type="file"
                                                             class="absolute inset-0 w-full h-full opacity-0 cursor-pointer border-gray-300 rounded-md"
                                                             @change="handleImageChange">
                                                     </div>
@@ -549,6 +549,7 @@ const productForm = reactive({
     category_id: '',
     image: null,
     imagePreview: null,
+    imageFile:null,
     status: 'active'
 });
 
@@ -568,27 +569,40 @@ function closeModal() {
 }
 
 function editProduct(product) {
-    isEditing.value = true;
-    productForm.id = product.id;
-    productForm.name = product.name;
-    productForm.description = product.description;
-    productForm.price = product.price;
-    productForm.stock = product.stock;
-    productForm.category_id = product.category_id;
-    productForm.image = product.image;
-    productForm.status = product.status || 'active';
-    isModalOpen.value = true;
+  isEditing.value = true;
+  productForm.id = product.id;
+  productForm.name = product.name;
+  productForm.description = product.description;
+  productForm.price = product.price;
+  productForm.stock = product.stock;
+  productForm.category_id = product.category_id;
+  productForm.status = product.status || 'active';
+  
+  // For existing image, store the URL/path but not as a file
+  if (product.image) {
+    productForm.image = product.image; // Store the image path/URL
+    productForm.imagePreview = product.image; // Use the same for preview
+    productForm.imageFile = null; // No file yet unless user uploads a new one
+  } else {
+    productForm.image = null;
+    productForm.imagePreview = null;
+    productForm.imageFile = null;
+  }
+  
+  isModalOpen.value = true;
 }
 
 function resetForm() {
-    productForm.id = null;
-    productForm.name = '';
-    productForm.description = '';
-    productForm.price = '';
-    productForm.stock = '';
-    productForm.category_id = '';
-    productForm.image = null;
-    productForm.status = 'active';
+  productForm.id = null;
+  productForm.name = '';
+  productForm.description = '';
+  productForm.price = '';
+  productForm.stock = '';
+  productForm.category_id = '';
+  productForm.image = null;
+  productForm.imagePreview = null;
+  productForm.imageFile = null;
+  productForm.status = 'active';
 }
 
 function confirmDelete(product) {
@@ -601,25 +615,21 @@ function closeDeleteModal() {
     selectedProduct.value = null;
 }
 
-// Image handling
 function handleImageChange(event) {
-    const file = event.target.files[0];
-    if (file) {
-        console.log(file.name)
-        productForm.image = file
-        // In a real app, you would upload this to your server
-        // For now, we'll just create a data URL for preview
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            productForm.imagePreview = e.target.result;
-            console.log(productForm.imagePreview)
-                };
-        reader.readAsDataURL(file);
-    }
+  const file = event.target.files[0];
+  if (file) {
+    // Store the actual file object
+    productForm.imageFile = file;
+    
+    // Create a preview URL for display
+    productForm.imagePreview = URL.createObjectURL(file);
+  }
 }
 
 function removeImage() {
-    productForm.image = null;
+  productForm.imageFile = null;
+  productForm.imagePreview = null;
+  productForm.image = null; // Clear the existing image path as well
 }
 
 // API functions
@@ -662,55 +672,57 @@ async function fetchCategories() {
 }
 
 async function submitProduct() {
-    try {
-        errors.value = {};
+  try {
+    errors.value = {};
 
-        // Get CSRF cookie from Laravel Sanctum
-        await axios.get('http://localhost:8000/sanctum/csrf-cookie', { withCredentials: true });
+    // Get CSRF cookie from Laravel Sanctum
+    await axios.get('http://localhost:8000/sanctum/csrf-cookie', { withCredentials: true });
 
-        const url = isEditing.value
-            ? `http://localhost:8000/api/products/${productForm.id}/update`
-            : 'http://localhost:8000/api/products/create';
+    const url = isEditing.value
+      ? `http://localhost:8000/api/products/${productForm.id}/update`
+      : 'http://localhost:8000/api/products/create';
 
-        const method = isEditing.value ? 'put' : 'post';
+    const method = isEditing.value ? 'post' : 'post';
 
-        const formData = new FormData();
-        formData.append('name', productForm.name);
-        formData.append('description', productForm.description);
-        formData.append('price', productForm.price);
-        formData.append('stock', productForm.stock);
-        formData.append('categorie_id', productForm.category_id);
-        formData.append('status', productForm.status);
+    const formData = new FormData();
+    formData.append('name', productForm.name);
+    formData.append('description', productForm.description);
+    formData.append('price', productForm.price);
+    formData.append('stock', productForm.stock);
+    formData.append('categorie_id', productForm.category_id);
+    formData.append('status', productForm.status);
 
-        if (productForm.image) {
-            formData.append('image', productForm.image); 
-        }
-
-        if (isEditing.value) {
-            formData.append('_method', 'PUT'); 
-        }
-
-        const response = await axios[method](
-            url,
-            formData,
-            {
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Accept': 'application/json',
-                }
-            }
-        );
-
-        closeModal();
-        await fetchProducts();
-
-    } catch (err) {
-        if (err.response && err.response.data && err.response.data.errors) {
-            errors.value = err.response.data.errors;
-        } else {
-            console.error('Error submitting product:', err);
-        }
+    // Only append image if there's a new file selected
+    if (productForm.imageFile) {
+      formData.append('image', productForm.imageFile);
     }
+
+    if (isEditing.value) {
+      formData.append('_method', 'PUT');
+    }
+
+    const response = await axios[method](
+      url,
+      formData,
+      {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Accept': 'application/json',
+          'Content-Type': 'multipart/form-data' // Important for file uploads
+        }
+      }
+    );
+
+    closeModal();
+    await fetchProducts();
+
+  } catch (err) {
+    if (err.response && err.response.data && err.response.data.errors) {
+      errors.value = err.response.data.errors;
+    } else {
+      console.error('Error submitting product:', err);
+    }
+  }
 }
 
 async function deleteProduct() {
