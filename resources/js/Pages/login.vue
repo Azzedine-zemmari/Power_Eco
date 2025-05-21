@@ -21,6 +21,7 @@
                         </label>
                         <div class="mt-1">
                             <input v-model="email" id="email" name="email" type="email" autocomplete="email" required class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm">
+                            <div v-if="errors.email" class="text-red-600 text-sm mt-1">{{ errors.email[0] }}</div>
                         </div>
                     </div>
 
@@ -30,6 +31,7 @@
                         </label>
                         <div class="mt-1">
                             <input v-model="password" id="password" name="password" type="password" autocomplete="current-password" required class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm">
+                            <div v-if="errors.password" class="text-red-600 text-sm mt-1">{{ errors.password[0] }}</div>
                         </div>
                     </div>
 
@@ -109,6 +111,7 @@
     const router = useRouter();
     let email = ref('');
     let password = ref('');
+    let errors = ref({})
 
     async function login(){
         try{
@@ -146,9 +149,11 @@
         }
        catch (error) {
     if (error.response && error.response.status === 422) {
-        console.log('Validation errors:', error.response.data.errors);
-        alert('Validation failed: ' + JSON.stringify(error.response.data.errors));
-    } else {
+        errors.value = error.response.data.errors; 
+    } else if (error.response && error.response.status === 403) {
+        // Handle inactive account error
+        alert(error.response.data.message); 
+    }  else {
         console.error('login failed', error);
         alert('Login failed');
     }

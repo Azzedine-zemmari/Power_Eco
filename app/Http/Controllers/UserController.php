@@ -52,6 +52,7 @@ class UserController extends Controller
 
     $user->password = Hash::make($request->password);
     $user->set_password_token = null; // Invalidate token
+    $user->status = 'active';
     $user->save();
 
     return response()->json(['message' => 'Password set successfully.']);
@@ -92,6 +93,12 @@ class UserController extends Controller
             'message' => 'Invalid credentials'
         ], 401);
     }
+    
+    if ($user->status !== 'active') {
+        return response()->json([
+            'message' => 'Your account is not active yet. Please wait for admin approval.'
+        ], 403);
+    }
 
     // Revoke previous tokens if needed
     $user->tokens()->delete();
@@ -119,7 +126,8 @@ class UserController extends Controller
             'lastName'=>$request->lastName,
             'email'=>$request->email,
             'password' =>Hash::make($request->password),
-            'selectedRole' =>  'user'
+            'selectedRole' =>  'user',
+            'status'=>'pending'
         ]);
         
         return response()->json([
