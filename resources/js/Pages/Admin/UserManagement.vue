@@ -26,7 +26,7 @@
                                 class="border-green-300 text-white inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
                                 User Management
                             </a>
-                            <LogoutButton/>
+                            <LogoutButton />
                         </div>
                     </div>
                     <div class="hidden sm:ml-6 sm:flex sm:items-center">
@@ -76,8 +76,7 @@
         <header class="bg-white shadow">
             <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 flex justify-between items-center">
                 <h1 class="text-3xl font-bold text-gray-900">User Management</h1>
-                <button type="button"
-                    @click="openModal"
+                <button type="button" @click="openModal"
                     class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
                     id="open-create-user-modal">
                     <svg class="-ml-1 mr-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
@@ -152,7 +151,7 @@
                                                     </div>
                                                 </div>
 
-                                                
+
                                             </div>
 
                                             <!-- Role Selection -->
@@ -186,8 +185,7 @@
                                                     id="create-user-submit">
                                                     Create User
                                                 </button>
-                                                <button type="button"
-                                                    @click="closeModal"
+                                                <button type="button" @click="closeModal"
                                                     class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
                                                     id="close-modal">
                                                     Cancel
@@ -287,14 +285,32 @@
                                             {{ user.selectedRole }}
                                         </span>
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
+                                    <td class="px-6 py-4 whitespace-xnowrap">
                                         <span
                                             class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                            Active
+                                            {{ user.status }}
                                         </span>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                        <button @click="archiveUser(user.id)" class="text-red-600 hover:text-red-900">archive</button>
+                                        <button @click="archiveUser(user.id)"
+                                            class="text-red-600 hover:text-red-900"><svg
+                                                xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
+                                                fill="currentColor">
+                                                <path d="M4 3a2 2 0 100 4h12a2 2 0 100-4H4z" />
+                                                <path fill-rule="evenodd"
+                                                    d="M3 8h14v7a2 2 0 01-2 2H5a2 2 0 01-2-2V8zm5 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z"
+                                                    clip-rule="evenodd" />
+                                            </svg>
+                                        </button>
+                                        <button @click="activeUser(user.id)"
+                                            class="text-green-600 hover:text-green-900">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
+                                                fill="currentColor">
+                                                <path fill-rule="evenodd"
+                                                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                                    clip-rule="evenodd" />
+                                            </svg>
+                                        </button>
                                     </td>
                                 </tr>
                             </tbody>
@@ -365,9 +381,8 @@
 </template>
 <script setup>
 import axios from 'axios'
-import { ref,onMounted } from 'vue'
+import { ref, onMounted } from 'vue'
 import LogoutButton from '../../components/LogoutButton.vue'
-
 
 const isModalOpen = ref(false)
 const firstName = ref('')
@@ -381,6 +396,7 @@ function openModal() {
 }
 
 function closeModal() {
+    console.log('closeModal called')
     isModalOpen.value = false
 }
 
@@ -396,52 +412,77 @@ async function fetchUsers() {
         console.error('Error fetching users:', error)
     }
 }
+
 async function submitForm() {
     if (!firstName.value || !lastName.value || !email.value) {
         alert('Please fill in all required fields.')
         return
     }
+    // Close the modal
+    isModalOpen.value = false
+    
     const formData = {
         firstName: firstName.value,
         lastName: lastName.value,
         email: email.value,
         selectedRole: selectedRole.value
     }
-    try{
-        const response = await axios.post("http://localhost:8000/api/register",formData)
-        const newUser = response.data.user
-        users.value.push(newUser)
+    
+    try {
+        const response = await axios.post("http://localhost:8000/api/register", formData)
+        // Refresh the user list from backend after successful registration
+        await fetchUsers();
+        // Reset form fields
+        firstName.value = ''
+        lastName.value = ''
+        email.value = ''
+        selectedRole.value = ''
+        // Show success message
         alert(`User ${response.data.user.firstName} created successfully!`)
-    }catch(error){
+    } catch (error) {
         console.error('Error creating user:', error)
     }
-
-    closeModal()
-    // Reset
-    firstName.value = ''
-    lastName.value = ''
-    email.value = ''
-    selectedRole.value = ''
-
 }
 
 const token = localStorage.getItem('token')
-async function archiveUser(userId){
-    if(!confirm("Are you sure you want to archive this user ?"))return;
 
-    try{
-        await axios.delete(`http://localhost:8000/api/users/${userId}/archive`,{
-            headers:{
-                Authorization:`Bearer ${token}`,
-                Accept:'application/json'
+async function archiveUser(userId) {
+    if (!confirm("Are you sure you want to archive this user?")) return;
+
+    try {
+        await axios.delete(`http://localhost:8000/api/users/${userId}/archive`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                Accept: 'application/json'
             }
         })
         // remove user from local state
         users.value = users.value.filter(user => user.id !== userId);
-        alert('user archived successfully');
-    }catch(error){
+        alert('User archived successfully');
+    } catch (error) {
         console.error(error);
-        alert('failed to archive user.');
+        alert('Failed to archive user.');
+    }
+}
+
+async function activeUser(userId) {
+    if (!confirm("Are you sure you want to activate this user?")) return;
+    
+    try {
+        await axios.post(`http://localhost:8000/api/users/${userId}/active`, {}, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                Accept: 'application/json'
+            }
+        })
+        
+        // Refresh the user list to show updated status
+        await fetchUsers();
+        
+        alert('User activated successfully');
+    } catch (err) {
+        console.error(err);
+        alert('Failed to activate user.');
     }
 }
 </script>

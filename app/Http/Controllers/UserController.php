@@ -25,7 +25,7 @@ class UserController extends Controller
             'email'=>$request->email,
             'password' => Hash::make(Str::random(10)), // Temporary password
             'selectedRole' =>  $request->selectedRole,
-            'set_password_token' => $token
+            'set_password_token' => $token,
         ]);
 
         $url = url("/set-password/{$token}");
@@ -60,7 +60,7 @@ class UserController extends Controller
 
     // to show the admin all the user that he register
     public function show(){
-        $user = User::whereNotIn('selectedRole', ['user', 'admin'])->get();
+        $user = User::where('selectedRole', '!=','admin')->get();
         return response()->json($user);
     }
     // to soft delete a user by the admin 
@@ -79,6 +79,31 @@ class UserController extends Controller
             'user' => $user
         ], 200);
     }
+    public function activeUser(Request $request, int $id)
+{
+    $user = User::find($id);
+
+    if (!$user) {
+        return response()->json([
+            'message' => 'User not found.'
+        ], 404);
+    }
+
+    if ($user->selectedRole !== 'user') {
+        return response()->json([
+            'message' => 'This action is accessible only for users.'
+        ], 403);
+    }
+
+    $user->status = 'active';
+    $user->save();
+
+    return response()->json([
+        'message' => 'User activated successfully.',
+        'user' => $user
+    ], 200);
+}
+
     // login for all type of users
     public function login(Request $request) {
     $request->validate([
@@ -93,7 +118,7 @@ class UserController extends Controller
             'message' => 'Invalid credentials'
         ], 401);
     }
-    
+
     if ($user->status !== 'active') {
         return response()->json([
             'message' => 'Your account is not active yet. Please wait for admin approval.'
