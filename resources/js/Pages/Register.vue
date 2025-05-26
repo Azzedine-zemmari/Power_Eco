@@ -7,7 +7,7 @@
             <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">Create your account</h2>
             <p class="mt-2 text-center text-sm text-gray-600">
                 Or
-                <a href="login.html" class="font-medium text-green-600 hover:text-green-500">
+                <a href="/login" class="font-medium text-green-600 hover:text-green-500">
                     sign in to your existing account
                 </a>
             </p>
@@ -23,6 +23,7 @@
                         <div class="mt-1">
                             <input v-model="firstName" id="first-name" name="first-name" type="text" autocomplete="given-name" required class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm">
                         </div>
+                        <div v-if="errors.firstName" class="text-red-600 text-xs mt-1">{{ errors.firstName[0] }}</div>
                     </div>
 
                     <div>
@@ -32,6 +33,7 @@
                         <div class="mt-1">
                             <input v-model="lastName" id="last-name" name="last-name" type="text" autocomplete="family-name" required class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm">
                         </div>
+                        <div v-if="errors.lastName" class="text-red-600 text-xs mt-1">{{ errors.lastName[0] }}</div>
                     </div>
 
                     <div>
@@ -41,6 +43,7 @@
                         <div class="mt-1">
                             <input v-model="email" id="email" name="email" type="email" autocomplete="email" required class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm">
                         </div>
+                        <div v-if="errors.email" class="text-red-600 text-xs mt-1">{{ errors.email[0] }}</div>
                     </div>
 
                     <div>
@@ -49,6 +52,9 @@
                         </label>
                         <div class="mt-1">
                             <input v-model="password" id="password" name="password" type="password" autocomplete="new-password" required class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm">
+                        </div>
+                        <div v-if="errors.password" class="text-red-600 text-xs mt-1">
+                            Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character.
                         </div>
                     </div>
 
@@ -126,8 +132,10 @@ let firstName = ref('');
 let lastName = ref('');
 let email = ref('');
 let password = ref('');
+let errors = ref({});
 
 async function register() {
+    errors.value = {};
     try {
         const response = await axios.post('http://localhost:8000/api/UserRegister', {
             firstName: firstName.value,
@@ -140,12 +148,11 @@ async function register() {
         router.push('/login'); 
     } catch (error) {
         if (error.response && error.response.status === 422) {
-            const errors = error.response.data.errors;
-            alert('Validation failed:\n' + JSON.stringify(errors, null, 2));
+            errors.value = error.response.data.errors || {};
         } else {
             console.error('Registration failed:', error);
             alert('Registration failed');
-        }
+        } 
     }
 }
 </script>

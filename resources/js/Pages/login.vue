@@ -6,7 +6,7 @@
             <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">Sign in to your account</h2>
             <p class="mt-2 text-center text-sm text-gray-600">
                 Or
-                <a href="register.html" class="font-medium text-green-600 hover:text-green-500">
+                <a href="/register" class="font-medium text-green-600 hover:text-green-500">
                     create a new account
                 </a>
             </p>

@@ -41,8 +41,8 @@ class UserController extends Controller
 {
     $request->validate([
         'token' => 'required',
-        'password' => 'required|min:6',
-    ]);
+        'password' => ['required','min:6', 'regex:/[a-z]/', 'regex:/[A-Z]/','regex:/[0-9]/','regex:/[@$!%*#?&]/', 
+    ]]);
 
     $user = User::where('set_password_token', $request->token)->first();
 
@@ -108,7 +108,7 @@ class UserController extends Controller
     public function login(Request $request) {
     $request->validate([
         'email' => 'required|email',
-        'password' => 'required|string|min:6'
+        'password' => 'required|string|min:8'
     ]);
 
     $user = User::where('email', $request->email)->first();
@@ -142,10 +142,37 @@ class UserController extends Controller
         $request->validate([
             'firstName'=>'required|string|max:255',
             'lastName'=>'required|string|max:255',
-            'email'=>'required|email|unique:users,email',
-            'password'=>'required|string|min:6',
+            'email'=>'required|email',
+            'password' => [
+                'required',
+                'string',
+                'min:8', // minimum 8 characters
+                'regex:/[a-z]/',      // must contain at least one lowercase letter
+                'regex:/[A-Z]/',      // must contain at least one uppercase letter
+                'regex:/[0-9]/',      // must contain at least one digit
+                'regex:/[@$!%*#?&]/', // must contain a special character
+            ],
         ]);
 
+        // Check for a soft-deleted user with the same email
+        $existingUser = User::withTrashed()->where('email', $request->email)->first();
+
+        if ($existingUser && $existingUser->trashed()) {
+            // Restore the user and update their info
+            $existingUser->restore();
+            $existingUser->firstName = $request->firstName;
+            $existingUser->lastName = $request->lastName;
+            $existingUser->password = Hash::make($request->password);
+            $existingUser->selectedRole = 'user';
+            $existingUser->status = 'pending';
+            $existingUser->save();
+
+            return response()->json([
+                'message' => 'Account restored and registration successful. Please log in.',
+            ], 201);
+        }
+
+        // If no soft-deleted user, create a new one
         $user = User::create([
             'firstName'=>$request->firstName,
             'lastName'=>$request->lastName,
@@ -154,7 +181,7 @@ class UserController extends Controller
             'selectedRole' =>  'user',
             'status'=>'pending'
         ]);
-        
+
         return response()->json([
             'message' => 'Registration successful. Please log in.',
         ],201);

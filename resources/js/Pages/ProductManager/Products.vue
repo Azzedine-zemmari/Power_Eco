@@ -1,82 +1,7 @@
 <template>
     <div class="bg-gray-50 text-gray-800 font-sans">
         <div class="flex h-screen overflow-hidden">
-            <!-- Sidebar -->
-            <div class="hidden md:flex md:flex-shrink-0">
-                <div class="flex flex-col w-64 bg-green-800">
-                    <div class="flex items-center h-16 flex-shrink-0 px-4 bg-green-900">
-                        <span class="text-white font-bold text-xl">Eco<span class="text-green-300">Move</span></span>
-                    </div>
-                    <div class="h-0 flex-1 flex flex-col overflow-y-auto">
-                        <!-- User info -->
-                        <div class="flex items-center flex-shrink-0 px-4 py-4 border-b border-green-700">
-                            <div class="flex-shrink-0">
-                                <img class="h-10 w-10 rounded-full"
-                                    src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                                    alt="">
-                            </div>
-                            <div class="ml-3">
-                                <p class="text-base font-medium text-white">Michael Roberts</p>
-                                <p class="text-sm font-medium text-green-200">Product Manager</p>
-                            </div>
-                        </div>
-                        <!-- Navigation -->
-                        <nav class="mt-5 px-2 space-y-1">
-                            <a href="product-manager-dashboard.html"
-                                class="text-green-100 hover:bg-green-700 group flex items-center px-2 py-2 text-base font-medium rounded-md">
-                                <svg class="mr-3 h-6 w-6 text-green-300" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                    viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-                                </svg>
-                                Dashboard
-                            </a>
-
-                            <a href="product-manager-categories.html"
-                                class="text-green-100 hover:bg-green-700 group flex items-center px-2 py-2 text-base font-medium rounded-md">
-                                <svg class="mr-3 h-6 w-6 text-green-300" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                    viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                                </svg>
-                                Categories
-                            </a>
-
-                            <a href="product-manager-products.html"
-                                class="bg-green-700 text-white group flex items-center px-2 py-2 text-base font-medium rounded-md">
-                                <svg class="mr-3 h-6 w-6 text-green-300" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                    viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-                                </svg>
-                                Products
-                            </a>
-
-                            <a href="#"
-                                class="text-green-100 hover:bg-green-700 group flex items-center px-2 py-2 text-base font-medium rounded-md">
-                                <svg class="mr-3 h-6 w-6 text-green-300" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                    viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                                </svg>
-                                Analytics
-                            </a>
-
-                            <a href="#"
-                                class="text-green-100 hover:bg-green-700 group flex items-center px-2 py-2 text-base font-medium rounded-md">
-                                <svg class="mr-3 h-6 w-6 text-green-300" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                    viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                </svg>
-                                Settings
-                            </a>
-                        </nav>
-                    </div>
-                </div>
-            </div>
+            <Sidebar />
 
             <!-- Main content -->
             <div class="flex flex-col w-0 flex-1 overflow-hidden">
@@ -170,8 +95,7 @@
                                         </div>
                                     </div>
                                     <div class="mt-3 sm:mt-0 sm:ml-4">
-                                        <select
-                                            v-model="selectedCategoryFilter"
+                                        <select v-model="selectedCategoryFilter"
                                             class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm rounded-md">
                                             <option value="" selected disabled>All Categories</option>
                                             <option v-for="category in categories" :key="category.id"
@@ -237,10 +161,10 @@
                                                     </div>
                                                     <div class="mt-3 flex items-center">
                                                         <span class="text-2xl font-bold text-gray-900">${{ product.price
-                                                            }}</span>
+                                                        }}</span>
                                                         <span v-if="product.old_price"
                                                             class="ml-2 text-sm line-through text-gray-500">${{
-                                                            product.old_price }}</span>
+                                                                product.old_price }}</span>
                                                     </div>
                                                     <div class="mt-2">
                                                         <span
@@ -552,8 +476,10 @@
 </template>
 
 <script setup>
-import { ref, onMounted, reactive,computed } from 'vue';
+import { ref, onMounted, reactive, computed } from 'vue';
 import axios from 'axios';
+import LogoutButton from '../../components/LogoutButton.vue';
+import Sidebar from '../../components/Sidebar.vue';
 
 // State variables
 const isModalOpen = ref(false);
@@ -577,7 +503,7 @@ const productForm = reactive({
     category_id: '',
     image: null,
     imagePreview: null,
-    imageFile:null,
+    imageFile: null,
     status: 'active'
 });
 
@@ -597,40 +523,40 @@ function closeModal() {
 }
 
 function editProduct(product) {
-  isEditing.value = true;
-  productForm.id = product.id;
-  productForm.name = product.name;
-  productForm.description = product.description;
-  productForm.price = product.price;
-  productForm.stock = product.stock;
-  productForm.category_id = product.category_id;
-  productForm.status = product.status || 'active';
-  
-  // For existing image, store the URL/path but not as a file
-  if (product.image) {
-    productForm.image = product.image; // Store the image path/URL
-    productForm.imagePreview = product.image; // Use the same for preview
-    productForm.imageFile = null; // No file yet unless user uploads a new one
-  } else {
-    productForm.image = null;
-    productForm.imagePreview = null;
-    productForm.imageFile = null;
-  }
-  
-  isModalOpen.value = true;
+    isEditing.value = true;
+    productForm.id = product.id;
+    productForm.name = product.name;
+    productForm.description = product.description;
+    productForm.price = product.price;
+    productForm.stock = product.stock;
+    productForm.category_id = product.category_id;
+    productForm.status = product.status || 'active';
+
+    // For existing image, store the URL/path but not as a file
+    if (product.image) {
+        productForm.image = product.image; // Store the image path/URL
+        productForm.imagePreview = product.image; // Use the same for preview
+        productForm.imageFile = null; // No file yet unless user uploads a new one
+    } else {
+        productForm.image = null;
+        productForm.imagePreview = null;
+        productForm.imageFile = null;
+    }
+
+    isModalOpen.value = true;
 }
 
 function resetForm() {
-  productForm.id = null;
-  productForm.name = '';
-  productForm.description = '';
-  productForm.price = '';
-  productForm.stock = '';
-  productForm.category_id = '';
-  productForm.image = null;
-  productForm.imagePreview = null;
-  productForm.imageFile = null;
-  productForm.status = 'active';
+    productForm.id = null;
+    productForm.name = '';
+    productForm.description = '';
+    productForm.price = '';
+    productForm.stock = '';
+    productForm.category_id = '';
+    productForm.image = null;
+    productForm.imagePreview = null;
+    productForm.imageFile = null;
+    productForm.status = 'active';
 }
 
 function confirmDelete(product) {
@@ -644,20 +570,20 @@ function closeDeleteModal() {
 }
 
 function handleImageChange(event) {
-  const file = event.target.files[0];
-  if (file) {
-    // Store the actual file object
-    productForm.imageFile = file;
-    
-    // Create a preview URL for display
-    productForm.imagePreview = URL.createObjectURL(file);
-  }
+    const file = event.target.files[0];
+    if (file) {
+        // Store the actual file object
+        productForm.imageFile = file;
+
+        // Create a preview URL for display
+        productForm.imagePreview = URL.createObjectURL(file);
+    }
 }
 
 function removeImage() {
-  productForm.imageFile = null;
-  productForm.imagePreview = null;
-  productForm.image = null; // Clear the existing image path as well
+    productForm.imageFile = null;
+    productForm.imagePreview = null;
+    productForm.image = null; // Clear the existing image path as well
 }
 
 // API functions
@@ -700,57 +626,57 @@ async function fetchCategories() {
 }
 
 async function submitProduct() {
-  try {
-    errors.value = {};
+    try {
+        errors.value = {};
 
-    // Get CSRF cookie from Laravel Sanctum
-    await axios.get('http://localhost:8000/sanctum/csrf-cookie', { withCredentials: true });
+        // Get CSRF cookie from Laravel Sanctum
+        await axios.get('http://localhost:8000/sanctum/csrf-cookie', { withCredentials: true });
 
-    const url = isEditing.value
-      ? `http://localhost:8000/api/products/${productForm.id}/update`
-      : 'http://localhost:8000/api/products/create';
+        const url = isEditing.value
+            ? `http://localhost:8000/api/products/${productForm.id}/update`
+            : 'http://localhost:8000/api/products/create';
 
-    const method = isEditing.value ? 'post' : 'post';
+        const method = isEditing.value ? 'post' : 'post';
 
-    const formData = new FormData();
-    formData.append('name', productForm.name);
-    formData.append('description', productForm.description);
-    formData.append('price', productForm.price);
-    formData.append('stock', productForm.stock);
-    formData.append('categorie_id', productForm.category_id);
-    formData.append('status', productForm.status);
+        const formData = new FormData();
+        formData.append('name', productForm.name);
+        formData.append('description', productForm.description);
+        formData.append('price', productForm.price);
+        formData.append('stock', productForm.stock);
+        formData.append('categorie_id', productForm.category_id);
+        formData.append('status', productForm.status);
 
-    // Only append image if there's a new file selected
-    if (productForm.imageFile) {
-      formData.append('image', productForm.imageFile);
-    }
-
-    if (isEditing.value) {
-      formData.append('_method', 'PUT');
-    }
-
-    const response = await axios[method](
-      url,
-      formData,
-      {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Accept': 'application/json',
-          'Content-Type': 'multipart/form-data' // Important for file uploads
+        // Only append image if there's a new file selected
+        if (productForm.imageFile) {
+            formData.append('image', productForm.imageFile);
         }
-      }
-    );
 
-    closeModal();
-    await fetchProducts();
+        if (isEditing.value) {
+            formData.append('_method', 'PUT');
+        }
 
-  } catch (err) {
-    if (err.response && err.response.data && err.response.data.errors) {
-      errors.value = err.response.data.errors;
-    } else {
-      console.error('Error submitting product:', err);
+        const response = await axios[method](
+            url,
+            formData,
+            {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Accept': 'application/json',
+                    'Content-Type': 'multipart/form-data' // Important for file uploads
+                }
+            }
+        );
+
+        closeModal();
+        await fetchProducts();
+
+    } catch (err) {
+        if (err.response && err.response.data && err.response.data.errors) {
+            errors.value = err.response.data.errors;
+        } else {
+            console.error('Error submitting product:', err);
+        }
     }
-  }
 }
 
 async function deleteProduct() {
@@ -776,22 +702,22 @@ async function deleteProduct() {
 }
 // Create a computed property for filtered products
 const filteredProducts = computed(() => {
-  if (!selectedCategoryFilter.value || selectedCategoryFilter.value === '') {
-    // If no category is selected, return all products
-    return products.value;
-  }
-  
-  // Filter products by the selected category
-  return products.value.filter(product => {
-    // If you're filtering by category ID
-   return product.categorie_id === selectedCategoryFilter.value;
-  });
+    if (!selectedCategoryFilter.value || selectedCategoryFilter.value === '') {
+        // If no category is selected, return all products
+        return products.value;
+    }
+
+    // Filter products by the selected category
+    return products.value.filter(product => {
+        // If you're filtering by category ID
+        return product.categorie_id === selectedCategoryFilter.value;
+    });
 });
 
 // Function to reset filters
 function resetFilters() {
-  selectedCategoryFilter.value = '';
-  // Reset any other filters you might add in the future
+    selectedCategoryFilter.value = '';
+    // Reset any other filters you might add in the future
 }
 
 // Initialize
