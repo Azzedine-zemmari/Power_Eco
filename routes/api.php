@@ -29,3 +29,5 @@ Route::get('/products',[ProductController::class,'show']);
 Route::put('/products/{id}/update',[ProductController::class,'update']);
 Route::post('/products/{id}/delete',[ProductController::class,'destroy']);
 Route::post('/users/{id}/active',[UserController::class,'activeUser']);
+Route::post('/forgot-password',[UserController::class,'forgotPassword']);
+Route::post('/reset-password',[UserController::class,'resetPassword']);

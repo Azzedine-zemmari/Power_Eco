@@ -11,3 +11,7 @@ Route::get('/{vue_capture?}', function () {
     return view('welcome');
 })->where('vue_capture', '[\/\w\.-]*');
 
+Route::get('/reset-password/{token}', function ($token) {
+    return view('welcome');
+})->name('password.reset');
+

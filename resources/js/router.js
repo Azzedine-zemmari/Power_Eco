@@ -71,6 +71,14 @@ const routes = [
             requiresAuth:true,
             role:"product-manager"
         }
+    },{
+        path:'/user/forgetPassword',
+        component:()=>import('./Pages/forgotPassword.vue')
+    },
+    {
+        path: '/reset-password/:token',
+        component: () => import('./Pages/ResetPassword.vue'),
+        name: 'reset-password'
     }
 ];
 

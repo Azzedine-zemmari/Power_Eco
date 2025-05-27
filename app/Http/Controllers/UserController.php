@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
 
 class UserController extends Controller
@@ -192,5 +193,42 @@ class UserController extends Controller
         return response()->json([
             'message'=> 'logged out succesfully'
     ]);
+    }
+    public function forgotPassword(Request $request){
+        $request->validate(['email'=>'required|email']);
+
+        $status = Password::sendResetLink(
+            $request->only('email')
+        );
+
+        if ($status === Password::RESET_LINK_SENT) {
+            return response()->json(['message' => 'Reset link sent to your email address.'], 200);
+        } else {
+            return response()->json(['message' => 'Unable to send reset link. Please check your email address and try again.'], 400);
+        }
+    }
+    public function resetPassword(Request $request){
+        $request->validate([
+            'token' => 'required',
+            'email' => 'required|email',
+            'password' => [
+                'required',
+                'string',
+                'min:8',
+                'regex:/[a-z]/',
+                'regex:/[A-Z]/',
+                'regex:/[0-9]/', 
+                'regex:/[@$!%*#?&]/', 
+            ],        
+        ]);
+        $status = Password::reset(
+            $request->only('email','password','password_confirmation','token'),function($user,$password){
+                $user->forceFill([
+                    'password' => bcrypt($password)
+                ])->save();
+            }
+        );
+        return response()->json(['status' => __($status)]);
+
     }
 }
