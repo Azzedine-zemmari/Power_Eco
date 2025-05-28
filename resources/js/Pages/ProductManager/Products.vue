@@ -52,24 +52,135 @@
                         </div>
                     </div>
                 </div>
+<main class="flex-1 relative overflow-y-auto focus:outline-none">
+    <div class="py-6">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
+            <div class="flex justify-between items-center">
+                <h1 class="text-2xl font-semibold text-gray-900">All Products</h1>
+                <div class="flex space-x-3">
+                    <!-- Import Products Button -->
+                    <button @click="toggleImportSection" type="button"
+                        class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                        <svg class="-ml-1 mr-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                        </svg>
+                        Import Products
+                    </button>
+                    
+                    <!-- Add New Product Button -->
+                    <button @click="openModal" type="button" id="create-product-btn"
+                        class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                        <svg class="-ml-1 mr-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd"
+                                d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+                                clip-rule="evenodd" />
+                        </svg>
+                        Add New Product
+                    </button>
+                </div>
+            </div>
+        </div>
 
-                <main class="flex-1 relative overflow-y-auto focus:outline-none">
-                    <div class="py-6">
-                        <div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
-                            <div class="flex justify-between">
-                                <h1 class="text-2xl font-semibold text-gray-900">All Products</h1>
-                                <button @click="openModal" type="button" id="create-product-btn"
-                                    class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
-                                    <svg class="-ml-1 mr-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg"
-                                        viewBox="0 0 20 20" fill="currentColor">
-                                        <path fill-rule="evenodd"
-                                            d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
-                                            clip-rule="evenodd" />
+        <!-- Import Products Section (Collapsible) -->
+        <div v-if="showImportSection" class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 mt-6">
+            <div class="bg-white shadow rounded-lg border border-gray-200">
+                <div class="px-4 py-5 sm:p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <div>
+                            <h3 class="text-lg leading-6 font-medium text-gray-900">Import Products from Excel</h3>
+                            <p class="mt-1 text-sm text-gray-500">
+                                Upload an Excel file (.xlsx, .xls) or CSV file to import multiple products at once.
+                            </p>
+                        </div>
+                        <button @click="showImportSection = false" type="button"
+                            class="text-gray-400 hover:text-gray-500">
+                            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
+
+                    <form @submit.prevent="importProducts" class="space-y-4">
+                        <!-- File Upload Area -->
+                        <div class="flex items-center justify-center w-full">
+                            <label for="excel-file" 
+                                class="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors duration-200"
+                                :class="{ 'border-green-400 bg-green-50': file }">
+                                <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                                    <svg v-if="!file" class="w-8 h-8 mb-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                                     </svg>
-                                    Add New Product
+                                    <svg v-else class="w-8 h-8 mb-4 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    <p v-if="!file" class="mb-2 text-sm text-gray-500">
+                                        <span class="font-semibold">Click to upload</span> or drag and drop
+                                    </p>
+                                    <p v-else class="mb-2 text-sm text-green-600 font-semibold">
+                                        {{ file.name }}
+                                    </p>
+                                    <p class="text-xs text-gray-500">
+                                        {{ file ? `${(file.size / 1024 / 1024).toFixed(2)} MB` : 'XLSX, XLS or CSV (MAX. 10MB)' }}
+                                    </p>
+                                </div>
+                                <input id="excel-file" type="file" class="hidden" @change="handleFile" accept=".xlsx,.xls,.csv">
+                            </label>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-4">
+                                <button v-if="file" @click="clearFile" type="button"
+                                    class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                                    <svg class="-ml-0.5 mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                    </svg>
+                                    Clear File
                                 </button>
+                                
+                                <a href="#" class="text-sm text-green-600 hover:text-green-500 font-medium">
+                                    Download Sample Template
+                                </a>
+                            </div>
+
+                            <button type="submit" :disabled="!file || importing"
+                                class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-50 disabled:cursor-not-allowed">
+                                <svg v-if="!importing" class="-ml-1 mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                <svg v-else class="animate-spin -ml-1 mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                                {{ importing ? 'Importing...' : 'Import Products' }}
+                            </button>
+                        </div>
+
+                        <!-- Help Information -->
+                        <div class="bg-blue-50 border border-blue-200 rounded-md p-4">
+                            <div class="flex">
+                                <div class="flex-shrink-0">
+                                    <svg class="h-5 w-5 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                </div>
+                                <div class="ml-3">
+                                    <h3 class="text-sm font-medium text-blue-800">Import Guidelines</h3>
+                                    <div class="mt-2 text-sm text-blue-700">
+                                        <ul class="list-disc pl-5 space-y-1">
+                                            <li><strong>Required columns:</strong> name, description, price, stock, category_id, marge, sell_price, status, image</li>
+                                            <li><strong>File size limit:</strong> Maximum 10MB</li>
+                                            <li><strong>Supported formats:</strong> .xlsx, .xls, .csv</li>
+                                        </ul>
+                                    </div>
+                                </div>
                             </div>
                         </div>
+                    </form>
+                </div>
+            </div>
+        </div>
                         <div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
                             <!-- Products content -->
                             <div class="py-4">
@@ -320,22 +431,22 @@
                                         <!-- marge & prix de vente  -->
                                         <div class="grid grid-cols-2 gap-4">
                                             <div>
-                                                <label for="product-price"
+                                                <label for="product-marge"
                                                     class="block text-sm font-medium text-gray-700">Marge (%)</label>
                                                 <div class="mt-1">
-                                                    <input v-model="productForm.marge" @input="countMarge" type="number" step="0.01"
-                                                        id="product-price" name="product-price" required
+                                                    <input v-model="productForm.marge" @input="countMarge" type="number"
+                                                        id="product-marge" name="product-marge" required
                                                         class="shadow-sm focus:ring-green-500 focus:border-green-500 block w-full sm:text-sm border-gray-300 rounded-md">
                                                     <div v-if="errors.marge" class="text-red-500 text-sm mt-1">{{
                                                         errors.marge[0] }}</div>
                                                 </div>
                                             </div>
                                             <div>
-                                                <label for="product-stock"
+                                                <label for="product-SellPrice"
                                                     class="block text-sm font-medium text-gray-700">Sell Price</label>
                                                 <div class="mt-1">
-                                                    <input v-model="productForm.Sprice" @input="countMarge" type="number" id="product-stock"
-                                                        name="product-stock" required
+                                                    <input v-model="productForm.Sprice" @input="countMarge" type="number" id="product-SellPrice"
+                                                        name="product-SellPrice" required
                                                         class="shadow-sm focus:ring-green-500 focus:border-green-500 block w-full sm:text-sm border-gray-300 rounded-md">
                                                     <div v-if="errors.Sprice" class="text-red-500 text-sm mt-1">{{
                                                         errors.Sprice[0] }}</div>
@@ -668,8 +779,10 @@ async function submitProduct() {
         formData.append('name', productForm.name);
         formData.append('description', productForm.description);
         formData.append('price', productForm.price);
+        formData.append('sell_price',productForm.Sprice);
+        formData.append('marge',productForm.marge);
         formData.append('stock', productForm.stock);
-        formData.append('categorie_id', productForm.category_id);
+        formData.append('category_id', productForm.category_id);
         formData.append('status', productForm.status);
 
         // Only append image if there's a new file selected
@@ -736,7 +849,7 @@ const filteredProducts = computed(() => {
     // Filter products by the selected category
     return products.value.filter(product => {
         // If you're filtering by category ID
-        return product.categorie_id === selectedCategoryFilter.value;
+        return product.category_id === selectedCategoryFilter.value;
     });
 });
 
@@ -746,23 +859,84 @@ function resetFilters() {
     // Reset any other filters you might add in the future
 }
 function countMarge() {
-    // Convert to numbers to avoid string multiplication/division
     const price = parseFloat(productForm.price);
     const marge = parseFloat(productForm.marge);
-    const Sprice = parseFloat(productForm.Sprice);
+    const sellPrice = parseFloat(productForm.Sprice);
+    console.log("price : ",productForm.price," marge : ",productForm.marge," sellPrice : ",productForm.Sprice)
 
-    if (price && marge && (!productForm.Sprice || isNaN(Sprice))) {
-        // If price and marge are entered, calculate sell price
-        productForm.Sprice = (price * marge).toFixed(2);
-    } else if (price && Sprice && (!productForm.marge || isNaN(marge))) {
-        // If price and sell price are entered, calculate marge
-        productForm.marge = (Sprice / price).toFixed(2);
+    // Case 1: price and margin are given => calculate sell price
+    if (!isNaN(price) && price > 0 && !isNaN(marge) && (isNaN(sellPrice) || !productForm.Sprice)) {
+        const calculatedSellPrice = price * (1 + marge / 100);
+        productForm.Sprice = isFinite(calculatedSellPrice) ? calculatedSellPrice.toFixed(2) : '';
     }
-    else if(isNaN(price) || price <= 0){
+
+    // Case 2: price and sell price are given => calculate margin
+    else if (!isNaN(price) && price > 0 && !isNaN(sellPrice) && (isNaN(marge) || !productForm.marge)) {
+        const calculatedMargin = ((sellPrice - price) / price) * 100;
+        productForm.marge = isFinite(calculatedMargin) ? calculatedMargin.toFixed(2) : '';
+    }
+
+    // Reset if price is invalid
+    else if (isNaN(price) || price <= 0) {
         productForm.Sprice = '';
-        productForm.marge = ''
+        productForm.marge = '';
     }
 }
+
+// import files
+const file = ref(null)
+
+const handleFile = (e) => {
+    file.value = e.target.files[0]
+}
+
+
+// Add these to your existing reactive variables
+const showImportSection = ref(false);
+const importing = ref(false);
+
+// Add these functions
+function toggleImportSection() {
+    showImportSection.value = !showImportSection.value;
+}
+
+function clearFile() {
+    file.value = null;
+}
+
+// Update your existing importProducts function
+const importProducts = async () => {
+    if (!file.value) return alert("Please select a file.");
+    
+    importing.value = true;
+    const formData = new FormData();
+    formData.append('excel_file', file.value);
+
+    try {
+        const response = await fetch('/api/import-products', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: formData,
+        });
+
+        const data = await response.json();
+        if (response.ok) {
+            file.value = null;
+            showImportSection.value = false;
+            await fetchProducts(); // Refresh the products list
+        } else {
+            alert('Failed to import: ' + (data.message || 'Unknown error'));
+        }
+    } catch (err) {
+        alert('Error: ' + err.message);
+    } finally {
+        importing.value = false;
+    }
+}
+
 // Initialize
 onMounted(() => {
     fetchProducts();
