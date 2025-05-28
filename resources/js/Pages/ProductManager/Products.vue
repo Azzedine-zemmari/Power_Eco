@@ -298,7 +298,7 @@
                                                 <label for="product-price"
                                                     class="block text-sm font-medium text-gray-700">Price ($)</label>
                                                 <div class="mt-1">
-                                                    <input v-model="productForm.price" type="number" step="0.01"
+                                                    <input v-model="productForm.price" @input="countMarge" type="number" step="0.01"
                                                         id="product-price" name="product-price" required
                                                         class="shadow-sm focus:ring-green-500 focus:border-green-500 block w-full sm:text-sm border-gray-300 rounded-md">
                                                     <div v-if="errors.price" class="text-red-500 text-sm mt-1">{{
@@ -317,7 +317,31 @@
                                                 </div>
                                             </div>
                                         </div>
-
+                                        <!-- marge & prix de vente  -->
+                                        <div class="grid grid-cols-2 gap-4">
+                                            <div>
+                                                <label for="product-price"
+                                                    class="block text-sm font-medium text-gray-700">Marge (%)</label>
+                                                <div class="mt-1">
+                                                    <input v-model="productForm.marge" @input="countMarge" type="number" step="0.01"
+                                                        id="product-price" name="product-price" required
+                                                        class="shadow-sm focus:ring-green-500 focus:border-green-500 block w-full sm:text-sm border-gray-300 rounded-md">
+                                                    <div v-if="errors.marge" class="text-red-500 text-sm mt-1">{{
+                                                        errors.marge[0] }}</div>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <label for="product-stock"
+                                                    class="block text-sm font-medium text-gray-700">Sell Price</label>
+                                                <div class="mt-1">
+                                                    <input v-model="productForm.Sprice" @input="countMarge" type="number" id="product-stock"
+                                                        name="product-stock" required
+                                                        class="shadow-sm focus:ring-green-500 focus:border-green-500 block w-full sm:text-sm border-gray-300 rounded-md">
+                                                    <div v-if="errors.Sprice" class="text-red-500 text-sm mt-1">{{
+                                                        errors.Sprice[0] }}</div>
+                                                </div>
+                                            </div>
+                                        </div>
                                         <!-- Category -->
                                         <div>
                                             <label for="product-category"
@@ -500,6 +524,8 @@ const productForm = reactive({
     description: '',
     price: '',
     stock: '',
+    marge:'',
+    Sprice:'',
     category_id: '',
     image: null,
     imagePreview: null,
@@ -719,7 +745,24 @@ function resetFilters() {
     selectedCategoryFilter.value = '';
     // Reset any other filters you might add in the future
 }
+function countMarge() {
+    // Convert to numbers to avoid string multiplication/division
+    const price = parseFloat(productForm.price);
+    const marge = parseFloat(productForm.marge);
+    const Sprice = parseFloat(productForm.Sprice);
 
+    if (price && marge && (!productForm.Sprice || isNaN(Sprice))) {
+        // If price and marge are entered, calculate sell price
+        productForm.Sprice = (price * marge).toFixed(2);
+    } else if (price && Sprice && (!productForm.marge || isNaN(marge))) {
+        // If price and sell price are entered, calculate marge
+        productForm.marge = (Sprice / price).toFixed(2);
+    }
+    else if(isNaN(price) || price <= 0){
+        productForm.Sprice = '';
+        productForm.marge = ''
+    }
+}
 // Initialize
 onMounted(() => {
     fetchProducts();
