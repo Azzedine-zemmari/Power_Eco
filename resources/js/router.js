@@ -79,6 +79,10 @@ const routes = [
         path: '/reset-password/:token',
         component: () => import('./Pages/ResetPassword.vue'),
         name: 'reset-password'
+    },
+    {
+        path:'/products',
+        component:()=> import('./Pages/Products.vue')
     }
 ];
 

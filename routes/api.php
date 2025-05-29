@@ -32,3 +32,4 @@ Route::post('/users/{id}/active',[UserController::class,'activeUser']);
 Route::post('/forgot-password',[UserController::class,'forgotPassword']);
 Route::post('/reset-password',[UserController::class,'resetPassword']);
 Route::post('/import-products', [ProductController::class, 'import']);
+Route::post('/products',[ProductController::class,'showProducts']);

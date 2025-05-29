@@ -165,4 +165,8 @@ public function import(Request $request)
 
     return response()->json(['message' => 'Products imported successfully']);
 }
+public function showProducts(){
+    $product = Product::where('status','active')->get();
+    return response()->json($product);
+}
 }
