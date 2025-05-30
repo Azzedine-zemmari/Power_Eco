@@ -1,3 +1,4 @@
+import { compile } from "vue";
 import { createRouter,createWebHistory } from "vue-router";
 
 const routes = [
@@ -90,6 +91,9 @@ const routes = [
         meta:{
             title:'Product Details'
         }
+    },{
+        path:'/cart',
+        component:() => import('./Pages/CartItem.vue')
     }
 ];
 

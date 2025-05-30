@@ -36,3 +36,4 @@ Route::post('/import-products', [ProductController::class, 'import']);
 Route::post('/products',[ProductController::class,'showProducts']);
 Route::get('/product/{id}',[ProductController::class,'showProductDetails']);
 Route::middleware('auth:sanctum')->post('/cart/add', [CartController::class, 'addToCart']);
+Route::middleware('auth:sanctum')->get('/cart', [CartController::class, 'getCartItem']);
