@@ -50,4 +50,24 @@ public function getCartItem()
         'cart_items' => $cartItems
     ]);
 }
+public function update(Request $request, $productId)
+{
+    $request->validate([
+        'quantity' => 'required|integer|min:1'
+    ]);
+
+    $cartItem = CartItem::where('user_id', auth()->id())
+                        ->where('product_id', $productId)
+                        ->first();
+
+    if (!$cartItem) {
+        return response()->json(['message' => 'Item not found'], 404);
+    }
+
+    $cartItem->quantity = $request->quantity;
+    $cartItem->save();
+
+    return response()->json(['message' => 'Quantity updated']);
+}
+
 }

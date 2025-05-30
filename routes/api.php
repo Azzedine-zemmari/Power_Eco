@@ -37,3 +37,4 @@ Route::post('/products',[ProductController::class,'showProducts']);
 Route::get('/product/{id}',[ProductController::class,'showProductDetails']);
 Route::middleware('auth:sanctum')->post('/cart/add', [CartController::class, 'addToCart']);
 Route::middleware('auth:sanctum')->get('/cart', [CartController::class, 'getCartItem']);
+Route::middleware('auth:sanctum')->put('/cart/{productId}', [CartController::class, 'update']);
