@@ -13,12 +13,12 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex flex-col md:flex-row py-6">
             <!-- Sidebar / Filters -->
-            <div class="w-full md:w-64 mb-6 md:mb-0 md:mr-8">
+            <!-- <div class="w-full md:w-64 mb-6 md:mb-0 md:mr-8">
                 <div class="bg-white p-4 rounded-lg shadow">
-                    <h2 class="font-bold text-lg mb-4">Filters</h2>
+                    <h2 class="font-bold text-lg mb-4">Filters</h2> -->
                     
                     <!-- Search -->
-                    <div class="mb-6">
+                    <!-- <div class="mb-6">
                         <label for="search" class="block text-sm font-medium text-gray-700 mb-1">Search</label>
                         <div class="mt-1 relative rounded-md shadow-sm">
                             <input type="text" name="search" id="search" class="focus:ring-green-500 focus:border-green-500 block w-full pr-10 sm:text-sm border-gray-300 rounded-md" placeholder="Search products...">
@@ -28,10 +28,10 @@
                                 </svg>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                     
                     <!-- Categories -->
-                    <div class="mb-6">
+                    <!-- <div class="mb-6">
                         <h3 class="font-medium text-sm text-gray-900 mb-2">Categories</h3>
                         <div class="space-y-2">
                             <div class="flex items-center">
@@ -51,10 +51,10 @@
                                 <label for="category-home" class="ml-2 text-sm text-gray-700">Home Energy</label>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                     
                     <!-- Price Range -->
-                    <div class="mb-6">
+                    <!-- <div class="mb-6">
                         <h3 class="font-medium text-sm text-gray-900 mb-2">Price Range</h3>
                         <div class="space-y-2">
                             <div class="flex items-center">
@@ -74,10 +74,10 @@
                                 <label for="price-4" class="ml-2 text-sm text-gray-700">Over $1000</label>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                     
                     <!-- Brand -->
-                    <div class="mb-6">
+                    <!-- <div class="mb-6">
                         <h3 class="font-medium text-sm text-gray-900 mb-2">Brand</h3>
                         <div class="space-y-2">
                             <div class="flex items-center">
@@ -103,7 +103,7 @@
                         Apply Filters
                     </button>
                 </div>
-            </div>
+            </div> -->
             
             <!-- Product Grid -->
             <div class="flex-1">
