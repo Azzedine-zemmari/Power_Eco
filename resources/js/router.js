@@ -83,6 +83,13 @@ const routes = [
     {
         path:'/products',
         component:()=> import('./Pages/Products.vue')
+    },
+    {
+        path:'/product/:id',
+        component:()=>import('./Pages/ProductDetails.vue'),
+        meta:{
+            title:'Product Details'
+        }
     }
 ];
 

@@ -110,11 +110,11 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                     <!-- Product 1 -->
                     <div v-for="product in products" class="bg-white rounded-lg shadow overflow-hidden">
-                        <a href="">
+                        <a :href="`/product/${product.id}`">
                             <img class="w-full h-48 object-cover" :src="`/storage/${product.image}`" alt="Premium Solar Panel Kit">
                         </a>
                         <div class="p-4">
-                            <a href="product-detail.html">
+                            <a :href="`/product/${product.id}`">
                                 <h3 class="text-lg font-semibold text-gray-900">{{ product.name }}</h3>
                             </a>
                             <p class="mt-1 text-sm text-gray-500">{{ product.description }}</p>

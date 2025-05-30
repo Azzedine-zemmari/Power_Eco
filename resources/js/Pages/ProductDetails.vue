@@ -31,18 +31,18 @@
                 <!-- Product Image -->
                 <div class="lg:max-w-lg lg:self-end">
                     <div class="rounded-lg overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1522107177-01884fcef41f?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80" alt="Premium Solar Panel Kit" class="w-full h-full object-center object-cover">
+                        <img :src="`/storage/${product.image}`" alt="Premium Solar Panel Kit" class="w-full h-full object-center object-cover">
                     </div>
                 </div>
 
                 <!-- Product Info -->
                 <div class="mt-10 px-4 sm:px-0 sm:mt-16 lg:mt-0">
-                    <h1 class="text-3xl font-extrabold tracking-tight text-gray-900">Premium Solar Panel Kit</h1>
+                    <h1 class="text-3xl font-extrabold tracking-tight text-gray-900">{{ product.name }}</h1>
                     
 
                     <!-- Price -->
                     <div class="mt-4">
-                        <p class="text-3xl text-gray-900">$899</p>
+                        <p class="text-3xl text-gray-900">MAD {{ product.price }}</p>
                         <p class="mt-1 text-sm text-gray-500">Free shipping and returns</p>
                     </div>
 
@@ -50,8 +50,7 @@
                     <div class="mt-6">
                         <h2 class="text-sm font-medium text-gray-900">Description</h2>
                         <div class="mt-4 prose prose-sm text-gray-500">
-                            <p>The Premium Solar Panel Kit is a complete home solar solution designed for easy installation and maximum energy efficiency. This kit includes high-efficiency monocrystalline solar panels, an inverter, mounting hardware, and a comprehensive installation guide.</p>
-                            <p class="mt-2">Perfect for homeowners looking to reduce their carbon footprint and energy bills, this system can generate up to 5kW of clean, renewable energy. The panels are weather-resistant, durable, and come with a 25-year warranty.</p>
+                            <p>{{ product.description }}</p>
                         </div>
                     </div>
 
@@ -192,5 +191,21 @@
 import Navbar from '../components/Navbar.vue';
 import Footer from '../components/Footer.vue';
 import axios from 'axios';
+import { useRoute } from 'vue-router';
+import { onMounted,ref } from 'vue';
 
+const product = ref(null)
+const route = useRoute()
+const productId = route.params.id
+
+const fetchProduct = async () => {
+    try{
+        const response = await axios.get(`/api/product/${productId}`)
+        product.value = response.data
+        console.log(product.value)
+    }catch(error){
+        console.error('Error fetching product: ',error)
+    }
+}
+onMounted(fetchProduct)
 </script>

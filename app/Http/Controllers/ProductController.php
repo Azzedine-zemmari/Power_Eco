@@ -169,4 +169,8 @@ public function showProducts(){
     $product = Product::where('status','active')->get();
     return response()->json($product);
 }
+public function showProductDetails(int $id){
+    $product = Product::findOrFail($id);
+    return response()->json($product);
+}
 }
