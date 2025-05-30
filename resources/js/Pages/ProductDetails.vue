@@ -27,7 +27,7 @@
     <!-- Product Detail -->
     <div class="bg-white">
         <div class="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
-            <div class="lg:grid lg:grid-cols-2 lg:gap-x-8">
+            <div v-if="product" class="lg:grid lg:grid-cols-2 lg:gap-x-8">
                 <!-- Product Image -->
                 <div class="lg:max-w-lg lg:self-end">
                     <div class="rounded-lg overflow-hidden">
@@ -60,13 +60,13 @@
                         <div class="flex items-center">
                             <h2 class="text-sm font-medium text-gray-900 w-24">Quantity</h2>
                             <div class="flex items-center border border-gray-300 rounded-md">
-                                <button type="button" class="p-2 text-gray-500 hover:text-gray-600">
+                                <button @click="decreaseQuantity" type="button" class="p-2 text-gray-500 hover:text-gray-600">
                                     <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                                         <path fill-rule="evenodd" d="M3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd" />
                                     </svg>
                                 </button>
-                                <input type="text" class="w-12 text-center border-transparent focus:border-green-500 focus:ring-0" value="1">
-                                <button type="button" class="p-2 text-gray-500 hover:text-gray-600">
+                                <input v-model="quantity" type="text" class="w-12 text-center border-transparent focus:border-green-500 focus:ring-0">
+                                <button @click="increaseQuantity" type="button" class="p-2 text-gray-500 hover:text-gray-600">
                                     <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                                         <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
                                     </svg>
@@ -195,6 +195,7 @@ import { useRoute } from 'vue-router';
 import { onMounted,ref } from 'vue';
 
 const product = ref(null)
+
 const route = useRoute()
 const productId = route.params.id
 
@@ -205,6 +206,16 @@ const fetchProduct = async () => {
         console.log(product.value)
     }catch(error){
         console.error('Error fetching product: ',error)
+    }
+}
+const quantity = ref(1)
+
+const increaseQuantity = () =>{
+    quantity.value++
+}
+const decreaseQuantity = () => {
+    if(quantity.value > 1){
+        quantity.value--
     }
 }
 onMounted(fetchProduct)
