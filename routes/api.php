@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
@@ -34,3 +35,4 @@ Route::post('/reset-password',[UserController::class,'resetPassword']);
 Route::post('/import-products', [ProductController::class, 'import']);
 Route::post('/products',[ProductController::class,'showProducts']);
 Route::get('/product/{id}',[ProductController::class,'showProductDetails']);
+Route::middleware('auth:sanctum')->post('/cart/add', [CartController::class, 'addToCart']);
