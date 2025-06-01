@@ -94,6 +94,12 @@ const routes = [
     },{
         path:'/cart',
         component:() => import('./Pages/CartItem.vue')
+    },{
+    path:'/checkout',
+        component:() => import('./Pages/Checkout.vue'),
+        meta:{
+            title:'Checkout Page'
+        }
     }
 ];
 
