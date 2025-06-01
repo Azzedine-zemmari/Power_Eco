@@ -69,5 +69,14 @@ public function update(Request $request, $productId)
 
     return response()->json(['message' => 'Quantity updated']);
 }
+    public function dropItem(int $id)
+    {
+        $cartItem = CartItem::where('id', $id)->first();
+        if (!$cartItem) {
+            return response()->json(['message' => 'Item not found'], 404);
+        }
 
+        $cartItem->delete();
+        return response()->json(['message' => 'Item deleted successfully']);
+    }
 }

@@ -176,23 +176,24 @@ const updateQuantity = async (item, newQuantity) => {
     }
 };
 
-// const removeItem = async (item) => {
-//     try {
-//         await axios.delete(`/api/cart/${item.product_id}`, {
-//             headers: {
-//                 Authorization: `Bearer ${localStorage.getItem('token')}`
-//             }
-//         });
+const removeItem = async (item) => {
+    try {
+        console.log(item)
+        await axios.delete(`/api/cart/${item.id}/drop`, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`
+            }
+        });
         
-//         // Remove item from local state
-//         items.value = items.value.filter(cartItem => cartItem.product_id !== item.product_id);
+        // Remove item from local state
+        items.value = items.value.filter(cartItem => cartItem.product_id !== item.product_id);
         
-//         console.log('Item removed successfully');
-//     } catch (error) {
-//         console.error(error);
-//         alert('Failed to remove item');
-//     }
-// };
+        console.log('Item removed successfully');
+    } catch (error) {
+        console.error(error);
+        alert('Failed to remove item');
+    }
+};
 
 onMounted(cartItems);
 </script>
