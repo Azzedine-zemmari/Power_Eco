@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
@@ -39,3 +40,5 @@ Route::middleware('auth:sanctum')->post('/cart/add', [CartController::class, 'ad
 Route::middleware('auth:sanctum')->get('/cart', [CartController::class, 'getCartItem']);
 Route::middleware('auth:sanctum')->put('/cart/{productId}', [CartController::class, 'update']);
 Route::middleware('auth:sanctum')->delete('/cart/{productId}/drop', [CartController::class, 'dropItem']);
+Route::middleware('auth:sanctum')->post('/checkout', [CheckoutController::class, 'checkout']);
+

@@ -15,43 +15,72 @@
                 <section aria-labelledby="checkout-heading" class="lg:col-span-7">
                     <h2 id="checkout-heading" class="sr-only">Checkout form</h2>
 
-                    <form>
+                    <form @submit.prevent="checkout">
                         <!-- Contact Information -->
                         <div class="bg-white shadow-sm rounded-lg p-6 mb-8">
                             <h3 class="text-lg font-medium text-gray-900 mb-4">Contact Information</h3>
                             <div class="grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
                                 <div class="sm:col-span-2">
-                                    <label for="email" class="block text-sm font-medium text-gray-700">Email
-                                        address</label>
+                                    <label for="email" class="block text-sm font-medium text-gray-700">Email address</label>
                                     <div class="mt-1">
-                                        <input type="email" id="email" name="email" autocomplete="email"
-                                            class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 sm:text-sm">
+                                        <input 
+                                            type="email" 
+                                            v-model="formData.email" 
+                                            id="email" 
+                                            name="email" 
+                                            autocomplete="email"
+                                            required
+                                            class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 sm:text-sm"
+                                            :class="{ 'border-red-300': errors.email }">
+                                        <p v-if="errors.email" class="mt-1 text-sm text-red-600">{{ errors.email[0] }}</p>
                                     </div>
                                 </div>
 
                                 <div>
-                                    <label for="first-name" class="block text-sm font-medium text-gray-700">First
-                                        name</label>
+                                    <label for="first-name" class="block text-sm font-medium text-gray-700">First name</label>
                                     <div class="mt-1">
-                                        <input type="text" id="first-name" name="first-name" autocomplete="given-name"
-                                            class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 sm:text-sm">
+                                        <input 
+                                            type="text" 
+                                            v-model="formData.first_name" 
+                                            id="first-name" 
+                                            name="first-name" 
+                                            autocomplete="given-name"
+                                            required
+                                            class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 sm:text-sm"
+                                            :class="{ 'border-red-300': errors.first_name }">
+                                        <p v-if="errors.first_name" class="mt-1 text-sm text-red-600">{{ errors.first_name[0] }}</p>
                                     </div>
                                 </div>
 
                                 <div>
-                                    <label for="last-name" class="block text-sm font-medium text-gray-700">Last
-                                        name</label>
+                                    <label for="last-name" class="block text-sm font-medium text-gray-700">Last name</label>
                                     <div class="mt-1">
-                                        <input type="text" id="last-name" name="last-name" autocomplete="family-name"
-                                            class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 sm:text-sm">
+                                        <input 
+                                            type="text" 
+                                            id="last-name" 
+                                            v-model="formData.last_name" 
+                                            name="last-name" 
+                                            autocomplete="family-name"
+                                            required
+                                            class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 sm:text-sm"
+                                            :class="{ 'border-red-300': errors.last_name }">
+                                        <p v-if="errors.last_name" class="mt-1 text-sm text-red-600">{{ errors.last_name[0] }}</p>
                                     </div>
                                 </div>
 
                                 <div class="sm:col-span-2">
                                     <label for="phone" class="block text-sm font-medium text-gray-700">Phone</label>
                                     <div class="mt-1">
-                                        <input type="text" id="phone" name="phone" autocomplete="tel"
-                                            class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 sm:text-sm">
+                                        <input 
+                                            type="tel" 
+                                            id="phone" 
+                                            v-model="formData.phone" 
+                                            name="phone" 
+                                            autocomplete="tel"
+                                            required
+                                            class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 sm:text-sm"
+                                            :class="{ 'border-red-300': errors.phone }">
+                                        <p v-if="errors.phone" class="mt-1 text-sm text-red-600">{{ errors.phone[0] }}</p>
                                     </div>
                                 </div>
                             </div>
@@ -64,70 +93,62 @@
                                 <div class="sm:col-span-2">
                                     <label for="address" class="block text-sm font-medium text-gray-700">Address</label>
                                     <div class="mt-1">
-                                        <input type="text" id="address" name="address" autocomplete="street-address"
-                                            class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 sm:text-sm">
+                                        <input 
+                                            type="text" 
+                                            v-model="formData.address" 
+                                            id="address" 
+                                            name="address" 
+                                            autocomplete="street-address"
+                                            required
+                                            class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 sm:text-sm"
+                                            :class="{ 'border-red-300': errors.address }">
+                                        <p v-if="errors.address" class="mt-1 text-sm text-red-600">{{ errors.address[0] }}</p>
                                     </div>
                                 </div>
 
                                 <div class="sm:col-span-2">
-                                    <label for="apartment" class="block text-sm font-medium text-gray-700">Apartment,
-                                        suite, etc.</label>
+                                    <label for="apartment" class="block text-sm font-medium text-gray-700">Apartment, suite, etc.</label>
                                     <div class="mt-1">
-                                        <input type="text" id="apartment" name="apartment"
-                                            class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 sm:text-sm">
+                                        <input 
+                                            type="text" 
+                                            id="apartment" 
+                                            name="apartment" 
+                                            v-model="formData.apartment"
+                                            class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 sm:text-sm"
+                                            :class="{ 'border-red-300': errors.apartment }">
+                                        <p v-if="errors.apartment" class="mt-1 text-sm text-red-600">{{ errors.apartment[0] }}</p>
                                     </div>
                                 </div>
 
                                 <div>
                                     <label for="city" class="block text-sm font-medium text-gray-700">City</label>
                                     <div class="mt-1">
-                                        <input type="text" id="city" name="city" autocomplete="address-level2"
-                                            class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 sm:text-sm">
+                                        <input 
+                                            type="text" 
+                                            id="city" 
+                                            name="city" 
+                                            v-model="formData.city" 
+                                            autocomplete="address-level2"
+                                            required
+                                            class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 sm:text-sm"
+                                            :class="{ 'border-red-300': errors.city }">
+                                        <p v-if="errors.city" class="mt-1 text-sm text-red-600">{{ errors.city[0] }}</p>
                                     </div>
                                 </div>
 
                                 <div>
-                                    <label for="state" class="block text-sm font-medium text-gray-700">State /
-                                        Province</label>
+                                    <label for="postal-code" class="block text-sm font-medium text-gray-700">Postal code</label>
                                     <div class="mt-1">
-                                        <input type="text" id="state" name="state" autocomplete="address-level1"
-                                            class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 sm:text-sm">
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <label for="postal-code" class="block text-sm font-medium text-gray-700">Postal
-                                        code</label>
-                                    <div class="mt-1">
-                                        <input type="text" id="postal-code" name="postal-code"
+                                        <input 
+                                            type="text" 
+                                            id="postal-code" 
+                                            v-model="formData.postal_code" 
+                                            name="postal-code"
                                             autocomplete="postal-code"
-                                            class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 sm:text-sm">
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <label for="country" class="block text-sm font-medium text-gray-700">Country</label>
-                                    <div class="mt-1">
-                                        <select id="country" name="country" autocomplete="country-name"
-                                            class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 sm:text-sm">
-                                            <option>United States</option>
-                                            <option>Canada</option>
-                                            <option>Mexico</option>
-                                            <option>United Kingdom</option>
-                                            <option>Germany</option>
-                                            <option>France</option>
-                                            <option>Australia</option>
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <div class="sm:col-span-2">
-                                    <div class="flex items-center">
-                                        <input id="same-billing" name="same-billing" type="checkbox" checked
-                                            class="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded">
-                                        <label for="same-billing" class="ml-2 block text-sm text-gray-700">
-                                            Billing address is the same as shipping address
-                                        </label>
+                                            required
+                                            class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 sm:text-sm"
+                                            :class="{ 'border-red-300': errors.postal_code }">
+                                        <p v-if="errors.postal_code" class="mt-1 text-sm text-red-600">{{ errors.postal_code[0] }}</p>
                                     </div>
                                 </div>
                             </div>
@@ -137,13 +158,33 @@
                         <div class="bg-white shadow-sm rounded-lg p-6 mb-8">
                             <h3 class="text-lg font-medium text-gray-900 mb-4">Additional Notes</h3>
                             <div>
-                                <label for="notes" class="block text-sm font-medium text-gray-700">Order notes
-                                    (optional)</label>
+                                <label for="notes" class="block text-sm font-medium text-gray-700">Order notes (optional)</label>
                                 <div class="mt-1">
-                                    <textarea id="notes" name="notes" rows="3"
-                                        class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 sm:text-sm"></textarea>
+                                    <textarea 
+                                        id="notes" 
+                                        name="notes" 
+                                        v-model="formData.notes" 
+                                        rows="3"
+                                        placeholder="Special delivery instructions, gift message, etc."
+                                        class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 sm:text-sm"
+                                        :class="{ 'border-red-300': errors.notes }"></textarea>
+                                    <p v-if="errors.notes" class="mt-1 text-sm text-red-600">{{ errors.notes[0] }}</p>
                                 </div>
                             </div>
+                        </div>
+
+                        <!-- Place Order Button -->
+                        <div class="bg-white shadow-sm rounded-lg p-6">
+                            <button 
+                                type="submit"
+                                :disabled="isProcessing || items.length === 0"
+                                class="w-full bg-green-600 border border-transparent rounded-md shadow-sm py-3 px-4 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed">
+                                <svg v-if="isProcessing" class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                                {{ isProcessing ? 'Processing...' : 'Place Order' }}
+                            </button>
                         </div>
                     </form>
                 </section>
@@ -153,41 +194,35 @@
                     class="mt-16 bg-white rounded-lg px-4 py-6 sm:p-6 lg:p-8 lg:mt-0 lg:col-span-5">
                     <h2 id="summary-heading" class="text-lg font-medium text-gray-900">Order summary</h2>
 
-                    <div class="mt-6 space-y-4">
+                    <div v-if="items.length > 0" class="mt-6 space-y-4">
                         <div v-for="item in items" :key="item.id" class="flex items-center justify-between border-t border-gray-200 pt-4">
                             <dt class="flex items-center text-sm text-gray-600">
                                 <span>{{ item.product_name }} ({{ item.quantity }})</span>
                             </dt>
-                            <dd class="text-sm font-medium text-gray-900">MAD {{ item.product_price }} </dd>
+                            <dd class="text-sm font-medium text-gray-900">MAD {{ (parseFloat(item.product_price) * parseInt(item.quantity)).toFixed(2) }}</dd>
                         </div>
+                        
                         <div class="flex items-center justify-between border-t border-gray-200 pt-4">
                             <dt class="text-base font-medium text-gray-900">Order total</dt>
-                            <dd class="text-base font-medium text-gray-900">${{ total.toFixed(2) }}</dd>
+                            <dd class="text-base font-medium text-gray-900">MAD {{ total.toFixed(2) }}</dd>
                         </div>
                     </div>
 
-                    <!-- Promo Code -->
-                    <!-- <div class="mt-6">
-                        <div class="flex items-center">
-                            <input type="text" id="promo-code" name="promo-code" placeholder="Promo code"
-                                class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 sm:text-sm">
-                            <button type="button"
-                                class="ml-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
-                                Apply
-                            </button>
+                    <div v-else class="mt-6 text-center py-8">
+                        <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                        </svg>
+                        <h3 class="mt-2 text-sm font-medium text-gray-900">Your cart is empty</h3>
+                        <p class="mt-1 text-sm text-gray-500">Add some products to continue with checkout.</p>
+                        <div class="mt-6">
+                            <a href="/products" class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700">
+                                Continue Shopping
+                            </a>
                         </div>
-                    </div> -->
-
-                    <!-- Place Order Button -->
-                    <div class="mt-6">
-                        <button type="submit"
-                            class="w-full bg-green-600 border border-transparent rounded-md shadow-sm py-3 px-4 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 flex items-center justify-center">
-                            Place Order
-                        </button>
                     </div>
 
                     <!-- Eco-friendly message -->
-                    <div class="mt-8 border-t border-gray-200 pt-6">
+                    <div v-if="items.length > 0" class="mt-8 border-t border-gray-200 pt-6">
                         <div class="flex items-center">
                             <svg class="h-5 w-5 text-green-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
                                 fill="currentColor">
@@ -220,9 +255,25 @@
 <script setup>
 import Navbar from '../components/Navbar.vue';
 import Footer from '../components/Footer.vue';
-import { ref,onMounted, computed } from 'vue';
+import { ref,onMounted, computed,reactive } from 'vue';
+import axios from 'axios';
 
 let items = ref([])
+const isProcessing = ref(false);
+const errors = ref({});
+
+const formData = reactive({
+    email: '',
+    first_name: '',
+    last_name: '',
+    phone: '',
+    address: '',
+    apartment: '',
+    city: '',
+    postal_code: '',
+    notes: ''
+});
+
 const cartItems = async () => {
     try {
         const response = await axios.get('/api/cart', {
@@ -244,7 +295,64 @@ const total = computed(()=>{
         return sum+(parseFloat(item.product_price) * parseInt(item.quantity))
     },0)
 })
-
+const checkout = async () => {
+    // Get CSRF cookie from Laravel Sanctum
+    await axios.get('http://localhost:8000/sanctum/csrf-cookie', { withCredentials: true });
+    if (isProcessing.value) return;
+    
+    // Clear previous errors
+    errors.value = {};
+    
+    // Check if cart is empty
+    if (items.value.length === 0) {
+        alert('Your cart is empty. Please add some products before checkout.');
+        return;
+    }
+    
+    isProcessing.value = true;
+    
+    try {
+        const response = await axios.post('/api/checkout', formData, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+                'Content-Type': 'application/json'
+            }
+        });
+        
+        // Handle successful checkout
+        if (response.data.message) {
+            alert('Order placed successfully!');
+            
+            // Clear the cart items from frontend
+            items.value = [];
+            
+            // Reset form
+            Object.keys(formData).forEach(key => {
+                if (key !== 'email' && key !== 'first_name' && key !== 'last_name') {
+                    formData[key] = '';
+                }
+            });
+            
+            // Redirect to orders page or home
+            window.location.href = '/'; // or wherever you want to redirect
+        }
+        
+    } catch (error) {
+        console.error('Checkout failed:', error);
+        
+        if (error.response && error.response.status === 422) {
+            // Handle validation errors
+            errors.value = error.response.data.errors || {};
+        } else if (error.response && error.response.status === 400) {
+            // Handle cart empty error
+            alert(error.response.data.message || 'Cart is empty');
+        } else {
+            alert('Checkout failed. Please try again.');
+        }
+    } finally {
+        isProcessing.value = false;
+    }
+}
 onMounted(() => {
     cartItems();
 });
