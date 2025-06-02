@@ -100,6 +100,13 @@ const routes = [
         meta:{
             title:'Checkout Page'
         }
+    },
+    {
+        path:'/user/profile',
+        component:()=> import('./Pages/User/Profile.vue'),
+        meta:{
+            title:'User Profile'
+        }
     }
 ];
 

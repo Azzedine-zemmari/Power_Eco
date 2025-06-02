@@ -231,4 +231,12 @@ class UserController extends Controller
         return response()->json(['status' => __($status)]);
 
     }
+    public function getUserData(Request $request){
+        $user = $request->user();
+        if($user){
+            $data = User::find($user->id);
+            return response()->json($data);
+        }
+        return response()->json(['message' => 'User not authenticated.'], 401);
+    }
 }
