@@ -108,18 +108,6 @@
                                                     >
                                                     <p v-else class="text-gray-900 bg-gray-50 px-3 py-2 rounded-md">{{ profile.email }}</p>
                                                 </div>
-
-                                                <!-- Phone -->
-                                                <div>
-                                                    <label class="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
-                                                    <input 
-                                                        v-if="isEditing"
-                                                        v-model="editProfile.phone"
-                                                        type="tel"
-                                                        class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500"
-                                                    >
-                                                    <p v-else class="text-gray-900 bg-gray-50 px-3 py-2 rounded-md">{{ profile.phone }}</p>
-                                                </div>
                                             </div>
 
                                             <!-- Member Since -->
@@ -164,7 +152,6 @@ const profile = reactive({
     firstName: '',
     lastName:'',
     email: '',
-    phone: '',
     joinDate: ''
 });
 
@@ -172,12 +159,12 @@ const editProfile = reactive({
     firstName: '',
     lastName:'',
     email: '',
-    phone: '',
 });
 
-// Fetch user data from API and update profile
+// Fetch user data from API 
 const fetchProfile = async () => {
     try {
+        await axios.get('http://localhost:8000/sanctum/csrf-cookie', { withCredentials: true });
         const response = await axios.get('http://localhost:8000/api/user/data', {
             withCredentials: true,
             headers: {
@@ -185,43 +172,56 @@ const fetchProfile = async () => {
                 Authorization: `Bearer ${localStorage.getItem('token')}`
             }
         });
-        // Assuming response.data contains the user object
+
         Object.assign(profile, {
             firstName: response.data.firstName,
             lastName:response.data.lastName,
             email: response.data.email,
-            phone: response.data.phone,
-            joinDate: response.data.joinDate
+            joinDate: response.data.created_at
         });
         Object.assign(editProfile, {
             firstName: response.data.firstName,
             lastName:response.data.lastName,
             email: response.data.email,
-            phone: response.data.phone
         });
     } catch (error) {
         console.error(error);
     }
 };
 
-onMounted(fetchProfile);
 
 const toggleEdit = () => {
     if (isEditing.value) {
         // Reset edit profile to original values when canceling
         Object.assign(editProfile, {
-            name: profile.name,
+            firstName: profile.firstName,
+            lastName: profile.lastName,
             email: profile.email,
-            phone: profile.phone,
         });
     }
     isEditing.value = !isEditing.value;
 };
 
-const saveProfile = () => {
-    // Update the main profile with edited values
-    Object.assign(profile, editProfile);
-    isEditing.value = false;
+const saveProfile = async () => {
+    try {
+        const response = await axios.put('http://localhost:8000/api/user/data/update', {
+            firstName: editProfile.firstName,
+            lastName: editProfile.lastName,
+            email: editProfile.email,
+        }, {
+            withCredentials: true,
+            headers: {
+                Accept: 'application/json',
+                Authorization: `Bearer ${localStorage.getItem('token')}`
+            }
+        });
+        // Update the main profile with edited values
+        Object.assign(profile, response.data);
+        isEditing.value = false;
+    } catch (error) {
+        console.error(error);
+        // Optionally show error to user
+    }
 };
 
 const formatDate = (dateString) => {
@@ -231,4 +231,5 @@ const formatDate = (dateString) => {
         day: 'numeric'
     });
 };
+onMounted(fetchProfile);
 </script>

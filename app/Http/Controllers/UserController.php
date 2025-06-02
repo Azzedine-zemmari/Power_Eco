@@ -231,10 +231,40 @@ class UserController extends Controller
         return response()->json(['status' => __($status)]);
 
     }
+    // user data for profile information
     public function getUserData(Request $request){
         $user = $request->user();
         if($user){
             $data = User::find($user->id);
+            return response()->json($data);
+        }
+        return response()->json(['message' => 'User not authenticated.'], 401);
+    }
+
+    // update user data
+    public function update(Request $request){
+        $user = $request->user();
+        if($user){
+            $request->validate([
+                'firstName' => 'sometimes|required|string|max:255',
+                'lastName' => 'sometimes|required|string|max:255',
+                'email' => 'sometimes|required|email|unique:users,email,' . $user->id,
+            ]);
+
+            $data = User::find($user->id);
+
+            if ($request->has('firstName')) {
+                $data->firstName = $request->firstName;
+            }
+            if ($request->has('lastName')) {
+                $data->lastName = $request->lastName;
+            }
+            if ($request->has('email')) {
+                $data->email = $request->email;
+            }
+
+            $data->save();
+
             return response()->json($data);
         }
         return response()->json(['message' => 'User not authenticated.'], 401);

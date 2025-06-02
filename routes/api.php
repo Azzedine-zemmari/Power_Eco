@@ -42,4 +42,5 @@ Route::middleware('auth:sanctum')->put('/cart/{productId}', [CartController::cla
 Route::middleware('auth:sanctum')->delete('/cart/{productId}/drop', [CartController::class, 'dropItem']);
 Route::middleware('auth:sanctum')->post('/checkout', [CheckoutController::class, 'checkout']);
 Route::middleware('auth:sanctum')->get('/user/data',[UserController::class,'getUserData']);
+Route::middleware('auth:sanctum')->put('/user/data/update',[UserController::class,'update']);
 
