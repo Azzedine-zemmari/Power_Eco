@@ -6,7 +6,7 @@
 <script setup>
 import axios from 'axios';
 import { useRouter } from 'vue-router';
-import { ref,computed } from 'vue';
+import { computed } from 'vue';
 
 const props = defineProps({
     variant:{
@@ -29,8 +29,8 @@ const computedClass = computed(()=>{
 async function logout() {
     try{
         const token = localStorage.getItem('token')
-
-        await axios.post('http://localhost:8000/api/logout',{},{
+        if (!token) throw new Error('Token not found');
+        await axios.post('http://localhost:8000/api/logout', {}, {
             headers : {
                 Authorization : `Bearer ${token}`
             }

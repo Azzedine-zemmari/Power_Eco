@@ -75,3 +75,6 @@
         </div>
     </nav>
 </template>
+<script setup>
+import LogoutButton from './LogoutButton.vue';
+</script>

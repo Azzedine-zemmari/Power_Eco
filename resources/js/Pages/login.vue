@@ -137,7 +137,7 @@
                     router.push('/');
                     break;
                 case 'commercial':
-                    router.push('/test');
+                    router.push('/saleList');
                     break;
                 case 'product-manager':
                     router.push('/productManager/dashboard');

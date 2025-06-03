@@ -107,6 +107,12 @@ const routes = [
         meta:{
             title:'User Profile'
         }
+    },{
+        path:'/saleList',
+        component:() => import('./Pages/Commercial/SalesList.vue'),
+        meta:{
+            title:'Sales list'
+        }
     }
 ];
 
