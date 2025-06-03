@@ -3,6 +3,7 @@
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\CommercialController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
@@ -43,4 +44,4 @@ Route::middleware('auth:sanctum')->delete('/cart/{productId}/drop', [CartControl
 Route::middleware('auth:sanctum')->post('/checkout', [CheckoutController::class, 'checkout']);
 Route::middleware('auth:sanctum')->get('/user/data',[UserController::class,'getUserData']);
 Route::middleware('auth:sanctum')->put('/user/data/update',[UserController::class,'update']);
-
+Route::middleware('auth:sanctum')->get('/sales/data',[CommercialController::class,'sales']);
