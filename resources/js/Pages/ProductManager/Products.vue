@@ -205,15 +205,27 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="mt-3 sm:mt-0 sm:ml-4">
+                                    <div class="mt-3 sm:mt-0 sm:ml-4 flex space-x-2 items-center">
                                         <select v-model="selectedCategoryFilter"
                                             class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm rounded-md">
                                             <option value="" selected disabled>All Categories</option>
                                             <option v-for="category in categories" :key="category.id"
                                                 :value="category.id">{{ category.name }}</option>
                                         </select>
+                                        <!-- Price filter inputs -->
+                                        <input v-model="minPriceFilter" type="number" step="0.01" placeholder="Min Price"
+                                            class="mt-1 block w-24 pl-3 pr-2 py-2 text-base border-gray-300 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm rounded-md" />
+                                        <span class="mx-1 text-gray-500">-</span>
+                                        <input v-model="maxPriceFilter" type="number" step="0.01" placeholder="Max Price"
+                                            class="mt-1 block w-24 pl-3 pr-2 py-2 text-base border-gray-300 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm rounded-md" />
+                                        <!-- Stock filter text inputs -->
+                                        <input v-model="minStockFilter" type="number" step="1" placeholder="Min Stock"
+                                            class="mt-1 block w-24 pl-3 pr-2 py-2 text-base border-gray-300 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm rounded-md" />
+                                        <span class="mx-1 text-gray-500">-</span>
+                                        <input v-model="maxStockFilter" type="number" step="1" placeholder="Max Stock"
+                                            class="mt-1 block w-24 pl-3 pr-2 py-2 text-base border-gray-300 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm rounded-md" />
                                     </div>
-                                    <button v-if="selectedCategoryFilter" @click="resetFilters"
+                                    <button v-if="selectedCategoryFilter || minPriceFilter || maxPriceFilter" @click="resetFilters"
                                         class="ml-2 inline-flex items-center px-2 py-1 border border-transparent text-xs leading-4 font-medium rounded text-green-700 bg-green-100 hover:bg-green-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
                                         <svg class="mr-1 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
                                             fill="currentColor">
@@ -627,6 +639,10 @@ const categories = ref([]);
 const selectedProduct = ref(null);
 const errors = ref({});
 const selectedCategoryFilter = ref('');
+const minPriceFilter = ref('');
+const maxPriceFilter = ref('');
+const minStockFilter = ref('');
+const maxStockFilter = ref('10000');
 
 // Form state
 const productForm = reactive({
@@ -839,25 +855,45 @@ async function deleteProduct() {
         console.error('Error deleting product:', err);
     }
 }
+
 // Create a computed property for filtered products
 const filteredProducts = computed(() => {
-    if (!selectedCategoryFilter.value || selectedCategoryFilter.value === '') {
-        // If no category is selected, return all products
-        return products.value;
+    let filtered = products.value;
+    // Category filter
+    if (selectedCategoryFilter.value && selectedCategoryFilter.value !== '') {
+        filtered = filtered.filter(product => product.category_id === selectedCategoryFilter.value);
     }
-
-    // Filter products by the selected category
-    return products.value.filter(product => {
-        // If you're filtering by category ID
-        return product.category_id === selectedCategoryFilter.value;
-    });
+    // Price filter
+    const min = parseFloat(minPriceFilter.value);
+    const max = parseFloat(maxPriceFilter.value);
+    if (!isNaN(min)) {
+        filtered = filtered.filter(product => parseFloat(product.price) >= min);
+    }
+    if (!isNaN(max)) {
+        filtered = filtered.filter(product => parseFloat(product.price) <= max);
+    }
+    // Stock filter (min and max)
+    const minStock = parseInt(minStockFilter.value);
+    const maxStock = parseInt(maxStockFilter.value);
+    if (!isNaN(minStock)) {
+        filtered = filtered.filter(product => parseInt(product.stock) >= minStock);
+    }
+    if (!isNaN(maxStock) && maxStock < 10000) {
+        filtered = filtered.filter(product => parseInt(product.stock) <= maxStock);
+    }
+    return filtered;
 });
 
 // Function to reset filters
 function resetFilters() {
     selectedCategoryFilter.value = '';
+    minPriceFilter.value = '';
+    maxPriceFilter.value = '';
+    minStockFilter.value = '';
+    maxStockFilter.value = '10000';
     // Reset any other filters you might add in the future
 }
+
 function countMarge() {
     // Parse values as floats
     const price = parseFloat(productForm.price);
