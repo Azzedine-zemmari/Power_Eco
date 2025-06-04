@@ -228,6 +228,7 @@ const addToCart = async () =>{
                 Authorization:`Bearer ${localStorage.getItem('token')}`
             }
         })
+        alert('product added sucessfully');
     }catch(error){
         console.error(error)
         alert('failed to add to cart')

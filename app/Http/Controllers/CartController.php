@@ -79,4 +79,8 @@ public function update(Request $request, $productId)
         $cartItem->delete();
         return response()->json(['message' => 'Item deleted successfully']);
     }
+    public function count(){
+        $count = CartItem::where('user_id',auth()->id())->count();
+        return response()->json($count);
+    }
 }

@@ -45,3 +45,4 @@ Route::middleware('auth:sanctum')->post('/checkout', [CheckoutController::class,
 Route::middleware('auth:sanctum')->get('/user/data',[UserController::class,'getUserData']);
 Route::middleware('auth:sanctum')->put('/user/data/update',[UserController::class,'update']);
 Route::middleware('auth:sanctum')->get('/sales/data',[CommercialController::class,'sales']);
+Route::middleware('auth:sanctum')->get('/cart/count',[CartController::class,'count']);
