@@ -191,11 +191,12 @@
 import Navbar from '../components/Navbar.vue';
 import Footer from '../components/Footer.vue';
 import axios from 'axios';
+import { useCartStore } from '../stores/CartStore';
 import { useRoute } from 'vue-router';
 import { onMounted,ref } from 'vue';
 
 const product = ref(null)
-
+const cart = useCartStore();
 const route = useRoute()
 const productId = route.params.id
 
@@ -229,6 +230,7 @@ const addToCart = async () =>{
             }
         })
         alert('product added sucessfully');
+        cart.cartCount+=1
     }catch(error){
         console.error(error)
         alert('failed to add to cart')

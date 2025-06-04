@@ -126,8 +126,10 @@
 import Navbar from '../components/Navbar.vue';
 import { ref, onMounted, computed } from 'vue';
 import axios from 'axios';
+import { useCartStore } from '../stores/CartStore';
 
 const items = ref([])
+const cart = useCartStore();
 
 // Computed properties for order summary
 const total = computed(() => {
@@ -187,7 +189,7 @@ const removeItem = async (item) => {
         
         // Remove item from local state
         items.value = items.value.filter(cartItem => cartItem.product_id !== item.product_id);
-        
+        cart.cartCount -= 1
         console.log('Item removed successfully');
     } catch (error) {
         console.error(error);

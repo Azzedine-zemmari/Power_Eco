@@ -38,9 +38,9 @@
                             </svg>
 
                             <!-- Cart Count Badge -->
-                            <span v-if="cartCount && cartCount > 0"
+                            <span v-if="cartStore.cartCount && cartStore.cartCount > 0"
                                 class="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
-                                {{ cartCount }}
+                                    {{ cartStore.cartCount }}
                             </span>
                         </a>
                         <LogoutButton variant="default" />
@@ -100,28 +100,10 @@
 </template>
 <script setup>
 import LogoutButton from './LogoutButton.vue';
-import { onMounted, ref } from 'vue';
-import axios from 'axios';
-let cartCount = ref(0)
+import { useCartStore } from '../stores/CartStore';
+import { onMounted } from 'vue';
 
-const counter = async () => {
-    const token = localStorage.getItem('token');
-    if (!token) {
-        cartCount.value = 0;
-        return;
-    }
-    try {
-        const response = await axios.get('http://localhost:8000/api/cart/count', {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        });
-        cartCount.value = response.data;
-        console.log(cartCount.value)
-    } catch (error) {
-        cartCount.value = 0;
-        console.error(error);
-    }
-};
-onMounted(counter);
+const cartStore = useCartStore();
+
+onMounted(()=>{cartStore.fetchCartCount();});
 </script>
