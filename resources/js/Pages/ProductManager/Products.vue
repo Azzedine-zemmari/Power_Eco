@@ -633,10 +633,10 @@ const productForm = reactive({
     id: null,
     name: '',
     description: '',
-    price: '',
+    price: 0,
     stock: '',
-    marge:'',
-    Sprice:'',
+    marge:0,
+    Sprice:0,
     category_id: '',
     image: null,
     imagePreview: null,
@@ -859,27 +859,33 @@ function resetFilters() {
     // Reset any other filters you might add in the future
 }
 function countMarge() {
+    // Parse values as floats
     const price = parseFloat(productForm.price);
     const marge = parseFloat(productForm.marge);
     const sellPrice = parseFloat(productForm.Sprice);
-    console.log("price : ",productForm.price," marge : ",productForm.marge," sellPrice : ",productForm.Sprice)
 
-    // Case 1: price and margin are given => calculate sell price
-    if (!isNaN(price) && price > 0 && !isNaN(marge) && (isNaN(sellPrice) || !productForm.Sprice)) {
-        const calculatedSellPrice = price * (1 + marge / 100);
-        productForm.Sprice = isFinite(calculatedSellPrice) ? calculatedSellPrice.toFixed(2) : '';
-    }
+    // Debug log
+    console.log("price:", price, "marge:", marge, "sellPrice:", sellPrice);
 
-    // Case 2: price and sell price are given => calculate margin
-    else if (!isNaN(price) && price > 0 && !isNaN(sellPrice) && (isNaN(marge) || !productForm.marge)) {
-        const calculatedMargin = ((sellPrice - price) / price) * 100;
-        productForm.marge = isFinite(calculatedMargin) ? calculatedMargin.toFixed(2) : '';
-    }
-
-    // Reset if price is invalid
-    else if (isNaN(price) || price <= 0) {
+    // If price is invalid, reset both
+    if (isNaN(price) || price <= 0) {
         productForm.Sprice = '';
         productForm.marge = '';
+        return;
+    }
+
+    // If price and marge are valid, but sellPrice is not, calculate sellPrice
+    if (!isNaN(marge) && (isNaN(sellPrice) || document.activeElement.id === 'product-marge')) {
+        const calculatedSellPrice = price * (1 + marge / 100);
+        productForm.Sprice = isFinite(calculatedSellPrice) ? calculatedSellPrice.toFixed(2) : '';
+        return;
+    }
+
+    // If price and sellPrice are valid, but marge is not, calculate marge
+    if (!isNaN(sellPrice) && (isNaN(marge) || document.activeElement.id === 'product-SellPrice')) {
+        const calculatedMargin = ((sellPrice - price) / price) * 100;
+        productForm.marge = isFinite(calculatedMargin) ? calculatedMargin.toFixed(2) : '';
+        return;
     }
 }
 
