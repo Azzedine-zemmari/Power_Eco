@@ -68,63 +68,92 @@
                                     <h2 class="text-lg font-semibold mb-2">Sales Orders</h2>
                                     <div class="overflow-x-auto">
                                         <table class="min-w-full bg-white rounded shadow">
-                                            <thead>
+                                            <thead class="bg-gray-50">
                                                 <tr>
-                                                    <th
-                                                        class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
+                                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                                         Order ID</th>
-                                                    <th
-                                                        class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
+                                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                        User</th>
+                                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                        Tel</th>
+                                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                        Email</th>
+                                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                                         Status</th>
-                                                    <th
-                                                        class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
-                                                        Product ID</th>
-                                                    <th
-                                                        class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
-                                                        Quantity</th>
-                                                    <th
-                                                        class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
-                                                        Price</th>
-                                                    <th
-                                                        class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
+                                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                        Products</th>
+                                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                                         Total Price</th>
-                                                    <th
-                                                        class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
-                                                        Action
-                                                    </th>
+                                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                        Action</th>
                                                 </tr>
                                             </thead>
-                                            <tbody>
-                                                <tr v-for="item in sale" :key="item.orderId" class="border-t">
-                                                    <td class="px-4 py-2">{{ item.orderId }}</td>
-                                                    <td class="px-4 py-2">{{ item.status }}</td>
-                                                    <td class="px-4 py-2">
-                                                        <div v-for="p in item.products" :key="p.productId">
-                                                            ID: {{ p.productId }}
+                                            <tbody class="bg-white divide-y divide-gray-200">
+                                                <tr v-for="item in sale" :key="item.orderId" class="hover:bg-gray-50">
+                                                    <td class="px-4 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                                        #{{ item.orderId }}
+                                                    </td>
+                                                    <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-900">
+                                                        {{ item.lastname }} {{ item.firstname }}
+                                                    </td>
+                                                    <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-900">
+                                                        {{ item.phone }}
+                                                    </td>
+                                                    <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-900">
+                                                        {{ item.email }}
+                                                    </td>
+                                                    <td class="px-4 py-4 whitespace-nowrap">
+                                                        <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full"
+                                                            :class="{
+                                                                'bg-yellow-100 text-yellow-800': item.status === 'order',
+                                                                'bg-blue-100 text-blue-800': item.status === 'paid',
+                                                                'bg-green-100 text-green-800': item.status === 'delivered',
+                                                                'bg-purple-100 text-purple-800': item.status === 'received'
+                                                            }">
+                                                            {{ item.status.charAt(0).toUpperCase() + item.status.slice(1) }}
+                                                        </span>
+                                                    </td>
+                                                    <td class="px-4 py-4 text-sm text-gray-900">
+                                                        <div class="space-y-1">
+                                                            <div v-for="p in item.products" :key="p.productId" class="text-xs">
+                                                                <span class="font-medium">ID:</span> {{ p.productId }} | 
+                                                                <span class="font-medium">Qty:</span> {{ p.quantity }} | 
+                                                                <span class="font-medium">Price:</span> MAD {{ p.price }}
+                                                            </div>
                                                         </div>
                                                     </td>
-                                                    <td class="px-4 py-2">
-                                                        <div v-for="p in item.products" :key="p.productId">
-                                                            {{ p.quantity }}
-                                                        </div>
+                                                    <td class="px-4 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                                        MAD {{ item.totalPrice }}
                                                     </td>
-                                                    <td class="px-4 py-2">
-                                                        <div v-for="p in item.products" :key="p.productId">
-                                                            {{ p.price }}
-                                                        </div>
-                                                    </td>
-                                                    <td class="px-4 py-2">{{ item.totalPrice }}</td>
-                                                    <td class="flex justify-between items-center">
-                                                        <select v-model="item.status" @change="updateSale(item)">
-                                                            <option value="order">Order</option>
-                                                            <option value="paid">Paid</option>
-                                                            <option value="delivered">Delivered</option>
-                                                            <option value="received">Received</option>
+                                                    <td class="px-4 py-4 whitespace-nowrap">
+                                                        <select 
+                                                            v-model="item.status" 
+                                                            @change="updateSale(item)"
+                                                            class="block w-full px-3 py-2 text-sm border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 bg-white hover:border-gray-400 transition-colors duration-200"
+                                                            :class="{
+                                                                'border-yellow-300 bg-yellow-50': item.status === 'order',
+                                                                'border-blue-300 bg-blue-50': item.status === 'paid',
+                                                                'border-green-300 bg-green-50': item.status === 'delivered',
+                                                                'border-purple-300 bg-purple-50': item.status === 'received'
+                                                            }">
+                                                            <option value="order">📋 Order</option>
+                                                            <option value="paid">💳 Paid</option>
+                                                            <option value="delivered">🚚 Delivered</option>
+                                                            <option value="received">✅ Received</option>
                                                         </select>
                                                     </td>
                                                 </tr>
                                             </tbody>
                                         </table>
+                                    </div>
+
+                                    <!-- Empty State -->
+                                    <div v-if="!sale || sale.length === 0" class="text-center py-12">
+                                        <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                                        </svg>
+                                        <h3 class="mt-2 text-sm font-medium text-gray-900">No orders found</h3>
+                                        <p class="mt-1 text-sm text-gray-500">Orders will appear here when customers make purchases.</p>
                                     </div>
                                 </div>
                             </div>

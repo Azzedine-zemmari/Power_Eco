@@ -30,7 +30,11 @@ class CommercialController extends Controller
             'orders.total_price as totalPrice',
             'order_items.product_id as productId',
             'order_items.quantity as quantity',
-            'order_items.price as price'
+            'order_items.price as price',
+            'orders.email as email',
+            'orders.phone as phone',
+            'orders.last_name as lastname',
+            'orders.first_name as firstname'            
         )
         ->orderBy('orders.id')
         ->get()
@@ -44,6 +48,10 @@ class CommercialController extends Controller
             'orderId' => $orderId,
             'status' => $firstItem->status,
             'totalPrice' => $firstItem->totalPrice,
+            'firstname' => $firstItem->firstname,
+            'lastname' => $firstItem->lastname,
+            'email' => $firstItem->email,
+            'phone' => $firstItem->phone,
             'products' => $items->map(function ($item) {
                 return [
                     'productId' => $item->productId,
