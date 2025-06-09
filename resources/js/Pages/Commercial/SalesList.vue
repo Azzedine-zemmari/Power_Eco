@@ -115,10 +115,11 @@
                                                     </td>
                                                     <td class="px-4 py-2">{{ item.totalPrice }}</td>
                                                     <td class="flex justify-between items-center">
-                                                        <select name="" id="">
-                                                            <option value=""></option>
-                                                            <option value=""></option>
-                                                            <option value=""></option>
+                                                        <select v-model="item.status" @change="updateSale(item)">
+                                                            <option value="order">Order</option>
+                                                            <option value="paid">Paid</option>
+                                                            <option value="delivered">Delivered</option>
+                                                            <option value="received">Received</option>
                                                         </select>
                                                     </td>
                                                 </tr>
@@ -159,6 +160,23 @@ const sales = async () => {
     }
 };
 
+const updateSale = async (item) => {
+  try {
+    await axios.put(
+      `http://localhost:8000/api/sales/update/${item.orderId}`,
+      { status: item.status },
+      {
+        headers: {
+          Accept: 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+      }
+    );
+    await sales();
+  } catch (error) {
+    alert('Failed to update order status');
+  }
+};
 
 onMounted(sales);
 </script>

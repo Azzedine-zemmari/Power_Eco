@@ -46,3 +46,4 @@ Route::middleware('auth:sanctum')->get('/user/data',[UserController::class,'getU
 Route::middleware('auth:sanctum')->put('/user/data/update',[UserController::class,'update']);
 Route::middleware('auth:sanctum')->get('/sales/data',[CommercialController::class,'sales']);
 Route::middleware('auth:sanctum')->get('/cart/count',[CartController::class,'count']);
+Route::middleware('auth:sanctum')->put('/sales/update/{id}',[CommercialController::class,'update']);

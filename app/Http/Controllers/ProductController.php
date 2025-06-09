@@ -173,4 +173,5 @@ public function showProductDetails(int $id){
     $product = Product::findOrFail($id);
     return response()->json($product);
 }
+
 }

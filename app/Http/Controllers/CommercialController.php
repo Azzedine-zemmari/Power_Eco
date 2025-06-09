@@ -56,5 +56,21 @@ class CommercialController extends Controller
 
     return response()->json($result);
 }
+public function update(int $id, Request $request)
+{
+    $validated = $request->validate([
+        'status' => 'required|string'
+    ]);
+
+    try {
+        $sale = Order::findOrFail($id);
+        $sale->status = $validated['status'];
+        $sale->save();
+
+        return response()->json($sale);
+    } catch (\Exception $e) {
+        return response()->json(['error' => 'Order not found or update failed.'], 404);
+    }
+}
 
 }
