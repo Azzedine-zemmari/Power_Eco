@@ -88,6 +88,10 @@
                                                     <th
                                                         class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
                                                         Total Price</th>
+                                                    <th
+                                                        class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
+                                                        Action
+                                                    </th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -110,12 +114,14 @@
                                                         </div>
                                                     </td>
                                                     <td class="px-4 py-2">{{ item.totalPrice }}</td>
+                                                    <td class="flex justify-between items-center">
+                                                        <select name="" id="">
+                                                            <option value=""></option>
+                                                            <option value=""></option>
+                                                            <option value=""></option>
+                                                        </select>
+                                                    </td>
                                                 </tr>
-
-                                                <!-- <tr v-if="!sale.length">
-                                                    <td colspan="6" class="px-4 py-2 text-center text-gray-400">No
-                                                        sales found.</td>
-                                                </tr> -->
                                             </tbody>
                                         </table>
                                     </div>

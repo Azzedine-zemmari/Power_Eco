@@ -17,7 +17,9 @@ const routes = [
         path:"/admin/users/management",
         component:() => import("./Pages/Admin/UserManagement.vue"),
         meta:{
-            title:"User Management"
+            title:"User Management",
+            requiresAuth:true,
+            role: "admin"
         }
     },
     {

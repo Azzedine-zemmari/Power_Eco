@@ -57,6 +57,16 @@
                             Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character.
                         </div>
                     </div>
+                    <div>
+                        <label for="phone" class="block text-sm font-medium text-gray-700">
+                            Phone
+                        </label>
+                        <div class="mt-1">
+                            <input v-model="phone" id="phone" name="phone" type="phone" required class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm">
+                        </div>
+                        <div v-if="errors.phone" class="text-red-600 text-xs mt-1">
+{{ errors.phone[0] }}                        </div>
+                    </div>
 
                     <div class="flex items-center">
                         <input id="terms" name="terms" type="checkbox" required class="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded">
@@ -132,6 +142,7 @@ let firstName = ref('');
 let lastName = ref('');
 let email = ref('');
 let password = ref('');
+let phone = ref('');
 let errors = ref({});
 
 async function register() {
@@ -142,6 +153,7 @@ async function register() {
             lastName: lastName.value,
             email: email.value,
             password: password.value,
+            phone:phone.value
         });
 
         alert(response.data.message); 
