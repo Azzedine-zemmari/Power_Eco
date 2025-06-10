@@ -144,7 +144,6 @@ class UserController extends Controller
             'firstName'=>'required|string|max:255',
             'lastName'=>'required|string|max:255',
             'email'=>'required|email',
-            'phone' => ['required', 'min:10'],
             'password' => [
                 'required',
                 'string',
@@ -167,7 +166,6 @@ class UserController extends Controller
             $existingUser->password = Hash::make($request->password);
             $existingUser->selectedRole = 'user';
             $existingUser->status = 'pending';
-            $existingUser->phone = $request->phone;
             $existingUser->save();
 
             return response()->json([
@@ -183,8 +181,7 @@ class UserController extends Controller
             'password' =>Hash::make($request->password),
             'selectedRole' =>  'user',
             'status'=>'pending',
-            'phone' => $request->phone
-        ]);
+            ]);
 
         return response()->json([
             'message' => 'Registration successful. Please log in.',
