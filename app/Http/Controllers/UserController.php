@@ -61,7 +61,7 @@ class UserController extends Controller
 
     // to show the admin all the user that he register
     public function show(Request $request){
-        $perPage = $request->get('per_page', 1);
+        $perPage = $request->get('per_page', 6);
         $user = User::withTrashed()->where('selectedRole', '!=', 'admin')->paginate($perPage);
         return response()->json($user);
     }
@@ -84,29 +84,29 @@ class UserController extends Controller
         ], 200);
     }
     public function activeUser(Request $request, int $id)
-{
-    $user = User::find($id);
+    {
+        $user = User::withTrashed()->find($id);
 
-    if (!$user) {
+        if (!$user) {
+            return response()->json([
+                'message' => 'User not found.'
+            ], 404);
+        }
+
+        // If the user was soft-deleted, restore them first
+        if ($user->trashed()) {
+            $user->restore();
+        }
+
+        // Then set their status to active
+        $user->status = 'active';
+        $user->save();
+
         return response()->json([
-            'message' => 'User not found.'
-        ], 404);
+            'message' => 'User activated successfully.',
+            'user' => $user
+        ], 200);
     }
-
-    if ($user->selectedRole !== 'user') {
-        return response()->json([
-            'message' => 'This action is accessible only for users.'
-        ], 403);
-    }
-
-    $user->status = 'active';
-    $user->save();
-
-    return response()->json([
-        'message' => 'User activated successfully.',
-        'user' => $user
-    ], 200);
-}
 
     // login for all type of users
     public function login(Request $request) {

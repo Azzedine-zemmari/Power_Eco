@@ -66,7 +66,9 @@
                                 </svg>
                                 User Management
                             </a>
-                            @
+                            <div class="mt-auto pt-4">
+                                <LogoutButton variant="sidebar" />
+                            </div>
                         </nav>
                     </div>
                 </div>
@@ -101,6 +103,9 @@
                                 </svg>
                                 User Management
                             </a>
+                            <div class="mt-auto pt-4">
+                                <LogoutButton variant="sidebar" />
+                            </div>
                         </nav>
                     </div>
                 </div>
@@ -254,9 +259,14 @@
                                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                                     {{ formatDate(user.created_at) }}
                                                 </td>
-                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                    <button class="h-6 w-6" @click.prevent="archiveUser(user)">
+                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 flex space-x-1 items-center">
+                                                    <button class="h-5 w-5" @click.prevent="archiveUser(user)">
                                                         <svg class="" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M2 12.0002C2 7.28611 2 4.92909 3.46447 3.46462C4.70529 2.2238 6.58687 2.03431 10 2.00537M22 12.0002C22 7.28611 22 4.92909 20.5355 3.46462C19.2947 2.2238 17.4131 2.03431 14 2.00537" stroke="#ae1e1e" stroke-width="1.5" stroke-linecap="round"></path> <path d="M10 22C7.19974 22 5.79961 22 4.73005 21.455C3.78924 20.9757 3.02433 20.2108 2.54497 19.27C2 18.2004 2 16.8003 2 14C2 11.1997 2 9.79961 2.54497 8.73005C3.02433 7.78924 3.78924 7.02433 4.73005 6.54497C5.79961 6 7.19974 6 10 6H14C16.8003 6 18.2004 6 19.27 6.54497C20.2108 7.02433 20.9757 7.78924 21.455 8.73005C22 9.79961 22 11.1997 22 14C22 16.8003 22 18.2004 21.455 19.27C20.9757 20.2108 20.2108 20.9757 19.27 21.455C18.2004 22 16.8003 22 14 22" stroke="#ae1e1e" stroke-width="1.5" stroke-linecap="round"></path> <path d="M12 11L12 17M12 17L14.5 14.5M12 17L9.5 14.5" stroke="#ae1e1e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+                                                    </button>
+                                                    <button class="h-5 w-5" @click.prevent="activeUser(user)">
+                                                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" fill="#22c55e"/>
+                                                        </svg>
                                                     </button>
                                                 </td>
                                             </tr>
@@ -294,8 +304,17 @@
                                                             </span>
                                                         </div>
                                                     </div>
+                                                    <div class="flex items-center space-x-2">
+                                                        <button class="h-5 w-5" @click.prevent="archiveUser(user)">
+                                                            <svg class="" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M2 12.0002C2 7.28611 2 4.92909 3.46447 3.46462C4.70529 2.2238 6.58687 2.03431 10 2.00537M22 12.0002C22 7.28611 22 4.92909 20.5355 3.46462C19.2947 2.2238 17.4131 2.03431 14 2.00537" stroke="#ae1e1e" stroke-width="1.5" stroke-linecap="round"></path> <path d="M10 22C7.19974 22 5.79961 22 4.73005 21.455C3.78924 20.9757 3.02433 20.2108 2.54497 19.27C2 18.2004 2 16.8003 2 14C2 11.1997 2 9.79961 2.54497 8.73005C3.02433 7.78924 3.78924 7.02433 4.73005 6.54497C5.79961 6 7.19974 6 10 6H14C16.8003 6 18.2004 6 19.27 6.54497C20.2108 7.02433 20.9757 7.78924 21.455 8.73005C22 9.79961 22 11.1997 22 14C22 16.8003 22 18.2004 21.455 19.27C20.9757 20.2108 20.2108 20.9757 19.27 21.455C18.2004 22 16.8003 22 14 22" stroke="#ae1e1e" stroke-width="1.5" stroke-linecap="round"></path> <path d="M12 11L12 17M12 17L14.5 14.5M12 17L9.5 14.5" stroke="#ae1e1e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+                                                        </button>
+                                                        <button class="h-5 w-5" @click.prevent="activeUser(user)">
+                                                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" fill="#22c55e"/>
+                                                            </svg>
+                                                        </button>
+                                                    </div>
                                                 </div>
-
                                             </div>
                                         </li>
                                     </ul>
@@ -321,25 +340,25 @@
 
                                 <!-- Pagination -->
                                 <div v-if="totalPages > 1"
-                                    class="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
-                                    <div class="flex-1 flex flex-col sm:flex-row justify-between items-center">
-                                        <div class="mb-2 sm:mb-0">
-                                            <p class="text-sm text-gray-700">
-                                                Showing page <span class="font-medium">{{ currentPage }}</span> of <span
-                                                    class="font-medium">{{ totalPages }}</span>
-                                            </p>
-                                        </div>
-                                        <div class="flex space-x-2">
-                                            <button @click="changePage(currentPage - 1)" :disabled="currentPage === 1"
-                                                class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
-                                                Previous
-                                            </button>
-                                            <button @click="changePage(currentPage + 1)"
-                                                :disabled="currentPage === totalPages"
-                                                class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
-                                                Next
-                                            </button>
-                                        </div>
+                                    class="bg-white px-4 py-3 flex items-center justify-end border-t border-gray-200 sm:px-6">
+                                    <div class="flex items-center space-x-2">
+                                        <button @click="changePage(currentPage - 1)" 
+                                            :disabled="currentPage === 1"
+                                            class="relative inline-flex items-center p-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
+                                            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                                            </svg>
+                                        </button>
+                                        <span class="text-sm text-gray-700">
+                                            Page {{ currentPage }} of {{ totalPages }}
+                                        </span>
+                                        <button @click="changePage(currentPage + 1)"
+                                            :disabled="currentPage === totalPages"
+                                            class="relative inline-flex items-center p-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
+                                            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                                            </svg>
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -366,8 +385,7 @@
                                 </svg>
                             </div>
                             <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
-                                <h3 class="text-lg leading-6 font-medium text-gray-900">{{ editingUser ? 'Edit User' :
-                                    'Create New User' }}</h3>
+                                <h3 class="text-lg leading-6 font-medium text-gray-900">Create New User</h3>
                                 <div class="mt-4">
                                     <form @submit.prevent="submitForm" class="space-y-6">
                                         <div class="grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
@@ -432,57 +450,9 @@
                                     d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
                                 </path>
                             </svg>
-                            {{ editingUser ? 'Update User' : 'Create User' }}
+                            Create User
                         </button>
                         <button type="button" @click="closeModal"
-                            class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
-                            Cancel
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Delete Confirmation Modal -->
-        <div v-if="userToDelete" class="fixed z-50 inset-0 overflow-y-auto">
-            <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-                <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
-                <div
-                    class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-                    <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                        <div class="sm:flex sm:items-start">
-                            <div
-                                class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
-                                <svg class="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
-                                </svg>
-                            </div>
-                            <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-                                <h3 class="text-lg leading-6 font-medium text-gray-900">Delete User</h3>
-                                <div class="mt-2">
-                                    <p class="text-sm text-gray-500">
-                                        Are you sure you want to delete {{ userToDelete.firstName }} {{
-                                        userToDelete.lastName }}? This action cannot be undone.
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                        <button type="button" @click="deleteUser" :disabled="isLoading"
-                            class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm disabled:opacity-50">
-                            <svg v-if="isLoading" class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" fill="none"
-                                viewBox="0 0 24 24">
-                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
-                                    stroke-width="4"></circle>
-                                <path class="opacity-75" fill="currentColor"
-                                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-                                </path>
-                            </svg>
-                            Delete
-                        </button>
-                        <button type="button" @click="userToDelete = null"
                             class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
                             Cancel
                         </button>
@@ -530,16 +500,15 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import axios from 'axios'
+import LogoutButton from '@/components/LogoutButton.vue'
 
 // Reactive data
 const sidebarOpen = ref(false)
 const isModalOpen = ref(false)
 const isLoading = ref(false)
-const editingUser = ref(null)
-const userToDelete = ref(null)
 const users = ref([])
 const currentPage = ref(1)
-const perPage = ref(10)
+const perPage = ref(6)
 const totalPages = ref(1)
 const searchTerm = ref('')
 const statusFilter = ref('')
@@ -613,14 +582,12 @@ const getStatusBadgeClass = (status) => {
 
 const openModal = () => {
     resetForm()
-    editingUser.value = null
     isModalOpen.value = true
 }
 
 const closeModal = () => {
     isModalOpen.value = false
     resetForm()
-    editingUser.value = null
 }
 
 const resetForm = () => {
@@ -628,19 +595,6 @@ const resetForm = () => {
     lastName.value = ''
     email.value = ''
     selectedRole.value = 'commercial'
-}
-
-const editUser = (user) => {
-    editingUser.value = user
-    firstName.value = user.firstName
-    lastName.value = user.lastName
-    email.value = user.email
-    selectedRole.value = user.selectedRole
-    isModalOpen.value = true
-}
-
-const confirmDelete = (user) => {
-    userToDelete.value = user
 }
 
 const fetchUsers = async (page = 1) => {
@@ -711,6 +665,24 @@ const archiveUser = async (user) => {
     } catch (error) {
         console.error('Error archiving user:', error);
         showToast(error.response?.data?.message || 'Failed to archive user', 'error');
+    } finally {
+        isLoading.value = false;
+    }
+}
+const activeUser = async (user) =>{
+    try{
+        isLoading.value = true;
+        await axios.post(`http://localhost:8000/api/users/${user.id}/active`,{
+            headers:{
+                'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                'Accept': 'application/json'
+            }
+        });
+        showToast('User activated successfully!');
+        await fetchUsers(currentPage.value);
+    }catch (error) {
+        console.error('Error activate user:', error);
+        showToast(error.response?.data?.message || 'Failed to active user', 'error');
     } finally {
         isLoading.value = false;
     }
