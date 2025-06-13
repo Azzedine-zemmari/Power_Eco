@@ -25,4 +25,30 @@ class CategoryController extends Controller
         $category = Category::all();
         return response()->json($category);
     }
+
+    public function update(Request $request, $id)
+    {
+        try {
+            $request->validate([
+                'name' => 'required|string|max:255',
+                'description' => 'nullable|string'
+            ]);
+
+            $category = Category::findOrFail($id);
+            $category->update([
+                'name' => $request->name,
+                'description' => $request->description
+            ]);
+
+            return response()->json([
+                'message' => 'Category updated successfully',
+                'category' => $category
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Failed to update category',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
 }

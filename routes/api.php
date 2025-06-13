@@ -54,3 +54,4 @@ Route::get('/featured-products', [ProductController::class, 'getFeaturedProducts
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/product-manager/stats', [ProductManagerController::class, 'getStats']);
 });
+Route::middleware('auth:sanctum')->put('/categories/{id}',[CategoryController::class,'update']);

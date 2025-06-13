@@ -125,7 +125,7 @@
                                                     </div>
                                                     <div class="mt-4 flex-shrink-0 sm:mt-0">
                                                         <div class="flex space-x-4">
-                                                            <button type="button"
+                                                            <button @click="openEditModal(category)" type="button"
                                                                 class="inline-flex items-center px-3 py-1 border border-transparent text-sm leading-5 font-medium rounded-md text-green-700 bg-green-100 hover:bg-green-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
                                                                 Edit
                                                             </button>
@@ -208,10 +208,10 @@
         </div>
 
         <!-- Edit Category Modal -->
-        <div class="fixed z-10 inset-0 overflow-y-auto hidden" id="edit-category-modal">
+        <div v-if="isEditOpen" class="fixed z-10 inset-0 overflow-y-auto" id="edit-category-modal">
             <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
                 <!-- Background overlay -->
-                <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" id="edit-modal-backdrop"></div>
+                <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" @click="closeEditModal"></div>
 
                 <!-- Modal panel -->
                 <div
@@ -229,15 +229,15 @@
                             <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
                                 <h3 class="text-lg leading-6 font-medium text-gray-900">Edit Category</h3>
                                 <div class="mt-4">
-                                    <form id="edit-category-form" class="space-y-6">
-                                        <input type="hidden" id="edit-category-id" name="edit-category-id">
+                                    <form @submit.prevent="updateCategory" class="space-y-6">
                                         <div>
                                             <label for="edit-category-name"
                                                 class="block text-sm font-medium text-gray-700">Category Name</label>
                                             <div class="mt-1">
-                                                <input type="text" id="edit-category-name" name="edit-category-name"
+                                                <input v-model="name" type="text" id="edit-category-name" name="edit-category-name"
                                                     required
                                                     class="shadow-sm focus:ring-green-500 focus:border-green-500 block w-full sm:text-sm border-gray-300 rounded-md">
+                                                <div v-if="errors.name" class="text-red-500 text-sm">{{ errors.name[0] }}</div>
                                             </div>
                                         </div>
 
@@ -245,22 +245,10 @@
                                             <label for="edit-category-description"
                                                 class="block text-sm font-medium text-gray-700">Description</label>
                                             <div class="mt-1">
-                                                <textarea id="edit-category-description"
+                                                <textarea v-model="description" id="edit-category-description"
                                                     name="edit-category-description" rows="3"
                                                     class="shadow-sm focus:ring-green-500 focus:border-green-500 block w-full sm:text-sm border-gray-300 rounded-md"></textarea>
-                                            </div>
-                                        </div>
-
-                                        <div>
-                                            <label for="edit-category-status"
-                                                class="block text-sm font-medium text-gray-700">Status</label>
-                                            <div class="mt-1">
-                                                <select id="edit-category-status" name="edit-category-status"
-                                                    class="shadow-sm focus:ring-green-500 focus:border-green-500 block w-full sm:text-sm border-gray-300 rounded-md">
-                                                    <option value="active">Active</option>
-                                                    <option value="inactive">Inactive</option>
-                                                    <option value="draft">Draft</option>
-                                                </select>
+                                                <div v-if="errors.description" class="text-red-500 text-sm">{{ errors.description[0] }}</div>
                                             </div>
                                         </div>
                                     </form>
@@ -269,11 +257,11 @@
                         </div>
                     </div>
                     <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                        <button type="button" id="update-category-btn"
+                        <button @click="updateCategory" type="button"
                             class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:ml-3 sm:w-auto sm:text-sm">
                             Update Category
                         </button>
-                        <button type="button" id="cancel-edit-btn"
+                        <button @click="closeEditModal" type="button"
                             class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
                             Cancel
                         </button>
@@ -290,13 +278,16 @@ import { onMounted, ref } from 'vue';
 import axios from 'axios';
 import LogoutButton from '../../components/LogoutButton.vue';
 import Sidebar from '../../components/Sidebar.vue';
+
 const isOpen = ref(false);
+const isEditOpen = ref(false);
 const name = ref('');
 const description = ref('');
 const errors = ref({});
-const categories = ref([])
-const loading = ref(true)
-const error = ref(null)
+const categories = ref([]);
+const loading = ref(true);
+const error = ref(null);
+const editingCategory = ref(null);
 
 function openModal() {
     isOpen.value = !isOpen.value;
@@ -305,14 +296,27 @@ function openModal() {
     errors.value = {};
 }
 
-const token = localStorage.getItem('token')
+function openEditModal(category) {
+    editingCategory.value = category;
+    isEditOpen.value = true;
+    name.value = category.name;
+    description.value = category.description;
+}
+
+function closeEditModal() {
+    isEditOpen.value = false;
+    editingCategory.value = null;
+    name.value = '';
+    description.value = '';
+    errors.value = {};
+}
+
+const token = localStorage.getItem('token');
 
 async function submitCategory() {
     try {
-        // First, get CSRF cookie from Laravel Sanctum
         await axios.get('http://localhost:8000/sanctum/csrf-cookie', { withCredentials: true });
 
-        // send the POST request with credentials
         const response = await axios.post(
             'http://localhost:8000/api/categories/create',
             {
@@ -327,7 +331,6 @@ async function submitCategory() {
             }
         );
 
-        // Clear errors and close modal on success
         errors.value = {};
         openModal();
         await fetchCategories();
@@ -340,26 +343,58 @@ async function submitCategory() {
         }
     }
 }
-async function fetchCategories(){
-    try{
-        const response = await axios.get('http://localhost:8000/api/categories',{
-            withCredentials:true,
-            headers :{
-                Accept :'application/json',
-                Authorization : `Bearer ${token}`
 
+async function updateCategory() {
+    try {
+        await axios.get('http://localhost:8000/sanctum/csrf-cookie', { withCredentials: true });
+
+        const response = await axios.put(
+            `http://localhost:8000/api/categories/${editingCategory.value.id}`,
+            {
+                name: name.value,
+                description: description.value
+            },
+            {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Accept': 'application/json',
+                }
             }
-        })
+        );
+
+        errors.value = {};
+        closeEditModal();
+        await fetchCategories();
+
+    } catch (error) {
+        if (error.response && error.response.data && error.response.data.errors) {
+            errors.value = error.response.data.errors;
+        } else {
+            console.error('Error updating category:', error);
+        }
+    }
+}
+
+async function fetchCategories() {
+    try {
+        const response = await axios.get('http://localhost:8000/api/categories', {
+            withCredentials: true,
+            headers: {
+                Accept: 'application/json',
+                Authorization: `Bearer ${token}`
+            }
+        });
         categories.value = response.data.category || response.data;
-    }catch(error){
-        error.value = 'Failed to load categories'
-        console.error(error)
-    } finally{
+    } catch (error) {
+        error.value = 'Failed to load categories';
+        console.error(error);
+    } finally {
         loading.value = false;
     }
 }
-onMounted(()=>{
+
+onMounted(() => {
     fetchCategories();
-})
+});
 </script>
 
