@@ -48,64 +48,19 @@
             <div class="max-w-2xl mx-auto py-16 sm:py-24 lg:py-32 lg:max-w-none">
                 <h2 class="text-3xl font-extrabold text-gray-900">Featured Products</h2>
                 <div class="mt-6 space-y-12 lg:space-y-0 lg:grid lg:grid-cols-4 lg:gap-x-6">
-                    <!-- Product 1 -->
-                    <div class="group relative">
+                    <!-- Product Card -->
+                    <div v-for="product in featuredProducts" :key="product.id" class="group relative">
                         <div class="relative w-full h-80 bg-white rounded-lg overflow-hidden group-hover:opacity-75 sm:aspect-w-2 sm:aspect-h-1 sm:h-64 lg:aspect-w-1 lg:aspect-h-1">
-                            <img src="https://images.unsplash.com/photo-1522107177-01884fcef41f?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80" alt="Solar Panel Kit" class="w-full h-full object-center object-cover">
+                            <img :src="`/storage/${product.image}`" :alt="product.name" class="w-full h-full object-center object-cover">
                         </div>
                         <h3 class="mt-6 text-sm text-gray-500">
-                            <a href="product-detail.html">
+                            <a :href="`product/${product.id}`">
                                 <span class="absolute inset-0"></span>
-                                Home Energy
+                                {{ product.name }}
                             </a>
                         </h3>
-                        <p class="text-base font-semibold text-gray-900">Premium Solar Panel Kit</p>
-                        <p class="mt-1 text-sm text-gray-500">Starting from $899</p>
-                    </div>
-
-                    <!-- Product 2 -->
-                    <div class="group relative">
-                        <div class="relative w-full h-80 bg-white rounded-lg overflow-hidden group-hover:opacity-75 sm:aspect-w-2 sm:aspect-h-1 sm:h-64 lg:aspect-w-1 lg:aspect-h-1">
-                            <img src="https://images.unsplash.com/photo-1558981852-426c6c22a060?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80" alt="Electric Bike" class="w-full h-full object-center object-cover">
-                        </div>
-                        <h3 class="mt-6 text-sm text-gray-500">
-                            <a href="product-detail.html">
-                                <span class="absolute inset-0"></span>
-                                Mobility
-                            </a>
-                        </h3>
-                        <p class="text-base font-semibold text-gray-900">Urban Electric Bike</p>
-                        <p class="mt-1 text-sm text-gray-500">$1,299</p>
-                    </div>
-
-                    <!-- Product 3 -->
-                    <div class="group relative">
-                        <div class="relative w-full h-80 bg-white rounded-lg overflow-hidden group-hover:opacity-75 sm:aspect-w-2 sm:aspect-h-1 sm:h-64 lg:aspect-w-1 lg:aspect-h-1">
-                            <img src="https://images.unsplash.com/photo-1564424224827-cd24b8915874?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1489&q=80" alt="Smart Thermostat" class="w-full h-full object-center object-cover">
-                        </div>
-                        <h3 class="mt-6 text-sm text-gray-500">
-                            <a href="product-detail.html">
-                                <span class="absolute inset-0"></span>
-                                Smart Home
-                            </a>
-                        </h3>
-                        <p class="text-base font-semibold text-gray-900">Eco Smart Thermostat</p>
-                        <p class="mt-1 text-sm text-gray-500">$199</p>
-                    </div>
-
-                    <!-- Product 4 -->
-                    <div class="group relative">
-                        <div class="relative w-full h-80 bg-white rounded-lg overflow-hidden group-hover:opacity-75 sm:aspect-w-2 sm:aspect-h-1 sm:h-64 lg:aspect-w-1 lg:aspect-h-1">
-                            <img src="https://images.unsplash.com/photo-1560343776-97e7d202ff0e?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1051&q=80" alt="Solar Charger" class="w-full h-full object-center object-cover">
-                        </div>
-                        <h3 class="mt-6 text-sm text-gray-500">
-                            <a href="product-detail.html">
-                                <span class="absolute inset-0"></span>
-                                Gadgets
-                            </a>
-                        </h3>
-                        <p class="text-base font-semibold text-gray-900">Portable Solar Charger</p>
-                        <p class="mt-1 text-sm text-gray-500">$79</p>
+                        <p class="text-base font-semibold text-gray-900">${{ product.sell_price }}</p>
+                        <p class="mt-1 text-sm text-gray-500">Stock: {{ product.stock }}</p>
                     </div>
                 </div>
             </div>
@@ -142,4 +97,21 @@
 import LogoutButton from '../components/LogoutButton.vue';
 import Navbar from '../components/Navbar.vue';
 import Footer from '../components/Footer.vue'
+import { ref, onMounted } from 'vue';
+import axios from 'axios';
+
+const featuredProducts = ref([]);
+
+const fetchFeaturedProducts = async () => {
+    try {
+        const response = await axios.get('http://localhost:8000/api/featured-products');
+        featuredProducts.value = response.data;
+    } catch (error) {
+        console.error('Error fetching featured products:', error);
+    }
+};
+
+onMounted(() => {
+    fetchFeaturedProducts();
+});
 </script>

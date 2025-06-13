@@ -174,4 +174,14 @@ public function showProductDetails(int $id){
     return response()->json($product);
 }
 
+public function getFeaturedProducts()
+{
+    $featuredProducts = Product::where('status', 'active')
+        ->orderBy('created_at', 'desc')
+        ->take(4)
+        ->get();
+    
+    return response()->json($featuredProducts);
+}
+
 }
