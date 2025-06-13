@@ -198,7 +198,18 @@ public function showProducts(){
 }
 public function showProductDetails(int $id){
     $product = Product::findOrFail($id);
-    return response()->json($product);
+    
+    // Get related products from the same category
+    $relatedProducts = Product::where('categorie_id', $product->categorie_id)
+        ->where('id', '!=', $id) // Exclude current product
+        ->where('status', 'active')
+        ->take(4)
+        ->get();
+    
+    return response()->json([
+        'product' => $product,
+        'relatedProducts' => $relatedProducts
+    ]);
 }
 
 public function getFeaturedProducts()

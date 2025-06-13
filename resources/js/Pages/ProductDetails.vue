@@ -7,19 +7,19 @@
     <nav class="bg-white py-3 px-4 sm:px-6 lg:px-8" aria-label="Breadcrumb">
         <ol class="max-w-7xl mx-auto flex items-center space-x-2 text-sm text-gray-500">
             <li>
-                <a href="index.html" class="hover:text-gray-700">Home</a>
+                <a href="/" class="hover:text-gray-700">Home</a>
             </li>
             <li class="flex items-center">
                 <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                     <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
                 </svg>
-                <a href="products.html" class="ml-2 hover:text-gray-700">Products</a>
+                <a href="/products" class="ml-2 hover:text-gray-700">Products</a>
             </li>
             <li class="flex items-center">
                 <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                     <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
                 </svg>
-                <span class="ml-2 text-gray-900 font-medium">Premium Solar Panel Kit</span>
+                <span v-if="product" class="ml-2 text-gray-900 font-medium">{{ product.name }}</span>
             </li>
         </ol>
     </nav>
@@ -103,81 +103,23 @@
 
             <!-- Related Products -->
             <div class="mt-16 sm:mt-24">
-                <h2 class="text-2xl font-bold tracking-tight text-gray-900">Customers also purchased</h2>
+                <h2 class="text-2xl font-bold tracking-tight text-gray-900">Related Products</h2>
                 <div class="mt-6 grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
-                    <!-- Related Product 1 -->
-                    <div class="group relative">
+                    <div v-for="relatedProduct in relatedProducts" :key="relatedProduct.id" class="group relative">
                         <div class="w-full min-h-80 bg-gray-200 aspect-w-1 aspect-h-1 rounded-md overflow-hidden group-hover:opacity-75 lg:h-80 lg:aspect-none">
-                            <img src="https://images.unsplash.com/photo-1564424224827-cd24b8915874?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1489&q=80" alt="Eco Smart Thermostat" class="w-full h-full object-center object-cover lg:w-full lg:h-full">
+                            <img :src="`/storage/${relatedProduct.image}`" :alt="relatedProduct.name" class="w-full h-full object-center object-cover lg:w-full lg:h-full">
                         </div>
                         <div class="mt-4 flex justify-between">
                             <div>
                                 <h3 class="text-sm text-gray-700">
-                                    <a href="#">
+                                    <a :href="`/product/${relatedProduct.id}`">
                                         <span aria-hidden="true" class="absolute inset-0"></span>
-                                        Eco Smart Thermostat
+                                        {{ relatedProduct.name }}
                                     </a>
                                 </h3>
-                                <p class="mt-1 text-sm text-gray-500">Energy-saving temperature control</p>
+                                <p class="mt-1 text-sm text-gray-500">{{ relatedProduct.description }}</p>
                             </div>
-                            <p class="text-sm font-medium text-gray-900">$199</p>
-                        </div>
-                    </div>
-
-                    <!-- Related Product 2 -->
-                    <div class="group relative">
-                        <div class="w-full min-h-80 bg-gray-200 aspect-w-1 aspect-h-1 rounded-md overflow-hidden group-hover:opacity-75 lg:h-80 lg:aspect-none">
-                            <img src="https://images.unsplash.com/photo-1592833167665-45638961c288?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80" alt="Energy Efficient LED Bulbs" class="w-full h-full object-center object-cover lg:w-full lg:h-full">
-                        </div>
-                        <div class="mt-4 flex justify-between">
-                            <div>
-                                <h3 class="text-sm text-gray-700">
-                                    <a href="#">
-                                        <span aria-hidden="true" class="absolute inset-0"></span>
-                                        Energy Efficient LED Bulbs
-                                    </a>
-                                </h3>
-                                <p class="mt-1 text-sm text-gray-500">Pack of 6 smart LED bulbs</p>
-                            </div>
-                            <p class="text-sm font-medium text-gray-900">$49</p>
-                        </div>
-                    </div>
-
-                    <!-- Related Product 3 -->
-                    <div class="group relative">
-                        <div class="w-full min-h-80 bg-gray-200 aspect-w-1 aspect-h-1 rounded-md overflow-hidden group-hover:opacity-75 lg:h-80 lg:aspect-none">
-                            <img src="https://images.unsplash.com/photo-1560343776-97e7d202ff0e?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1051&q=80" alt="Portable Solar Charger" class="w-full h-full object-center object-cover lg:w-full lg:h-full">
-                        </div>
-                        <div class="mt-4 flex justify-between">
-                            <div>
-                                <h3 class="text-sm text-gray-700">
-                                    <a href="#">
-                                        <span aria-hidden="true" class="absolute inset-0"></span>
-                                        Portable Solar Charger
-                                    </a>
-                                </h3>
-                                <p class="mt-1 text-sm text-gray-500">Compact solar panel for devices</p>
-                            </div>
-                            <p class="text-sm font-medium text-gray-900">$79</p>
-                        </div>
-                    </div>
-
-                    <!-- Related Product 4 -->
-                    <div class="group relative">
-                        <div class="w-full min-h-80 bg-gray-200 aspect-w-1 aspect-h-1 rounded-md overflow-hidden group-hover:opacity-75 lg:h-80 lg:aspect-none">
-                            <img src="https://images.unsplash.com/photo-1592833167665-45638961c288?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80" alt="Home Battery Storage" class="w-full h-full object-center object-cover lg:w-full lg:h-full">
-                        </div>
-                        <div class="mt-4 flex justify-between">
-                            <div>
-                                <h3 class="text-sm text-gray-700">
-                                    <a href="#">
-                                        <span aria-hidden="true" class="absolute inset-0"></span>
-                                        Home Battery Storage
-                                    </a>
-                                </h3>
-                                <p class="mt-1 text-sm text-gray-500">Store excess solar energy</p>
-                            </div>
-                            <p class="text-sm font-medium text-gray-900">$1,299</p>
+                            <p class="text-sm font-medium text-gray-900">MAD {{ relatedProduct.price }}</p>
                         </div>
                     </div>
                 </div>
@@ -193,48 +135,54 @@ import Footer from '../components/Footer.vue';
 import axios from 'axios';
 import { useCartStore } from '../stores/CartStore';
 import { useRoute } from 'vue-router';
-import { onMounted,ref } from 'vue';
+import { onMounted, ref } from 'vue';
 
-const product = ref(null)
+const product = ref(null);
+const relatedProducts = ref([]);
 const cart = useCartStore();
-const route = useRoute()
-const productId = route.params.id
+const route = useRoute();
+const productId = route.params.id;
 
 const fetchProduct = async () => {
-    try{
-        const response = await axios.get(`/api/product/${productId}`)
-        product.value = response.data
-        console.log(product.value)
-    }catch(error){
-        console.error('Error fetching product: ',error)
+    try {
+        const response = await axios.get(`/api/product/${productId}`);
+        product.value = response.data.product;
+        relatedProducts.value = response.data.relatedProducts;
+        console.log(product.value);
+    } catch (error) {
+        console.error('Error fetching product: ', error);
     }
-}
-const quantity = ref(1)
+};
 
-const increaseQuantity = () =>{
-    quantity.value++
-}
+const quantity = ref(1);
+
+const increaseQuantity = () => {
+    quantity.value++;
+};
+
 const decreaseQuantity = () => {
-    if(quantity.value > 1){
-        quantity.value--
+    if (quantity.value > 1) {
+        quantity.value--;
     }
-}
-const addToCart = async () =>{
-    try{
-        await axios.post('/api/cart/add',{
-            product_id : productId,
-            quantity:quantity.value
-        },{
-            headers:{
-                Authorization:`Bearer ${localStorage.getItem('token')}`
+};
+
+const addToCart = async () => {
+    try {
+        await axios.post('/api/cart/add', {
+            product_id: productId,
+            quantity: quantity.value
+        }, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`
             }
-        })
-        alert('product added sucessfully');
-        cart.cartCount+=1
-    }catch(error){
-        console.error(error)
-        alert('failed to add to cart')
+        });
+        alert('product added successfully');
+        cart.cartCount += 1;
+    } catch (error) {
+        console.error(error);
+        alert('failed to add to cart');
     }
-}
-onMounted(fetchProduct)
+};
+
+onMounted(fetchProduct);
 </script>
