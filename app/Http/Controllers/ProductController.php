@@ -43,9 +43,36 @@ class ProductController extends Controller
         ], 201);
     }
 
-    public function show(){
-        $product = Product::all();
-        return response()->json($product);
+    public function show(Request $request){
+        $perPage = $request->get('per_page', 6);
+        $query = Product::query();
+
+        // Search filter
+        if ($request->has('search')) {
+            $query->where('name', 'like', '%' . $request->search . '%')
+                  ->orWhere('description', 'like', '%' . $request->search . '%');
+        }
+
+        // Category filter
+        if ($request->has('category')) {
+            $query->where('categorie_id', $request->category);
+        }
+
+        // Price range filter
+        if ($request->has('min_price')) {
+            $query->where('price', '>=', $request->min_price);
+        }
+        if ($request->has('max_price')) {
+            $query->where('price', '<=', $request->max_price);
+        }
+
+        // Status filter
+        if ($request->has('status')) {
+            $query->where('status', $request->status);
+        }
+
+        $products = $query->paginate($perPage);
+        return response()->json($products);
     }
     public function update(Request $request, int $id)
 {
