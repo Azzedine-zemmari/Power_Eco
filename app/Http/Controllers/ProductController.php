@@ -42,7 +42,7 @@ class ProductController extends Controller
             'product' => $product
         ], 201);
     }
-
+    // this function for the user to see the data with some advanced filters
     public function show(Request $request){
         $perPage = $request->get('per_page', 6);
         $query = Product::query();
@@ -73,6 +73,11 @@ class ProductController extends Controller
 
         $products = $query->paginate($perPage);
         return response()->json($products);
+    }
+    // this show for product manager
+    public function ProductShow(){
+        $product = Product::all();
+        return response()->json($product);
     }
     public function update(Request $request, int $id)
 {

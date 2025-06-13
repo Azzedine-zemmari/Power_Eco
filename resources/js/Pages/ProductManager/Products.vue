@@ -189,7 +189,7 @@
                                     <div class="flex-1">
                                         <div class="flex rounded-md shadow-sm max-w-md">
                                             <div class="relative flex-grow focus-within:z-10">
-                                                <input type="text" name="search" id="search"
+                                                <input type="text" name="search" id="search" v-model="searchQuery"
                                                     class="focus:ring-green-500 focus:border-green-500 block w-full rounded-md pl-10 sm:text-sm border-gray-300"
                                                     placeholder="Search products">
                                                 <div
@@ -643,6 +643,7 @@ const minPriceFilter = ref('');
 const maxPriceFilter = ref('');
 const minStockFilter = ref('');
 const maxStockFilter = ref('10000');
+const searchQuery = ref('');
 
 // Form state
 const productForm = reactive({
@@ -746,7 +747,7 @@ async function fetchProducts() {
         error.value = null;
 
         // This would be your actual API endpoint
-        const response = await axios.get('http://localhost:8000/api/products', {
+        const response = await axios.get('http://localhost:8000/api/product-manager/products', {
             withCredentials: true,
             headers: {
                 Accept: 'application/json',
@@ -860,10 +861,21 @@ async function deleteProduct() {
 // Create a computed property for filtered products
 const filteredProducts = computed(() => {
     let filtered = products.value;
+
+    // Search filter
+    if (searchQuery.value) {
+        const query = searchQuery.value.toLowerCase();
+        filtered = filtered.filter(product => 
+            product.name.toLowerCase().includes(query) ||
+            product.description.toLowerCase().includes(query)
+        );
+    }
+
     // Category filter
     if (selectedCategoryFilter.value && selectedCategoryFilter.value !== '') {
         filtered = filtered.filter(product => product.categorie_id == selectedCategoryFilter.value);
     }
+
     // Price filter
     const min = parseFloat(minPriceFilter.value);
     const max = parseFloat(maxPriceFilter.value);
@@ -873,6 +885,7 @@ const filteredProducts = computed(() => {
     if (!isNaN(max)) {
         filtered = filtered.filter(product => parseFloat(product.price) <= max);
     }
+
     // Stock filter (min and max)
     const minStock = parseInt(minStockFilter.value);
     const maxStock = parseInt(maxStockFilter.value);
@@ -882,6 +895,7 @@ const filteredProducts = computed(() => {
     if (!isNaN(maxStock) && maxStock < 10000) {
         filtered = filtered.filter(product => parseInt(product.stock) <= maxStock);
     }
+
     return filtered;
 });
 
@@ -892,7 +906,7 @@ function resetFilters() {
     maxPriceFilter.value = '';
     minStockFilter.value = '';
     maxStockFilter.value = '10000';
-    // Reset any other filters you might add in the future
+    searchQuery.value = '';
 }
 
 function countMarge() {
