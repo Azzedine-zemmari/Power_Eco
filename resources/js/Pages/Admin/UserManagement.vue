@@ -176,7 +176,7 @@
                                                 class="focus:ring-green-500 focus:border-green-500 block w-full sm:w-auto rounded-md sm:text-sm border-gray-300">
                                                 <option value="">All Status</option>
                                                 <option value="active">Active</option>
-                                                <option value="inactive">Inactive</option>
+                                                <option value="desactive">Archived</option>
                                             </select>
                                             <select v-model="roleFilter"
                                                 class="focus:ring-green-500 focus:border-green-500 block w-full sm:w-auto rounded-md sm:text-sm border-gray-300">
@@ -248,7 +248,7 @@
                                                     <span
                                                         class="inline-flex px-2 py-1 text-xs font-semibold rounded-full"
                                                         :class="getStatusBadgeClass(user.status)">
-                                                        {{ user.status || 'Active' }}
+                                                        {{ user.status === 'desactive' ? 'Archived' : (user.status || 'Active') }}
                                                     </span>
                                                 </td>
                                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
@@ -290,7 +290,7 @@
                                                             <span
                                                                 class="inline-flex px-2 py-1 text-xs font-semibold rounded-full"
                                                                 :class="getStatusBadgeClass(user.status)">
-                                                                {{ user.status || 'Active' }}
+                                                                {{ user.status === 'desactive' ? 'Archived' : (user.status || 'Active') }}
                                                             </span>
                                                         </div>
                                                     </div>
@@ -413,13 +413,6 @@
                                                     <label for="role-product-manager"
                                                         class="ml-3 block text-sm font-medium text-gray-700">Product
                                                         Manager</label>
-                                                </div>
-                                                <div class="flex items-center">
-                                                    <input id="role-admin" v-model="selectedRole" type="radio"
-                                                        value="admin"
-                                                        class="focus:ring-green-500 h-4 w-4 text-green-600 border-gray-300">
-                                                    <label for="role-admin"
-                                                        class="ml-3 block text-sm font-medium text-gray-700">Administrator</label>
                                                 </div>
                                             </div>
                                         </div>
@@ -613,7 +606,7 @@ const getRoleBadgeClass = (role) => {
 const getStatusBadgeClass = (status) => {
     const classes = {
         'active': 'bg-green-100 text-green-800',
-        'inactive': 'bg-red-100 text-red-800'
+        'desactive': 'bg-gray-100 text-gray-800'
     }
     return classes[status] || 'bg-green-100 text-green-800'
 }

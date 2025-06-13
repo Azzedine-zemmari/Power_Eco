@@ -62,18 +62,20 @@ class UserController extends Controller
     // to show the admin all the user that he register
     public function show(Request $request){
         $perPage = $request->get('per_page', 1);
-        $user = User::where('selectedRole', '!=', 'admin')->paginate($perPage);
+        $user = User::withTrashed()->where('selectedRole', '!=', 'admin')->paginate($perPage);
         return response()->json($user);
     }
     // to soft delete a user by the admin 
     public function archiveUser(Request $request , int $id){
         $user = User::find($id);
         if (!$user) {
-        return response()->json([
-            'message' => 'User not found.'
-        ], 404);
+            return response()->json([
+                'message' => 'User not found.'
+            ], 404);
         }
 
+        $user->status = 'desactive';
+        $user->save();
         $user->delete();
 
         return response()->json([
