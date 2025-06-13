@@ -66,6 +66,7 @@
                                 </svg>
                                 User Management
                             </a>
+                            @
                         </nav>
                     </div>
                 </div>
@@ -182,7 +183,6 @@
                                                 <option value="">All Roles</option>
                                                 <option value="commercial">Commercial</option>
                                                 <option value="product-manager">Product Manager</option>
-                                                <option value="admin">Admin</option>
                                             </select>
                                         </div>
                                     </div>
@@ -211,6 +211,10 @@
                                                 <th
                                                     class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                                     Created</th>
+                                                <th 
+                                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                    Action
+                                                </th>
                                             </tr>
                                         </thead>
                                         <tbody class="bg-white divide-y divide-gray-200">
@@ -250,7 +254,11 @@
                                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                                     {{ formatDate(user.created_at) }}
                                                 </td>
-
+                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                                    <button class="h-6 w-6" @click.prevent="archiveUser(user)">
+                                                        <svg class="" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M2 12.0002C2 7.28611 2 4.92909 3.46447 3.46462C4.70529 2.2238 6.58687 2.03431 10 2.00537M22 12.0002C22 7.28611 22 4.92909 20.5355 3.46462C19.2947 2.2238 17.4131 2.03431 14 2.00537" stroke="#ae1e1e" stroke-width="1.5" stroke-linecap="round"></path> <path d="M10 22C7.19974 22 5.79961 22 4.73005 21.455C3.78924 20.9757 3.02433 20.2108 2.54497 19.27C2 18.2004 2 16.8003 2 14C2 11.1997 2 9.79961 2.54497 8.73005C3.02433 7.78924 3.78924 7.02433 4.73005 6.54497C5.79961 6 7.19974 6 10 6H14C16.8003 6 18.2004 6 19.27 6.54497C20.2108 7.02433 20.9757 7.78924 21.455 8.73005C22 9.79961 22 11.1997 22 14C22 16.8003 22 18.2004 21.455 19.27C20.9757 20.2108 20.2108 20.9757 19.27 21.455C18.2004 22 16.8003 22 14 22" stroke="#ae1e1e" stroke-width="1.5" stroke-linecap="round"></path> <path d="M12 11L12 17M12 17L14.5 14.5M12 17L9.5 14.5" stroke="#ae1e1e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+                                                    </button>
+                                                </td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -678,17 +686,6 @@ const submitForm = async () => {
 
     try {
         isLoading.value = true
-
-        if (editingUser.value) {
-            // Update existing user
-            await axios.put(`http://localhost:8000/api/users/${editingUser.value.id}`, formData, {
-                headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
-                    'Accept': 'application/json'
-                }
-            })
-            showToast('User updated successfully!')
-        } else {
             // Create new user
             await axios.post('http://localhost:8000/api/register', formData, {
                 headers: {
@@ -697,7 +694,6 @@ const submitForm = async () => {
                 }
             })
             showToast('User created successfully!')
-        }
 
         closeModal()
         await fetchUsers(currentPage.value)
@@ -708,30 +704,24 @@ const submitForm = async () => {
         isLoading.value = false
     }
 }
-
-const deleteUser = async () => {
-    if (!userToDelete.value) return
-
+const archiveUser = async (user) => {
     try {
-        isLoading.value = true
-        await axios.delete(`http://localhost:8000/api/users/${userToDelete.value.id}/archive`, {
+        isLoading.value = true;
+        await axios.delete(`http://localhost:8000/api/users/${user.id}/archive`, {
             headers: {
                 'Authorization': `Bearer ${localStorage.getItem('token')}`,
                 'Accept': 'application/json'
             }
-        })
-
-        users.value = users.value.filter(user => user.id !== userToDelete.value.id)
-        userToDelete.value = null
-        showToast('User deleted successfully!')
+        });
+        showToast('User archived successfully!');
+        await fetchUsers(currentPage.value);
     } catch (error) {
-        console.error('Error deleting user:', error)
-        showToast('Failed to delete user', 'error')
+        console.error('Error archiving user:', error);
+        showToast(error.response?.data?.message || 'Failed to archive user', 'error');
     } finally {
-        isLoading.value = false
+        isLoading.value = false;
     }
 }
-
 const changePage = (page) => {
     if (page < 1 || page > totalPages.value) return
     fetchUsers(page)
