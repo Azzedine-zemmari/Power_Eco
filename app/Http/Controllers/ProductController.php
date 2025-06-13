@@ -17,7 +17,7 @@ class ProductController extends Controller
             'sell_price' => 'required|numeric',
             'marge' => 'required|numeric',
             'stock' => 'required|integer|min:0',
-            'category_id' => 'required|integer|exists:categories,id',
+            'categorie_id' => 'required|integer|exists:categories,id',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
             'status' => 'required|in:active,inactive'
         ]);
@@ -31,7 +31,7 @@ class ProductController extends Controller
             'description' => $request->description,
             'price' => $request->price,
             'stock' => $request->stock,
-            'categorie_id' => $request->category_id,
+            'categorie_id' => $request->categorie_id,
             'image' => $imagePath,
             'status' => $request->status,
             'sell_price' => $request->sell_price,

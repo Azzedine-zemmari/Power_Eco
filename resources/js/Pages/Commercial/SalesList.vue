@@ -131,12 +131,12 @@
                                                             @change="updateSale(item)"
                                                             class="block w-full px-3 py-2 text-sm border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 bg-white hover:border-gray-400 transition-colors duration-200"
                                                             :class="{
-                                                                'border-yellow-300 bg-yellow-50': item.status === 'order',
+                                                                'border-yellow-300 bg-yellow-50': item.status === 'ordered',
                                                                 'border-blue-300 bg-blue-50': item.status === 'paid',
                                                                 'border-green-300 bg-green-50': item.status === 'delivered',
                                                                 'border-purple-300 bg-purple-50': item.status === 'received'
                                                             }">
-                                                            <option value="order">📋 Order</option>
+                                                            <option value="ordered">📋 Ordered</option>
                                                             <option value="paid">💳 Paid</option>
                                                             <option value="delivered">🚚 Delivered</option>
                                                             <option value="received">✅ Received</option>

@@ -29,8 +29,6 @@
                         :active="current === '/productManager/Product/Category'" />
                     <SidebarLink to="/productManager/Products" icon="cube" label="Products"
                         :active="current === '/productManager/Products'" />
-                    <SidebarLink to="#" icon="chart-bar" label="Analytics" :active="false" />
-                    <SidebarLink to="#" icon="cog" label="Settings" :active="false" />
                     <LogoutButton variant="sidebar" />
                 </nav>
             </div>

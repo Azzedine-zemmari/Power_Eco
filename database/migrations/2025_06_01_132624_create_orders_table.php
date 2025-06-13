@@ -24,7 +24,7 @@ return new class extends Migration
             $table->string('postal_code');
             $table->text('notes')->nullable();
             $table->decimal('total_price', 10, 2);
-            $table->enum('status',['order','paid','delivered','received'])->default('order');
+            $table->enum('status',['ordered','paid','delivered','received'])->default('ordered');
             $table->timestamps();
 });
 

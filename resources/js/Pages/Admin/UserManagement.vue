@@ -1,438 +1,744 @@
 <template>
-    <div class="bg-gray-50 text-gray-800 font-sans">
-        <!-- Admin Navigation -->
-        <nav class="bg-green-800 shadow-sm sticky top-0 z-50">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="flex justify-between h-16">
-                    <div class="flex items-center">
-                        <a href="admin-dashboard.html" class="flex-shrink-0 flex items-center">
-                            <span class="text-white font-bold text-xl">Eco<span class="text-green-300">Move</span></span>
-                        </a>
-                        <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
-                            <a href="admin-user-management.html"
-                                class="border-green-300 text-white inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+    <div class="min-h-screen bg-gray-50">
+
+        <!-- Mobile Navigation Header -->
+        <div class="lg:hidden bg-green-800 shadow-sm sticky top-0 z-40">
+            <div class="flex items-center justify-between px-4 py-3">
+                <div class="flex items-center">
+                    <button @click="sidebarOpen = true"
+                        class="text-white hover:text-green-200 mr-3 focus:outline-none focus:ring-2 focus:ring-green-300 focus:ring-opacity-50 rounded-md p-1">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                    <span class="text-white font-bold text-xl">Eco<span class="text-green-300">Move</span></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex min-h-screen">
+            <!-- Mobile Sidebar Overlay -->
+            <div v-show="sidebarOpen" class="fixed inset-0 z-50 lg:hidden" @click="sidebarOpen = false">
+                <div class="fixed inset-0 bg-black bg-opacity-50 transition-opacity duration-300"></div>
+                <div class="relative flex flex-col max-w-xs w-full bg-green-800 h-full shadow-xl transform transition-transform duration-300 ease-in-out"
+                    @click.stop>
+                    <!-- Close button -->
+                    <div class="absolute top-0 right-0 -mr-12 pt-2">
+                        <button @click="sidebarOpen = false"
+                            class="ml-1 flex items-center justify-center h-10 w-10 rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white bg-green-700 hover:bg-green-600 transition-colors duration-200">
+                            <svg class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
+
+                    <!-- Mobile Sidebar Content -->
+                    <div class="flex-1 h-0 pt-5 pb-4 overflow-y-auto">
+                        <div class="flex-shrink-0 flex items-center px-4 mb-8">
+                            <span class="text-white font-bold text-xl">Eco<span
+                                    class="text-green-300">Move</span></span>
+                        </div>
+
+                        <!-- User Info Section for Mobile -->
+                        <div class="flex items-center px-4 py-4 border-b border-green-700 mb-4">
+                            <div class="ml-3">
+                                <p class="text-base font-medium text-white">Admin User</p>
+                                <p class="text-sm font-medium text-green-200">Administrator</p>
+                            </div>
+                        </div>
+
+                        <!-- Navigation Menu for Mobile -->
+                        <nav class="px-2 space-y-1">
+                            <a href="#"
+                                class="bg-green-700 text-white group flex items-center px-2 py-2 text-base font-medium rounded-md hover:bg-green-600 transition-colors duration-200">
+                                <svg class="mr-3 h-6 w-6 text-green-300" viewBox="0 0 24 24" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg" stroke="#949494">
+                                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                                    <g id="SVGRepo_iconCarrier">
+                                        <path
+                                            d="M19 15C21.2091 15 23 16.7909 23 19V21H21M16 10.874C17.7252 10.4299 19 8.86383 19 6.99999C19 5.13615 17.7252 3.57005 16 3.12601M13 7C13 9.20914 11.2091 11 9 11C6.79086 11 5 9.20914 5 7C5 4.79086 6.79086 3 9 3C11.2091 3 13 4.79086 13 7ZM5 15H13C15.2091 15 17 16.7909 17 19V21H1V19C1 16.7909 2.79086 15 5 15Z"
+                                            stroke="#c7c7c7" stroke-width="1.5" stroke-linecap="round"
+                                            stroke-linejoin="round"></path>
+                                    </g>
+                                </svg>
                                 User Management
                             </a>
-                        </div>
-                    </div>
-                    <div class="flex justify-end items-center">
-                        <LogoutButton variant="default"/>
+                        </nav>
                     </div>
                 </div>
             </div>
-        </nav>
 
-        <!-- Page Header -->
-        <header class="bg-white shadow">
-            <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 flex justify-between items-center">
-                <h1 class="text-3xl font-bold text-gray-900">User Management</h1>
-                <button type="button" @click="openModal"
-                    class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
-                    id="open-create-user-modal">
-                    <svg class="-ml-1 mr-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
-                        fill="currentColor">
-                        <path fill-rule="evenodd"
-                            d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
-                            clip-rule="evenodd" />
-                    </svg>
-                    Create User
-                </button>
+            <!-- Desktop Sidebar -->
+            <div class="hidden lg:flex lg:flex-shrink-0">
+                <div class="flex flex-col w-64 bg-green-800">
+                    <div class="flex items-center h-16 flex-shrink-0 px-4 bg-green-900">
+                        <span class="text-white font-bold text-xl">Eco<span class="text-green-300">Move</span></span>
+                    </div>
+                    <div class="h-0 flex-1 flex flex-col overflow-y-auto">
+                        <div class="flex items-center flex-shrink-0 px-4 py-4 border-b border-green-700">
+                            <div class="ml-3">
+                                <p class="text-base font-medium text-white">Admin User</p>
+                                <p class="text-sm font-medium text-green-200">Administrator</p>
+                            </div>
+                        </div>
+                        <nav class="mt-5 px-2 space-y-1">
+                            <a href="#"
+                                class="bg-green-700 text-white group flex items-center px-2 py-2 text-base font-medium rounded-md hover:bg-green-600 transition-colors duration-200">
+                                <svg class="mr-3 h-6 w-6 text-green-300" viewBox="0 0 24 24" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg" stroke="#949494">
+                                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                                    <g id="SVGRepo_iconCarrier">
+                                        <path
+                                            d="M19 15C21.2091 15 23 16.7909 23 19V21H21M16 10.874C17.7252 10.4299 19 8.86383 19 6.99999C19 5.13615 17.7252 3.57005 16 3.12601M13 7C13 9.20914 11.2091 11 9 11C6.79086 11 5 9.20914 5 7C5 4.79086 6.79086 3 9 3C11.2091 3 13 4.79086 13 7ZM5 15H13C15.2091 15 17 16.7909 17 19V21H1V19C1 16.7909 2.79086 15 5 15Z"
+                                            stroke="#c7c7c7" stroke-width="1.5" stroke-linecap="round"
+                                            stroke-linejoin="round"></path>
+                                    </g>
+                                </svg>
+                                User Management
+                            </a>
+                        </nav>
+                    </div>
+                </div>
             </div>
-        </header>
 
-        <!-- Main Content -->
-        <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-            <!-- User Creation Form (Modal) -->
-            <div v-if="isModalOpen" class="fixed z-50 inset-0 overflow-y-auto" id="create-user-modal"
-                @click.self="closeModal">
-                <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-                    <!-- Background overlay -->
-                    <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" id="modal-backdrop"></div>
-
-                    <!-- Modal panel -->
+            <!-- Main Content -->
+            <div class="flex-1 overflow-hidden">
+                <!-- Desktop Header -->
+                <div class="hidden lg:block bg-white shadow">
                     <div
-                        class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-                        <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                            <div class="sm:flex sm:items-start">
-                                <div
-                                    class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-green-100 sm:mx-0 sm:h-10 sm:w-10">
-                                    <svg class="h-6 w-6 text-green-600" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                        viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
-                                    </svg>
+                        class="max-w-7xl mx-auto py-4 px-4 sm:py-6 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                        <div>
+                            <h1 class="text-2xl sm:text-3xl font-bold text-gray-900">User Management</h1>
+                            <p class="text-gray-600 mt-1">Manage system users and their roles</p>
+                        </div>
+                        <button @click="openModal"
+                            class="w-full sm:w-auto inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors duration-200">
+                            <svg class="-ml-1 mr-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                            </svg>
+                            Create User
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Mobile Header -->
+                <div class="lg:hidden bg-white shadow">
+                    <div class="px-4 py-4">
+                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                            <div>
+                                <h1 class="text-xl font-bold text-gray-900">User Management</h1>
+                                <p class="text-gray-600 text-sm">Manage system users</p>
+                            </div>
+                            <button @click="openModal"
+                                class="w-full sm:w-auto inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                                <svg class="-ml-1 mr-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                                </svg>
+                                Create User
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Main Content Area -->
+                <main class="flex-1 relative overflow-y-auto focus:outline-none">
+                    <div class="py-6">
+                        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                            <!-- Search and Filter Section -->
+                            <div class="bg-white shadow rounded-lg mb-6">
+                                <div class="p-4 sm:p-6">
+                                    <div class="flex flex-col sm:flex-row gap-4">
+                                        <div class="flex-1">
+                                            <div class="relative">
+                                                <div
+                                                    class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                                    <svg class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24"
+                                                        stroke="currentColor">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            stroke-width="2"
+                                                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                                    </svg>
+                                                </div>
+                                                <input v-model="searchTerm" type="text"
+                                                    class="focus:ring-green-500 focus:border-green-500 block w-full pl-10 sm:text-sm border-gray-300 rounded-md"
+                                                    placeholder="Search users...">
+                                            </div>
+                                        </div>
+                                        <div class="flex flex-col sm:flex-row gap-2">
+                                            <select v-model="statusFilter"
+                                                class="focus:ring-green-500 focus:border-green-500 block w-full sm:w-auto rounded-md sm:text-sm border-gray-300">
+                                                <option value="">All Status</option>
+                                                <option value="active">Active</option>
+                                                <option value="inactive">Inactive</option>
+                                            </select>
+                                            <select v-model="roleFilter"
+                                                class="focus:ring-green-500 focus:border-green-500 block w-full sm:w-auto rounded-md sm:text-sm border-gray-300">
+                                                <option value="">All Roles</option>
+                                                <option value="commercial">Commercial</option>
+                                                <option value="product-manager">Product Manager</option>
+                                                <option value="admin">Admin</option>
+                                            </select>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
-                                    <h3 class="text-lg leading-6 font-medium text-gray-900">Create New User</h3>
-                                    <div class="mt-4">
-                                        <form @submit.prevent="submitForm" id="create-user-form" class="space-y-6">
-                                            <!-- Personal Information -->
-                                            <div class="grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
-                                                <div>
-                                                    <label for="first-name"
-                                                        class="block text-sm font-medium text-gray-700">First
-                                                        name</label>
-                                                    <div class="mt-1">
-                                                        <input v-model="firstName" type="text" id="first-name"
-                                                            name="first-name" required
-                                                            class="shadow-sm focus:ring-green-500 focus:border-green-500 block w-full sm:text-sm border-gray-300 rounded-md">
-                                                    </div>
-                                                </div>
+                            </div>
 
-                                                <div>
-                                                    <label for="last-name"
-                                                        class="block text-sm font-medium text-gray-700">Last
-                                                        name</label>
-                                                    <div class="mt-1">
-                                                        <input v-model="lastName" type="text" id="last-name"
-                                                            name="last-name" required
-                                                            class="shadow-sm focus:ring-green-500 focus:border-green-500 block w-full sm:text-sm border-gray-300 rounded-md">
-                                                    </div>
-                                                </div>
-
-                                                <div class="sm:col-span-2">
-                                                    <label for="email"
-                                                        class="block text-sm font-medium text-gray-700">Email
-                                                        address</label>
-                                                    <div class="mt-1">
-                                                        <input v-model="email" type="email" id="email" name="email"
-                                                            required
-                                                            class="shadow-sm focus:ring-green-500 focus:border-green-500 block w-full sm:text-sm border-gray-300 rounded-md">
-                                                    </div>
-                                                </div>
-
-
-                                            </div>
-
-                                            <!-- Role Selection -->
-                                            <div>
-                                                <label class="block text-sm font-medium text-gray-700">User Role</label>
-                                                <div class="mt-2 space-y-4">
+                            <!-- Users List -->
+                            <div class="bg-white shadow overflow-hidden sm:rounded-md">
+                                <!-- Desktop Table View -->
+                                <div class="hidden md:block">
+                                    <table class="min-w-full divide-y divide-gray-200">
+                                        <thead class="bg-gray-50">
+                                            <tr>
+                                                <th
+                                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                    User</th>
+                                                <th
+                                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                    Email</th>
+                                                <th
+                                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                    Role</th>
+                                                <th
+                                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                    Status</th>
+                                                <th
+                                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                    Created</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="bg-white divide-y divide-gray-200">
+                                            <tr v-for="user in filteredUsers" :key="user.id" class="hover:bg-gray-50">
+                                                <td class="px-6 py-4 whitespace-nowrap">
                                                     <div class="flex items-center">
-                                                        <input id="role-commercial" name="user-role"
-                                                            v-model="selectedRole" type="radio" value="commercial"
-                                                            class="focus:ring-green-500 h-4 w-4 text-green-600 border-gray-300"
-                                                            checked>
-                                                        <label for="role-commercial"
-                                                            class="ml-3 block text-sm font-medium text-gray-700">
-                                                            Commercial
-                                                        </label>
+                                                        <div class="flex-shrink-0 h-10 w-10">
+                                                            <div
+                                                                class="h-10 w-10 rounded-full bg-green-100 flex items-center justify-center">
+                                                                <span class="text-green-600 font-medium text-sm">{{
+                                                                    getUserInitials(user) }}</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="ml-4">
+                                                            <div class="text-sm font-medium text-gray-900">{{
+                                                                user.firstName }} {{ user.lastName }}</div>
+                                                        </div>
                                                     </div>
-                                                    <div class="flex items-center">
-                                                        <input id="role-product-manager" name="user-role"
-                                                            v-model="selectedRole" type="radio" value="product-manager"
-                                                            class="focus:ring-green-500 h-4 w-4 text-green-600 border-gray-300">
-                                                        <label for="role-product-manager"
-                                                            class="ml-3 block text-sm font-medium text-gray-700">
-                                                            Product Manager
-                                                        </label>
+                                                </td>
+                                                <td class="px-6 py-4 whitespace-nowrap">
+                                                    <div class="text-sm text-gray-900">{{ user.email }}</div>
+                                                </td>
+                                                <td class="px-6 py-4 whitespace-nowrap">
+                                                    <span
+                                                        class="inline-flex px-2 py-1 text-xs font-semibold rounded-full"
+                                                        :class="getRoleBadgeClass(user.selectedRole)">
+                                                        {{ formatRole(user.selectedRole) }}
+                                                    </span>
+                                                </td>
+                                                <td class="px-6 py-4 whitespace-nowrap">
+                                                    <span
+                                                        class="inline-flex px-2 py-1 text-xs font-semibold rounded-full"
+                                                        :class="getStatusBadgeClass(user.status)">
+                                                        {{ user.status || 'Active' }}
+                                                    </span>
+                                                </td>
+                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                                    {{ formatDate(user.created_at) }}
+                                                </td>
+
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <!-- Mobile Card View -->
+                                <div class="md:hidden">
+                                    <ul class="divide-y divide-gray-200">
+                                        <li v-for="user in filteredUsers" :key="user.id" class="px-4 py-4">
+                                            <div class="flex items-center justify-between">
+                                                <div class="flex items-center flex-1 min-w-0">
+                                                    <div class="flex-shrink-0 h-10 w-10">
+                                                        <div
+                                                            class="h-10 w-10 rounded-full bg-green-100 flex items-center justify-center">
+                                                            <span class="text-green-600 font-medium text-sm">{{
+                                                                getUserInitials(user) }}</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="ml-3 flex-1 min-w-0">
+                                                        <p class="text-sm font-medium text-gray-900 truncate">{{
+                                                            user.firstName }} {{ user.lastName }}</p>
+                                                        <p class="text-sm text-gray-500 truncate">{{ user.email }}</p>
+                                                        <div class="mt-2 flex items-center space-x-2">
+                                                            <span
+                                                                class="inline-flex px-2 py-1 text-xs font-semibold rounded-full"
+                                                                :class="getRoleBadgeClass(user.selectedRole)">
+                                                                {{ formatRole(user.selectedRole) }}
+                                                            </span>
+                                                            <span
+                                                                class="inline-flex px-2 py-1 text-xs font-semibold rounded-full"
+                                                                :class="getStatusBadgeClass(user.status)">
+                                                                {{ user.status || 'Active' }}
+                                                            </span>
+                                                        </div>
                                                     </div>
                                                 </div>
+
                                             </div>
-                                            <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                                                <button type="submit"
-                                                    class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:ml-3 sm:w-auto sm:text-sm"
-                                                    id="create-user-submit">
-                                                    Create User
-                                                </button>
-                                                <button type="button" @click="closeModal"
-                                                    class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
-                                                    id="close-modal">
-                                                    Cancel
-                                                </button>
-                                            </div>
-                                        </form>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                <!-- Empty State -->
+                                <div v-if="filteredUsers.length === 0" class="text-center py-12">
+                                    <svg class="mx-auto h-12 w-12 text-gray-400" viewBox="0 0 24 24" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg" stroke="#949494">
+                                        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round">
+                                        </g>
+                                        <g id="SVGRepo_iconCarrier">
+                                            <path
+                                                d="M19 15C21.2091 15 23 16.7909 23 19V21H21M16 10.874C17.7252 10.4299 19 8.86383 19 6.99999C19 5.13615 17.7252 3.57005 16 3.12601M13 7C13 9.20914 11.2091 11 9 11C6.79086 11 5 9.20914 5 7C5 4.79086 6.79086 3 9 3C11.2091 3 13 4.79086 13 7ZM5 15H13C15.2091 15 17 16.7909 17 19V21H1V19C1 16.7909 2.79086 15 5 15Z"
+                                                stroke="#c7c7c7" stroke-width="1.5" stroke-linecap="round"
+                                                stroke-linejoin="round"></path>
+                                        </g>
+                                    </svg>
+                                    <h3 class="mt-2 text-sm font-medium text-gray-900">No users found</h3>
+                                    <p class="mt-1 text-sm text-gray-500">{{ searchTerm ? 'Try adjusting your search criteria.' : 'Get started by creating a new user.' }}</p>
+                                </div>
+
+                                <!-- Pagination -->
+                                <div v-if="totalPages > 1"
+                                    class="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
+                                    <div class="flex-1 flex flex-col sm:flex-row justify-between items-center">
+                                        <div class="mb-2 sm:mb-0">
+                                            <p class="text-sm text-gray-700">
+                                                Showing page <span class="font-medium">{{ currentPage }}</span> of <span
+                                                    class="font-medium">{{ totalPages }}</span>
+                                            </p>
+                                        </div>
+                                        <div class="flex space-x-2">
+                                            <button @click="changePage(currentPage - 1)" :disabled="currentPage === 1"
+                                                class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
+                                                Previous
+                                            </button>
+                                            <button @click="changePage(currentPage + 1)"
+                                                :disabled="currentPage === totalPages"
+                                                class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
+                                                Next
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                </main>
             </div>
+        </div>
 
-            <!-- User List -->
-            <div class="bg-white shadow overflow-hidden sm:rounded-md">
-                <div class="px-4 py-5 sm:px-6 flex justify-between items-center">
-                    <div>
-                        <h3 class="text-lg leading-6 font-medium text-gray-900">Users</h3>
-                        <p class="mt-1 max-w-2xl text-sm text-gray-500">A list of all users in the system.</p>
-                    </div>
-                    <div class="flex items-center">
-                        <div class="relative">
-                            <input type="text" name="search" id="search" placeholder="Search users..."
-                                class="shadow-sm focus:ring-green-500 focus:border-green-500 block w-full pr-10 sm:text-sm border-gray-300 rounded-md">
-                            <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-                                <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg"
-                                    viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                    <path fill-rule="evenodd"
-                                        d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                                        clip-rule="evenodd" />
+        <!-- Create/Edit User Modal -->
+        <div v-if="isModalOpen" class="fixed z-50 inset-0 overflow-y-auto" @click.self="closeModal">
+            <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+                <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
+                <div
+                    class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full w-full mx-4">
+                    <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                        <div class="sm:flex sm:items-start">
+                            <div
+                                class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-green-100 sm:mx-0 sm:h-10 sm:w-10">
+                                <svg class="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                                 </svg>
                             </div>
-                        </div>
-                        <div class="ml-4">
-                            <select id="role-filter" name="role-filter"
-                                class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm rounded-md">
-                                <option value="">All Roles</option>
-                                <option value="commercial">Commercial</option>
-                                <option value="product-manager">Product Manager</option>
-                                <option value="admin">Administrator</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="border-t border-gray-200">
-                    <div class="overflow-x-auto">
-                        <table class="min-w-full divide-y divide-gray-200">
-                            <thead class="bg-gray-50">
-                                <tr>
-                                    <th scope="col"
-                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        FirstName
-                                    </th>
-                                    <th scope="col"
-                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        LastName
-                                    </th>
-                                    <th scope="col"
-                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Email
-                                    </th>
-                                    <th scope="col"
-                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Role
-                                    </th>
-                                    <th scope="col"
-                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Status
-                                    </th>
-                                    <th scope="col" class="relative px-6 py-3">
-                                        <span class="sr-only">Actions</span>
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody class="bg-white divide-y divide-gray-200">
-                                <!-- User Row 1 -->
-                                <tr v-for="user in users" :key="user.id">
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="flex items-center">
-                                            <div class="ml-4">
-                                                <div class="text-sm font-medium text-gray-900">
-                                                    {{ user.firstName }}
+                            <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
+                                <h3 class="text-lg leading-6 font-medium text-gray-900">{{ editingUser ? 'Edit User' :
+                                    'Create New User' }}</h3>
+                                <div class="mt-4">
+                                    <form @submit.prevent="submitForm" class="space-y-6">
+                                        <div class="grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
+                                            <div>
+                                                <label for="first-name"
+                                                    class="block text-sm font-medium text-gray-700">First name</label>
+                                                <div class="mt-1">
+                                                    <input v-model="firstName" type="text" id="first-name" required
+                                                        class="shadow-sm focus:ring-green-500 focus:border-green-500 block w-full sm:text-sm border-gray-300 rounded-md">
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <label for="last-name"
+                                                    class="block text-sm font-medium text-gray-700">Last name</label>
+                                                <div class="mt-1">
+                                                    <input v-model="lastName" type="text" id="last-name" required
+                                                        class="shadow-sm focus:ring-green-500 focus:border-green-500 block w-full sm:text-sm border-gray-300 rounded-md">
+                                                </div>
+                                            </div>
+                                            <div class="sm:col-span-2">
+                                                <label for="email" class="block text-sm font-medium text-gray-700">Email
+                                                    address</label>
+                                                <div class="mt-1">
+                                                    <input v-model="email" type="email" id="email" required
+                                                        class="shadow-sm focus:ring-green-500 focus:border-green-500 block w-full sm:text-sm border-gray-300 rounded-md">
                                                 </div>
                                             </div>
                                         </div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="text-sm text-gray-900">{{ user.lastName }}</div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="text-sm text-gray-900">{{ user.email }}</div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <span
-                                            class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                            {{ user.selectedRole }}
-                                        </span>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-xnowrap">
-                                        <span
-                                            class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                            {{ user.status }}
-                                        </span>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                        <button @click="archiveUser(user.id)"
-                                            class="text-red-600 hover:text-red-900"><svg
-                                                xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
-                                                fill="currentColor">
-                                                <path d="M4 3a2 2 0 100 4h12a2 2 0 100-4H4z" />
-                                                <path fill-rule="evenodd"
-                                                    d="M3 8h14v7a2 2 0 01-2 2H5a2 2 0 01-2-2V8zm5 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z"
-                                                    clip-rule="evenodd" />
-                                            </svg>
-                                        </button>
-                                        <button v-if="user.selectedRole == 'user'" @click="activeUser(user.id)"
-                                            class="text-green-600 hover:text-green-900">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
-                                                fill="currentColor">
-                                                <path fill-rule="evenodd"
-                                                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                                                    clip-rule="evenodd" />
-                                            </svg>
-                                        </button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                <!-- Pagination -->
-                <div class="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
-                    <div class="flex-1 flex justify-between sm:hidden">
-                        <a href="#"
-                            class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
-                            Previous
-                        </a>
-                        <a href="#"
-                            class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
-                            Next
-                        </a>
-                    </div>
-                    <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
-                        <div>
-                            <p class="text-sm text-gray-700">
-                                Showing <span class="font-medium">1</span> to <span class="font-medium">5</span> of
-                                <span class="font-medium">12</span> users
-                            </p>
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700">User Role</label>
+                                            <div class="mt-2 space-y-4">
+                                                <div class="flex items-center">
+                                                    <input id="role-commercial" v-model="selectedRole" type="radio"
+                                                        value="commercial"
+                                                        class="focus:ring-green-500 h-4 w-4 text-green-600 border-gray-300">
+                                                    <label for="role-commercial"
+                                                        class="ml-3 block text-sm font-medium text-gray-700">Commercial</label>
+                                                </div>
+                                                <div class="flex items-center">
+                                                    <input id="role-product-manager" v-model="selectedRole" type="radio"
+                                                        value="product-manager"
+                                                        class="focus:ring-green-500 h-4 w-4 text-green-600 border-gray-300">
+                                                    <label for="role-product-manager"
+                                                        class="ml-3 block text-sm font-medium text-gray-700">Product
+                                                        Manager</label>
+                                                </div>
+                                                <div class="flex items-center">
+                                                    <input id="role-admin" v-model="selectedRole" type="radio"
+                                                        value="admin"
+                                                        class="focus:ring-green-500 h-4 w-4 text-green-600 border-gray-300">
+                                                    <label for="role-admin"
+                                                        class="ml-3 block text-sm font-medium text-gray-700">Administrator</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
                         </div>
-                        <div>
-                            <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px"
-                                aria-label="Pagination">
-                                <a href="#"
-                                    class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-                                    <span class="sr-only">Previous</span>
-                                    <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
-                                        fill="currentColor" aria-hidden="true">
-                                        <path fill-rule="evenodd"
-                                            d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
-                                            clip-rule="evenodd" />
-                                    </svg>
-                                </a>
-                                <a href="#" aria-current="page"
-                                    class="z-10 bg-green-50 border-green-500 text-green-600 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
-                                    1
-                                </a>
-                                <a href="#"
-                                    class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
-                                    2
-                                </a>
-                                <a href="#"
-                                    class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
-                                    3
-                                </a>
-                                <a href="#"
-                                    class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-                                    <span class="sr-only">Next</span>
-                                    <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
-                                        fill="currentColor" aria-hidden="true">
-                                        <path fill-rule="evenodd"
-                                            d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                                            clip-rule="evenodd" />
-                                    </svg>
-                                </a>
-                            </nav>
-                        </div>
+                    </div>
+                    <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                        <button type="button" @click="submitForm" :disabled="isLoading"
+                            class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:ml-3 sm:w-auto sm:text-sm disabled:opacity-50">
+                            <svg v-if="isLoading" class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" fill="none"
+                                viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
+                                    stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor"
+                                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                                </path>
+                            </svg>
+                            {{ editingUser ? 'Update User' : 'Create User' }}
+                        </button>
+                        <button type="button" @click="closeModal"
+                            class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
+                            Cancel
+                        </button>
                     </div>
                 </div>
             </div>
-        </main>
+        </div>
+
+        <!-- Delete Confirmation Modal -->
+        <div v-if="userToDelete" class="fixed z-50 inset-0 overflow-y-auto">
+            <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+                <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
+                <div
+                    class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                    <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                        <div class="sm:flex sm:items-start">
+                            <div
+                                class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
+                                <svg class="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                                </svg>
+                            </div>
+                            <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                                <h3 class="text-lg leading-6 font-medium text-gray-900">Delete User</h3>
+                                <div class="mt-2">
+                                    <p class="text-sm text-gray-500">
+                                        Are you sure you want to delete {{ userToDelete.firstName }} {{
+                                        userToDelete.lastName }}? This action cannot be undone.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                        <button type="button" @click="deleteUser" :disabled="isLoading"
+                            class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm disabled:opacity-50">
+                            <svg v-if="isLoading" class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" fill="none"
+                                viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
+                                    stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor"
+                                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                                </path>
+                            </svg>
+                            Delete
+                        </button>
+                        <button type="button" @click="userToDelete = null"
+                            class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Toast Notifications -->
+        <div v-if="toast.show" class="fixed bottom-4 right-4 z-50">
+            <div class="bg-white rounded-lg shadow-lg border border-gray-200 p-4 max-w-sm w-full"
+                :class="toast.type === 'success' ? 'border-green-200' : 'border-red-200'">
+                <div class="flex">
+                    <div class="flex-shrink-0">
+                        <svg v-if="toast.type === 'success'" class="h-5 w-5 text-green-400" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <svg v-else class="h-5 w-5 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                    <div class="ml-3">
+                        <p class="text-sm font-medium"
+                            :class="toast.type === 'success' ? 'text-green-800' : 'text-red-800'">
+                            {{ toast.message }}
+                        </p>
+                    </div>
+                    <div class="ml-auto pl-3">
+                        <button @click="toast.show = false" class="inline-flex text-gray-400 hover:text-gray-500">
+                            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
-<script setup>
-import axios from 'axios'
-import { ref, onMounted } from 'vue'
-import LogoutButton from '../../components/LogoutButton.vue'
 
+<script setup>
+import { ref, computed, onMounted } from 'vue'
+import axios from 'axios'
+
+// Reactive data
+const sidebarOpen = ref(false)
 const isModalOpen = ref(false)
+const isLoading = ref(false)
+const editingUser = ref(null)
+const userToDelete = ref(null)
+const users = ref([])
+const currentPage = ref(1)
+const perPage = ref(10)
+const totalPages = ref(1)
+const searchTerm = ref('')
+const statusFilter = ref('')
+const roleFilter = ref('')
+
+// Form data
 const firstName = ref('')
 const lastName = ref('')
 const email = ref('')
-const selectedRole = ref('')
-const users = ref([])
+const selectedRole = ref('commercial')
 
-function openModal() {
+// Toast notification
+const toast = ref({
+    show: false,
+    message: '',
+    type: 'success'
+})
+
+// Computed properties
+const filteredUsers = computed(() => {
+    return users.value.filter(user => {
+        const matchesSearch = !searchTerm.value ||
+            user.firstName.toLowerCase().includes(searchTerm.value.toLowerCase()) ||
+            user.lastName.toLowerCase().includes(searchTerm.value.toLowerCase()) ||
+            user.email.toLowerCase().includes(searchTerm.value.toLowerCase())
+
+        const matchesStatus = !statusFilter.value || user.status === statusFilter.value
+        const matchesRole = !roleFilter.value || user.selectedRole === roleFilter.value
+
+        return matchesSearch && matchesStatus && matchesRole
+    })
+})
+
+// Methods
+const showToast = (message, type = 'success') => {
+    toast.value = { show: true, message, type }
+    setTimeout(() => {
+        toast.value.show = false
+    }, 5000)
+}
+
+const getUserInitials = (user) => {
+    return `${user.firstName.charAt(0)}${user.lastName.charAt(0)}`.toUpperCase()
+}
+
+const formatRole = (role) => {
+    return role.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
+}
+
+const formatDate = (dateString) => {
+    if (!dateString) return 'N/A'
+    return new Date(dateString).toLocaleDateString()
+}
+
+const getRoleBadgeClass = (role) => {
+    const classes = {
+        'commercial': 'bg-blue-100 text-blue-800',
+        'product-manager': 'bg-purple-100 text-purple-800',
+        'admin': 'bg-red-100 text-red-800'
+    }
+    return classes[role] || 'bg-gray-100 text-gray-800'
+}
+
+const getStatusBadgeClass = (status) => {
+    const classes = {
+        'active': 'bg-green-100 text-green-800',
+        'inactive': 'bg-red-100 text-red-800'
+    }
+    return classes[status] || 'bg-green-100 text-green-800'
+}
+
+const openModal = () => {
+    resetForm()
+    editingUser.value = null
     isModalOpen.value = true
 }
 
-function closeModal() {
-    console.log('closeModal called')
+const closeModal = () => {
     isModalOpen.value = false
+    resetForm()
+    editingUser.value = null
 }
 
-onMounted(async () => {
-    await fetchUsers()
-})
+const resetForm = () => {
+    firstName.value = ''
+    lastName.value = ''
+    email.value = ''
+    selectedRole.value = 'commercial'
+}
 
-async function fetchUsers() {
+const editUser = (user) => {
+    editingUser.value = user
+    firstName.value = user.firstName
+    lastName.value = user.lastName
+    email.value = user.email
+    selectedRole.value = user.selectedRole
+    isModalOpen.value = true
+}
+
+const confirmDelete = (user) => {
+    userToDelete.value = user
+}
+
+const fetchUsers = async (page = 1) => {
     try {
-        const response = await axios.get('http://localhost:8000/api/Users')
-        users.value = response.data
+        isLoading.value = true
+        const response = await axios.get(`http://localhost:8000/api/Users?page=${page}&per_page=${perPage.value}`, {
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                'Accept': 'application/json'
+            }
+        })
+
+        users.value = response.data.data || []
+        currentPage.value = response.data.current_page || 1
+        totalPages.value = response.data.last_page || 1
     } catch (error) {
         console.error('Error fetching users:', error)
+        showToast('Failed to fetch users', 'error')
+    } finally {
+        isLoading.value = false
     }
 }
 
-async function submitForm() {
-    if (!firstName.value || !lastName.value || !email.value) {
-        alert('Please fill in all required fields.')
+const submitForm = async () => {
+    if (!firstName.value || !lastName.value || !email.value || !selectedRole.value) {
+        showToast('Please fill in all required fields', 'error')
         return
     }
-    // Close the modal
-    isModalOpen.value = false
-    
+
     const formData = {
         firstName: firstName.value,
         lastName: lastName.value,
         email: email.value,
         selectedRole: selectedRole.value
     }
-    
+
     try {
-        const response = await axios.post("http://localhost:8000/api/register", formData)
-        // Refresh the user list from backend after successful registration
-        await fetchUsers();
-        // Reset form fields
-        firstName.value = ''
-        lastName.value = ''
-        email.value = ''
-        selectedRole.value = ''
-        // Show success message
-        alert(`User ${response.data.user.firstName} created successfully!`)
+        isLoading.value = true
+
+        if (editingUser.value) {
+            // Update existing user
+            await axios.put(`http://localhost:8000/api/users/${editingUser.value.id}`, formData, {
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                    'Accept': 'application/json'
+                }
+            })
+            showToast('User updated successfully!')
+        } else {
+            // Create new user
+            await axios.post('http://localhost:8000/api/register', formData, {
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                    'Accept': 'application/json'
+                }
+            })
+            showToast('User created successfully!')
+        }
+
+        closeModal()
+        await fetchUsers(currentPage.value)
     } catch (error) {
-        console.error('Error creating user:', error)
+        console.error('Error saving user:', error)
+        showToast(error.response?.data?.message || 'Failed to save user', 'error')
+    } finally {
+        isLoading.value = false
     }
 }
 
-const token = localStorage.getItem('token')
-
-async function archiveUser(userId) {
-    if (!confirm("Are you sure you want to archive this user?")) return;
+const deleteUser = async () => {
+    if (!userToDelete.value) return
 
     try {
-        await axios.delete(`http://localhost:8000/api/users/${userId}/archive`, {
+        isLoading.value = true
+        await axios.delete(`http://localhost:8000/api/users/${userToDelete.value.id}/archive`, {
             headers: {
-                Authorization: `Bearer ${token}`,
-                Accept: 'application/json'
+                'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                'Accept': 'application/json'
             }
         })
-        // remove user from local state
-        users.value = users.value.filter(user => user.id !== userId);
-        alert('User archived successfully');
+
+        users.value = users.value.filter(user => user.id !== userToDelete.value.id)
+        userToDelete.value = null
+        showToast('User deleted successfully!')
     } catch (error) {
-        console.error(error);
-        alert('Failed to archive user.');
+        console.error('Error deleting user:', error)
+        showToast('Failed to delete user', 'error')
+    } finally {
+        isLoading.value = false
     }
 }
 
-async function activeUser(userId) {
-    if (!confirm("Are you sure you want to activate this user?")) return;
-    
-    try {
-        await axios.post(`http://localhost:8000/api/users/${userId}/active`, {}, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-                Accept: 'application/json'
-            }
-        })
-        
-        // Refresh the user list to show updated status
-        await fetchUsers();
-        
-        alert('User activated successfully');
-    } catch (err) {
-        console.error(err);
-        alert('Failed to activate user.');
-    }
+const changePage = (page) => {
+    if (page < 1 || page > totalPages.value) return
+    fetchUsers(page)
 }
+
+// Lifecycle
+onMounted(() => {
+    fetchUsers()
+})
 </script>

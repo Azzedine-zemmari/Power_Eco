@@ -169,7 +169,7 @@
                                     <h3 class="text-sm font-medium text-blue-800">Import Guidelines</h3>
                                     <div class="mt-2 text-sm text-blue-700">
                                         <ul class="list-disc pl-5 space-y-1">
-                                            <li><strong>Required columns:</strong> name, description, price, stock, category_id, marge, sell_price, status, image</li>
+                                            <li><strong>Required columns:</strong> name, description, price, stock, categorie_id, marge, sell_price, status, image</li>
                                             <li><strong>File size limit:</strong> Maximum 10MB</li>
                                             <li><strong>Supported formats:</strong> .xlsx, .xls, .csv</li>
                                         </ul>
@@ -470,7 +470,7 @@
                                             <label for="product-category"
                                                 class="block text-sm font-medium text-gray-700">Category</label>
                                             <div class="mt-1">
-                                                <select v-model="productForm.category_id" id="product-category"
+                                                <select v-model="productForm.categorie_id" id="product-category"
                                                     name="product-category" required
                                                     class="shadow-sm focus:ring-green-500 focus:border-green-500 block w-full sm:text-sm border-gray-300 rounded-md">
                                                     <option value="">Select a category</option>
@@ -479,8 +479,8 @@
                                                         {{ category.name }}
                                                     </option>
                                                 </select>
-                                                <div v-if="errors.category_id" class="text-red-500 text-sm mt-1">{{
-                                                    errors.category_id[0] }}</div>
+                                                <div v-if="errors.categorie_id" class="text-red-500 text-sm mt-1">{{
+                                                    errors.categorie_id[0] }}</div>
                                             </div>
                                         </div>
 
@@ -653,7 +653,7 @@ const productForm = reactive({
     stock: '',
     marge:0,
     Sprice:0,
-    category_id: '',
+    categorie_id: '',
     image: null,
     imagePreview: null,
     imageFile: null,
@@ -682,7 +682,7 @@ function editProduct(product) {
     productForm.description = product.description;
     productForm.price = product.price;
     productForm.stock = product.stock;
-    productForm.category_id = product.category_id;
+    productForm.categorie_id = product.categorie_id;
     productForm.status = product.status || 'active';
 
     // For existing image, store the URL/path but not as a file
@@ -705,7 +705,7 @@ function resetForm() {
     productForm.description = '';
     productForm.price = '';
     productForm.stock = '';
-    productForm.category_id = '';
+    productForm.categorie_id = '';
     productForm.image = null;
     productForm.imagePreview = null;
     productForm.imageFile = null;
@@ -798,9 +798,10 @@ async function submitProduct() {
         formData.append('sell_price',productForm.Sprice);
         formData.append('marge',productForm.marge);
         formData.append('stock', productForm.stock);
-        formData.append('category_id', productForm.category_id);
+        formData.append('categorie_id', productForm.categorie_id);
         formData.append('status', productForm.status);
 
+        console.log(productForm.categorie_id)
         // Only append image if there's a new file selected
         if (productForm.imageFile) {
             formData.append('image', productForm.imageFile);
@@ -861,7 +862,7 @@ const filteredProducts = computed(() => {
     let filtered = products.value;
     // Category filter
     if (selectedCategoryFilter.value && selectedCategoryFilter.value !== '') {
-        filtered = filtered.filter(product => product.category_id === selectedCategoryFilter.value);
+        filtered = filtered.filter(product => product.categorie_id == selectedCategoryFilter.value);
     }
     // Price filter
     const min = parseFloat(minPriceFilter.value);

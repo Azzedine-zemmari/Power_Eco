@@ -11,12 +11,6 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // Drop the existing string column
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('status');
-        });
-
-        // Recreate the column as enum
         Schema::table('users', function (Blueprint $table) {
             $table->enum('status', ['active', 'pending', 'desactive'])->default('pending');
         });
