@@ -6,6 +6,7 @@ use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\CommercialController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ProductManagerController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -48,3 +49,8 @@ Route::middleware('auth:sanctum')->get('/sales/data',[CommercialController::clas
 Route::middleware('auth:sanctum')->get('/cart/count',[CartController::class,'count']);
 Route::middleware('auth:sanctum')->put('/sales/update/{id}',[CommercialController::class,'update']);
 Route::get('/featured-products', [ProductController::class, 'getFeaturedProducts']);
+
+// Product Manager Dashboard Routes
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::get('/product-manager/stats', [ProductManagerController::class, 'getStats']);
+});

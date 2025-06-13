@@ -70,7 +70,7 @@
                                                     </dt>
                                                     <dd>
                                                         <div class="text-lg font-medium text-gray-900">
-                                                            42
+                                                            {{ stats.totalProducts }}
                                                         </div>
                                                     </dd>
                                                 </dl>
@@ -79,7 +79,7 @@
                                     </div>
                                     <div class="bg-gray-50 px-4 py-4 sm:px-6">
                                         <div class="text-sm">
-                                            <a href="product-manager-products.html" class="font-medium text-green-600 hover:text-green-500">
+                                            <a href="/product-manager/products" class="font-medium text-green-600 hover:text-green-500">
                                                 View all products
                                                 <span aria-hidden="true">&rarr;</span>
                                             </a>
@@ -103,7 +103,7 @@
                                                     </dt>
                                                     <dd>
                                                         <div class="text-lg font-medium text-gray-900">
-                                                            8
+                                                            {{ stats.totalCategories }}
                                                         </div>
                                                     </dd>
                                                 </dl>
@@ -112,7 +112,7 @@
                                     </div>
                                     <div class="bg-gray-50 px-4 py-4 sm:px-6">
                                         <div class="text-sm">
-                                            <a href="product-manager-categories.html" class="font-medium text-green-600 hover:text-green-500">
+                                            <a href="/product-manager/categories" class="font-medium text-green-600 hover:text-green-500">
                                                 View all categories
                                                 <span aria-hidden="true">&rarr;</span>
                                             </a>
@@ -132,11 +132,11 @@
                                             <div class="ml-5 w-0 flex-1">
                                                 <dl>
                                                     <dt class="text-sm font-medium text-gray-500 truncate">
-                                                        Recent Sales
+                                                        Total Sales
                                                     </dt>
                                                     <dd>
                                                         <div class="text-lg font-medium text-gray-900">
-                                                            $12,346
+                                                            MAD {{ stats.totalSales }}
                                                         </div>
                                                     </dd>
                                                 </dl>
@@ -145,7 +145,7 @@
                                     </div>
                                     <div class="bg-gray-50 px-4 py-4 sm:px-6">
                                         <div class="text-sm">
-                                            <a href="#" class="font-medium text-green-600 hover:text-green-500">
+                                            <a href="/product-manager/sales" class="font-medium text-green-600 hover:text-green-500">
                                                 View sales report
                                                 <span aria-hidden="true">&rarr;</span>
                                             </a>
@@ -161,7 +161,33 @@
     </div>
 </div>
 </template>
+
 <script setup>
-import LogoutButton from '../../components/LogoutButton.vue';
+import { ref, onMounted } from 'vue';
 import Sidebar from '../../components/Sidebar.vue';
+import axios from 'axios';
+
+const stats = ref({
+    totalProducts: 0,
+    totalCategories: 0,
+    totalSales: 0
+});
+
+const fetchStats = async () => {
+    try {
+        const response = await axios.get('/api/product-manager/stats', {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`
+            }
+        });
+        console.log('Stats Response:', response.data);
+        stats.value = response.data;
+    } catch (error) {
+        console.error('Error fetching stats:', error.response?.data || error.message);
+    }
+};
+
+onMounted(() => {
+    fetchStats();
+});
 </script>
