@@ -176,11 +176,9 @@ const addToCart = async () => {
                 Authorization: `Bearer ${localStorage.getItem('token')}`
             }
         });
-        alert('product added successfully');
         cart.cartCount += 1;
     } catch (error) {
         console.error(error);
-        alert('failed to add to cart');
     }
 };
 

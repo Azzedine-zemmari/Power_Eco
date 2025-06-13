@@ -199,7 +199,7 @@
                             <dt class="flex items-center text-sm text-gray-600">
                                 <span>{{ item.product_name }} ({{ item.quantity }})</span>
                             </dt>
-                            <dd class="text-sm font-medium text-gray-900">MAD {{ (parseFloat(item.product_price) * parseInt(item.quantity)).toFixed(2) }}</dd>
+                            <dd class="text-sm font-medium text-gray-900">MAD {{ parseFloat(item.product_price).toFixed(2) }}</dd>
                         </div>
                         
                         <div class="flex items-center justify-between border-t border-gray-200 pt-4">
@@ -250,6 +250,39 @@
             </div>
         </div>
         <Footer/>
+        <!-- Toast Notifications -->
+        <div v-if="toast.show" class="fixed bottom-4 right-4 z-50">
+            <div class="bg-white rounded-lg shadow-lg border border-gray-200 p-4 max-w-sm w-full"
+                :class="toast.type === 'success' ? 'border-green-200' : 'border-red-200'">
+                <div class="flex">
+                    <div class="flex-shrink-0">
+                        <svg v-if="toast.type === 'success'" class="h-5 w-5 text-green-400" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <svg v-else class="h-5 w-5 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                    <div class="ml-3">
+                        <p class="text-sm font-medium"
+                            :class="toast.type === 'success' ? 'text-green-800' : 'text-red-800'">
+                            {{ toast.message }}
+                        </p>
+                    </div>
+                    <div class="ml-auto pl-3">
+                        <button @click="toast.show = false" class="inline-flex text-gray-400 hover:text-gray-500">
+                            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 <script setup>
@@ -257,6 +290,7 @@ import Navbar from '../components/Navbar.vue';
 import Footer from '../components/Footer.vue';
 import { ref,onMounted, computed,reactive } from 'vue';
 import axios from 'axios';
+import { useRouter } from 'vue-router';
 
 let items = ref([])
 const isProcessing = ref(false);
@@ -273,6 +307,8 @@ const formData = reactive({
     postal_code: '',
     notes: ''
 });
+
+const router = useRouter();
 
 const cartItems = async () => {
     try {
@@ -295,6 +331,22 @@ const total = computed(()=>{
         return sum+(parseFloat(item.product_price) * parseInt(item.quantity))
     },0)
 })
+
+// Add toast ref
+const toast = ref({
+    show: false,
+    message: '',
+    type: 'success'
+})
+
+// Add showToast method
+const showToast = (message, type = 'success') => {
+    toast.value = { show: true, message, type }
+    setTimeout(() => {
+        toast.value.show = false
+    }, 5000)
+}
+
 const checkout = async () => {
     // Get CSRF cookie from Laravel Sanctum
     await axios.get('http://localhost:8000/sanctum/csrf-cookie', { withCredentials: true });
@@ -305,7 +357,7 @@ const checkout = async () => {
     
     // Check if cart is empty
     if (items.value.length === 0) {
-        alert('Your cart is empty. Please add some products before checkout.');
+        showToast('Your cart is empty. Please add some products before checkout.', 'error');
         return;
     }
     
@@ -321,7 +373,7 @@ const checkout = async () => {
         
         // Handle successful checkout
         if (response.data.message) {
-            alert('Order placed successfully!');
+            showToast('Order placed successfully!', 'success');
             
             // Clear the cart items from frontend
             items.value = [];
@@ -333,8 +385,10 @@ const checkout = async () => {
                 }
             });
             
-            // Redirect to orders page or home
-            window.location.href = '/'; // or wherever you want to redirect
+            // Use router to navigate after showing toast
+            setTimeout(() => {
+                router.push('/');
+            }, 2000);
         }
         
     } catch (error) {
@@ -345,9 +399,9 @@ const checkout = async () => {
             errors.value = error.response.data.errors || {};
         } else if (error.response && error.response.status === 400) {
             // Handle cart empty error
-            alert(error.response.data.message || 'Cart is empty');
+            showToast(error.response.data.message || 'Cart is empty', 'error');
         } else {
-            alert('Checkout failed. Please try again.');
+            showToast('Checkout failed. Please try again.', 'error');
         }
     } finally {
         isProcessing.value = false;
