@@ -110,37 +110,43 @@ class UserController extends Controller
 
     // login for all type of users
     public function login(Request $request) {
-    $request->validate([
-        'email' => 'required|email',
-        'password' => 'required|string|min:8'
-    ]);
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required|string|min:8'
+        ]);
 
-    $user = User::where('email', $request->email)->first();
+        $user = User::where('email', $request->email)->first();
 
-    if (!$user || !Hash::check($request->password, $user->password)) {
+        if (!$user) {
+            return response()->json([
+                'message' => 'No account found with this email address.'
+            ], 401);
+        }
+
+        if (!Hash::check($request->password, $user->password)) {
+            return response()->json([
+                'message' => 'The password you entered is incorrect.'
+            ], 401);
+        }
+
+        if ($user->status !== 'active') {
+            return response()->json([
+                'message' => 'Your account is not active yet. Please wait for admin approval.'
+            ], 403);
+        }
+
+        // Revoke previous tokens if needed
+        $user->tokens()->delete();
+
+        // Create new token
+        $token = $user->createToken('auth_token')->plainTextToken;
+
         return response()->json([
-            'message' => 'Invalid credentials'
-        ], 401);
+            'user' => $user,
+            'role' => $user->selectedRole,
+            'token' => $token
+        ], 200);
     }
-
-    if ($user->status !== 'active') {
-        return response()->json([
-            'message' => 'Your account is not active yet. Please wait for admin approval.'
-        ], 403);
-    }
-
-    // Revoke previous tokens if needed
-    $user->tokens()->delete();
-
-    // Create new token
-    $token = $user->createToken('auth_token')->plainTextToken;
-
-    return response()->json([
-        'user' => $user,
-        'role' => $user->selectedRole,
-        'token' => $token
-    ], 200);
-}
 
     public function UserRegistre(Request $request){
         $request->validate([
