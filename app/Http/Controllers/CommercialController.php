@@ -20,9 +20,12 @@ class CommercialController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-   public function sales()
+   public function sales(Request $request)
 {
-    $sales = DB::table('orders')
+    $perPage = $request->get('per_page', 10);
+    $page = $request->get('page', 1);
+
+    $query = DB::table('orders')
         ->join('order_items', 'orders.id', '=', 'order_items.order_id')
         ->select(
             'orders.id as orderId',
@@ -36,9 +39,16 @@ class CommercialController extends Controller
             'orders.last_name as lastname',
             'orders.first_name as firstname'            
         )
-        ->orderBy('orders.id')
-        ->get()
-        ->groupBy('orderId');
+        ->orderBy('orders.id', 'desc');
+
+    // Get total count before pagination
+    $total = $query->count();
+
+    // Apply pagination
+    $sales = $query->skip(($page - 1) * $perPage)
+                  ->take($perPage)
+                  ->get()
+                  ->groupBy('orderId');
 
     $result = [];
 
@@ -62,7 +72,13 @@ class CommercialController extends Controller
         ];
     }
 
-    return response()->json($result);
+    return response()->json([
+        'data' => $result,
+        'total' => $total,
+        'per_page' => $perPage,
+        'current_page' => $page,
+        'last_page' => ceil($total / $perPage)
+    ]);
 }
 public function update(int $id, Request $request)
 {
