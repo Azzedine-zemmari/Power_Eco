@@ -37,7 +37,8 @@ class CommercialController extends Controller
             'orders.email as email',
             'orders.phone as phone',
             'orders.last_name as lastname',
-            'orders.first_name as firstname'            
+            'orders.first_name as firstname' ,
+            'orders.created_at as created_at'           
         )
         ->orderBy('orders.id', 'desc');
 
@@ -62,6 +63,7 @@ class CommercialController extends Controller
             'lastname' => $firstItem->lastname,
             'email' => $firstItem->email,
             'phone' => $firstItem->phone,
+            'created_at' => $firstItem->created_at,
             'products' => $items->map(function ($item) {
                 return [
                     'productId' => $item->productId,

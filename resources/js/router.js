@@ -121,6 +121,12 @@ const routes = [
         meta:{
             title:'Devis'
         }
+    },{
+        path:'/user/facture',
+        component : () => import('./Pages/User/Facture.vue'),
+        meta:{
+            title:'facture'
+        }
     }
 ];
 
