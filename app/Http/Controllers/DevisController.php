@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 class DevisController extends Controller
 {
     public function show(){
-        $product = Product::all();
+        $product = Product::where('status','=','active')->get();
         return response()->json($product);
     }
 }
