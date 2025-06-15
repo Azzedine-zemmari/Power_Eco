@@ -72,6 +72,11 @@
                                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                                                             </svg>
                                                         </button>
+                                                        <button @click="downloadPDF(order)" class="text-blue-600 hover:text-blue-900">
+                                                            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                                                            </svg>
+                                                        </button>
                                                     </div>
                                                 </td>
                                             </tr>
@@ -167,6 +172,9 @@
                         </div>
                     </div>
                     <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                        <button type="button" @click="downloadPDF(selectedOrder)" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:ml-3 sm:w-auto sm:text-sm">
+                            Télécharger PDF
+                        </button>
                         <button type="button" @click="closeModal" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
                             Fermer
                         </button>
@@ -181,6 +189,8 @@
 import { onMounted, ref } from 'vue';
 import axios from 'axios';
 import UserSideBar from '../../components/UserSideBar.vue';
+import { jsPDF } from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 const orders = ref([]);
 const showModal = ref(false);
@@ -188,7 +198,7 @@ const selectedOrder = ref(null);
 
 const data = async () => {
     try {
-        const response = await axios.get('http://localhost:8000/api/sales/data', {
+        const response = await axios.get('http://localhost:8000/api/factures', {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}`
             }
@@ -232,6 +242,69 @@ const openModal = (order) => {
 const closeModal = () => {
     showModal.value = false;
     selectedOrder.value = null;
+};
+
+const downloadPDF = async (order) => {
+    try {
+        const doc = new jsPDF();
+        
+        // Add company logo or header
+        doc.setFontSize(20);
+        doc.text('Facture', 105, 20, { align: 'center' });
+        
+        // Add order information
+        doc.setFontSize(12);
+        doc.text(`Commande #ORD_${order.orderId}`, 20, 40);
+        doc.text(`Date: ${formatDate(order.created_at)}`, 20, 50);
+        doc.text(`Statut: ${formatStatus(order.status)}`, 20, 60);
+        
+        // Add customer information
+        doc.text('Informations Client:', 20, 80);
+        doc.text(`${order.firstname} ${order.lastname}`, 20, 90);
+        doc.text(`Email: ${order.email}`, 20, 100);
+        doc.text(`Téléphone: ${order.phone}`, 20, 110);
+        
+        // Add products table
+        const tableColumn = ['Produit', 'Quantité', 'Prix Unitaire', 'Total'];
+        const tableRows = order.products.map(product => [
+            `Produit #${product.productId}`,
+            product.quantity,
+            `${formatPrice(product.price)} DH`,
+            `${formatPrice(product.price * product.quantity)} DH`
+        ]);
+        
+        // Add total row
+        tableRows.push(['', '', 'Total', `${formatPrice(order.totalPrice)} DH`]);
+        
+        autoTable(doc, {
+            startY: 130,
+            head: [tableColumn],
+            body: tableRows,
+            theme: 'grid',
+            styles: {
+                fontSize: 10,
+                cellPadding: 5,
+            },
+            headStyles: {
+                fillColor: [41, 128, 185],
+                textColor: 255,
+                fontStyle: 'bold',
+            },
+            footStyles: {
+                fillColor: [41, 128, 185],
+                textColor: 255,
+                fontStyle: 'bold',
+            },
+            alternateRowStyles: {
+                fillColor: [245, 245, 245],
+            },
+        });
+        
+        // Save the PDF
+        doc.save(`facture_${order.orderId}.pdf`);
+    } catch (error) {
+        console.error('Error generating PDF:', error);
+    }
 };
 
 onMounted(data);
