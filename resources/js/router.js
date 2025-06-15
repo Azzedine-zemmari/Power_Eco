@@ -115,6 +115,12 @@ const routes = [
         meta:{
             title:'Sales list'
         }
+    },{
+        path:'/user/devis',
+        component:()=>import('./Pages/User/Devis.vue'),
+        meta:{
+            title:'Devis'
+        }
     }
 ];
 

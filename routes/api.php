@@ -4,6 +4,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\CommercialController;
+use App\Http\Controllers\DevisController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProductManagerController;
@@ -56,3 +57,4 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/product-manager/stats', [ProductManagerController::class, 'getStats']);
 });
 Route::middleware('auth:sanctum')->put('/categories/{id}',[CategoryController::class,'update']);
+Route::get('/devis',[DevisController::class,'show']);

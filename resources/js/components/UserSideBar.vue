@@ -33,7 +33,7 @@
                         </div>
                         <div class="ml-3">
                             <p class="text-base font-medium text-white">Michael Roberts</p>
-                            <p class="text-sm font-medium text-green-200">Product Manager</p>
+                            <p class="text-sm font-medium text-green-200">User</p>
                         </div>
                     </div>
 

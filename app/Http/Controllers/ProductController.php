@@ -45,12 +45,14 @@ class ProductController extends Controller
     // this function for the user to see the data with some advanced filters
     public function show(Request $request){
         $perPage = $request->get('per_page', 6);
-        $query = Product::query();
+        $query = Product::query()->where('status', 'active');
 
         // Search filter
         if ($request->has('search')) {
-            $query->where('name', 'like', '%' . $request->search . '%')
+            $query->where(function($q) use ($request) {
+                $q->where('name', 'like', '%' . $request->search . '%')
                   ->orWhere('description', 'like', '%' . $request->search . '%');
+            });
         }
 
         // Category filter
@@ -64,11 +66,6 @@ class ProductController extends Controller
         }
         if ($request->has('max_price')) {
             $query->where('price', '<=', $request->max_price);
-        }
-
-        // Status filter
-        if ($request->has('status')) {
-            $query->where('status', $request->status);
         }
 
         $products = $query->paginate($perPage);
