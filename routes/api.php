@@ -48,26 +48,29 @@ Route::middleware(['auth:sanctum', 'role:commercial'])->group(function(){
 Route::put('/sales/update/{id}', [CommercialController::class, 'update']);
 });
 
-// User-only routes
-Route::middleware(['auth:sanctum', 'role:user'])->group(function(){
-    Route::get('/products', [ProductController::class, 'show']);
-    Route::get('/product/{id}', [ProductController::class, 'showProductDetails']);
-    Route::post('/cart/add', [CartController::class, 'addToCart']);
-    Route::get('/cart', [CartController::class, 'getCartItem']);
-    Route::put('/cart/{productId}', [CartController::class, 'update']);
-    Route::delete('/cart/{productId}/drop', [CartController::class, 'dropItem']);
-    Route::post('/checkout', [CheckoutController::class, 'checkout']);
-    Route::get('/user/data', [UserController::class, 'getUserData']);
-    Route::put('/user/data/update', [UserController::class, 'update']);
-    Route::get('/cart/count', [CartController::class, 'count']);
-    Route::get('/devis', [DevisController::class, 'show']);
-    Route::get('/factures', [FactureController::class, 'show']);
-});
-
 // General authenticated routes (any authenticated user)
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [UserController::class, 'logout']);
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
+    Route::get('/user/data', [UserController::class, 'getUserData']);
+    Route::put('/user/data/update', [UserController::class, 'update']);
+});
+
+// All authenticated user can access 
+Route::middleware(['auth:sanctum'])->group(function(){
+    Route::get('/products', [ProductController::class, 'show']);
+    Route::get('/product/{id}', [ProductController::class, 'showProductDetails']);
+});
+// User-only routes
+Route::middleware(['auth:sanctum', 'role:user'])->group(function(){
+    Route::post('/cart/add', [CartController::class, 'addToCart']);
+    Route::get('/cart', [CartController::class, 'getCartItem']);
+    Route::put('/cart/{productId}', [CartController::class, 'update']);
+    Route::delete('/cart/{productId}/drop', [CartController::class, 'dropItem']);
+    Route::post('/checkout', [CheckoutController::class, 'checkout']);
+    Route::get('/cart/count', [CartController::class, 'count']);
+    Route::get('/devis', [DevisController::class, 'show']);
+    Route::get('/factures', [FactureController::class, 'show']);
 });

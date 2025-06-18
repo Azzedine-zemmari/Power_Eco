@@ -233,7 +233,6 @@ const fetchProducts = async (page = 1) => {
         const url = `http://localhost:8000/api/products?page=${page}&per_page=6${queryParams ? '&' + queryParams : ''}`;
         
         const response = await axios.get(url, {
-            withCredentials: true,
             headers: {
                 Accept: 'application/json',
                 Authorization: `Bearer ${token}`

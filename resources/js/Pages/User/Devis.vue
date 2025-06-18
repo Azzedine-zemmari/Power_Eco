@@ -111,7 +111,13 @@ let devis = ref([]);
 
 const data = async () => {
     try {
-        const response = await axios.get('http://localhost:8000/api/devis');
+        const response = await axios.get('http://localhost:8000/api/devis', {
+            withCredentials: true,
+            headers: {
+                Accept: 'application/json',
+                Authorization: `Bearer ${localStorage.getItem('token')}`
+            }
+        });
         devis.value = response.data;
         console.log(devis.value);
     } catch (error) {

@@ -288,15 +288,22 @@ const updateSale = async (item) => {
 
 const fetchUserData = async () => {
     try {
+        const token = localStorage.getItem('token');
+        console.log('Token:', token); // Log the token to verify it exists
+
         const response = await axios.get('http://localhost:8000/api/user/data', {
+            withCredentials: true,
             headers: {
                 'Authorization': `Bearer ${token}`,
                 'Accept': 'application/json'
             }
         });
         user.value = response.data;
+        console.log('User data:', user.value);
     } catch (error) {
-        console.error('Error fetching user data:', error);
+        console.error('Error fetching user data:', error.response?.data || error.message);
+        console.error('Status:', error.response?.status);
+        console.error('Headers sent:', error.config?.headers);
     }
 };
 

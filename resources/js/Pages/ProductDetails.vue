@@ -145,7 +145,14 @@ const productId = route.params.id;
 
 const fetchProduct = async () => {
     try {
-        const response = await axios.get(`/api/product/${productId}`);
+        const token = localStorage.getItem('token');
+        const response = await axios.get(`/api/product/${productId}`, {
+            withCredentials: true,
+            headers: {
+                Accept: 'application/json',
+                Authorization: `Bearer ${token}`
+            }
+        });
         product.value = response.data.product;
         relatedProducts.value = response.data.relatedProducts;
         console.log(product.value);

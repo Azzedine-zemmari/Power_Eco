@@ -80,6 +80,7 @@ const token = localStorage.getItem('token')
 async function fetchUserData() {
     try {
         const response = await axios.get('http://localhost:8000/api/user/data', {
+            withCredentials: true,
             headers: {
                 'Authorization': `Bearer ${token}`,
                 'Accept': 'application/json'

@@ -669,18 +669,18 @@ const archiveUser = async (user) => {
         isLoading.value = false;
     }
 }
-const activeUser = async (user) =>{
-    try{
+const activeUser = async (user) => {
+    try {
         isLoading.value = true;
-        await axios.post(`http://localhost:8000/api/users/${user.id}/active`,{
-            headers:{
+        await axios.post(`http://localhost:8000/api/users/${user.id}/active`, {}, {
+            headers: {
                 'Authorization': `Bearer ${localStorage.getItem('token')}`,
                 'Accept': 'application/json'
             }
         });
         showToast('User activated successfully!');
         await fetchUsers(currentPage.value);
-    }catch (error) {
+    } catch (error) {
         console.error('Error activate user:', error);
         showToast(error.response?.data?.message || 'Failed to active user', 'error');
     } finally {
