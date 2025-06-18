@@ -18,21 +18,17 @@
         ]">
             <div class="flex flex-col w-64 bg-green-800 h-full">
                 <!-- Logo -->
-                <div class="flex items-center h-16 flex-shrink-0 px-4 bg-green-900">
+                <a href="/" class="flex items-center h-16 flex-shrink-0 px-4 bg-green-900">
                     <span class="text-white font-bold text-xl">
                         Eco<span class="text-green-300">Move</span>
                     </span>
-                </div>
+                </a>
 
                 <div class="h-0 flex-1 flex flex-col overflow-y-auto">
                     <!-- User Info -->
                     <div class="flex items-center flex-shrink-0 px-4 py-4 border-b border-green-700">
-                        <div class="flex-shrink-0">
-                            <img class="h-10 w-10 rounded-full"
-                                src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e" alt="" />
-                        </div>
                         <div class="ml-3">
-                            <p class="text-base font-medium text-white">Michael Roberts</p>
+                            <p class="text-base font-medium text-white">{{ user?.firstName }} {{ user?.lastName }}</p>
                             <p class="text-sm font-medium text-green-200">User</p>
                         </div>
                     </div>
@@ -63,9 +59,27 @@
 import { useRoute } from 'vue-router'
 import SidebarLink from './SidebarLink.vue'
 import LogoutButton from './LogoutButton.vue'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
+import axios from 'axios'
 
 const route = useRoute()
 const current = route.path
 const isOpen = ref(false)
+const user = ref('')
+
+const userData = async () =>{
+    try{
+        const response = await axios.get('http://localhost:8000/api/user/data',{
+            headers:{
+                Authorization: `Bearer ${localStorage.getItem('token')}`
+            }
+        })
+        user.value = response.data
+        console.log(user.value);
+        
+    }catch(error){
+        console.error(error);      
+    }
+}
+onMounted(userData)
 </script>

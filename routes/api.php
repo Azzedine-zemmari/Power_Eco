@@ -12,51 +12,62 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FactureController;
 
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');
-
-
-Route::get('/test',function(){
-    return "Hello from laravel";
-});
-
-Route::post('/register',[UserController::class,'createUser']);
-Route::get('/Users',[UserController::class,'show']);
-Route::post('/login',[UserController::class,'login']);
-Route::post('/UserRegister',[UserController::class,'UserRegistre']);
-Route::middleware('auth:sanctum')->post('/logout',[UserController::class,'logout']);
-Route::middleware('auth:sanctum')->post('/categories/create',[CategoryController::class,'createCategory']);
+// Public routes (no authentication required)
+Route::post('/login', [UserController::class, 'login']);
+Route::post('/UserRegister', [UserController::class, 'UserRegistre']);
 Route::post('/set-password', [UserController::class, 'setPassword']);
-Route::delete('/users/{id}/archive', [UserController::class, 'archiveUser'])->middleware('auth:sanctum');
-Route::get('/categories',[CategoryController::class,'show'])->middleware('auth:sanctum');
-Route::post('/products/create',[ProductController::class,'create']);
-Route::get('/products',[ProductController::class,'show']);
-Route::get('/product-manager/products',[ProductController::class,'ProductShow']);
-Route::put('/products/{id}/update',[ProductController::class,'update']);
-Route::post('/products/{id}/delete',[ProductController::class,'destroy']);
-Route::post('/users/{id}/active',[UserController::class,'activeUser']);
-Route::post('/forgot-password',[UserController::class,'forgotPassword']);
-Route::post('/reset-password',[UserController::class,'resetPassword']);
-Route::post('/import-products', [ProductController::class, 'import']);
-Route::post('/products',[ProductController::class,'showProducts']);
-Route::get('/product/{id}',[ProductController::class,'showProductDetails']);
-Route::middleware('auth:sanctum')->post('/cart/add', [CartController::class, 'addToCart']);
-Route::middleware('auth:sanctum')->get('/cart', [CartController::class, 'getCartItem']);
-Route::middleware('auth:sanctum')->put('/cart/{productId}', [CartController::class, 'update']);
-Route::middleware('auth:sanctum')->delete('/cart/{productId}/drop', [CartController::class, 'dropItem']);
-Route::middleware('auth:sanctum')->post('/checkout', [CheckoutController::class, 'checkout']);
-Route::middleware('auth:sanctum')->get('/user/data',[UserController::class,'getUserData']);
-Route::middleware('auth:sanctum')->put('/user/data/update',[UserController::class,'update']);
-Route::middleware('auth:sanctum')->get('/sales/data',[CommercialController::class,'sales']);
-Route::middleware('auth:sanctum')->get('/cart/count',[CartController::class,'count']);
-Route::middleware('auth:sanctum')->put('/sales/update/{id}',[CommercialController::class,'update']);
+Route::post('/forgot-password', [UserController::class, 'forgotPassword']);
+Route::post('/reset-password', [UserController::class, 'resetPassword']);
 Route::get('/featured-products', [ProductController::class, 'getFeaturedProducts']);
 
-// Product Manager Dashboard Routes
-Route::middleware(['auth:sanctum'])->group(function () {
+
+// Admin-only routes
+Route::middleware(['auth:sanctum', 'role:admin'])->group(function(){
+    Route::delete('/users/{id}/archive', [UserController::class, 'archiveUser']);
+    Route::get('/Users', [UserController::class, 'show']);
+    Route::post('/users/{id}/active', [UserController::class, 'activeUser']);
+    Route::post('/register', [UserController::class, 'createUser']);
+});
+
+// Product Manager-only routes
+Route::middleware(['auth:sanctum', 'role:product-manager'])->group(function(){
+    Route::get('/categories', [CategoryController::class, 'show']);
+    Route::post('/categories/create', [CategoryController::class, 'createCategory']);
+    Route::put('/categories/{id}', [CategoryController::class, 'update']);
+    Route::post('/products/create', [ProductController::class, 'create']);
+    Route::get('/product-manager/products', [ProductController::class, 'ProductShow']);
+    Route::put('/products/{id}/update', [ProductController::class, 'update']);
+    Route::post('/products/{id}/delete', [ProductController::class, 'destroy']);
+    Route::post('/import-products', [ProductController::class, 'import']);
     Route::get('/product-manager/stats', [ProductManagerController::class, 'getStats']);
 });
-Route::middleware('auth:sanctum')->put('/categories/{id}',[CategoryController::class,'update']);
-Route::get('/devis',[DevisController::class,'show']);
-Route::middleware('auth:sanctum')->get('/factures',[FactureController::class,'show']);
+
+// Commercial-only routes
+Route::middleware(['auth:sanctum', 'role:commercial'])->group(function(){
+    Route::get('/sales/data', [CommercialController::class, 'sales']);
+Route::put('/sales/update/{id}', [CommercialController::class, 'update']);
+});
+
+// User-only routes
+Route::middleware(['auth:sanctum', 'role:user'])->group(function(){
+    Route::get('/products', [ProductController::class, 'show']);
+    Route::get('/product/{id}', [ProductController::class, 'showProductDetails']);
+    Route::post('/cart/add', [CartController::class, 'addToCart']);
+    Route::get('/cart', [CartController::class, 'getCartItem']);
+    Route::put('/cart/{productId}', [CartController::class, 'update']);
+    Route::delete('/cart/{productId}/drop', [CartController::class, 'dropItem']);
+    Route::post('/checkout', [CheckoutController::class, 'checkout']);
+    Route::get('/user/data', [UserController::class, 'getUserData']);
+    Route::put('/user/data/update', [UserController::class, 'update']);
+    Route::get('/cart/count', [CartController::class, 'count']);
+    Route::get('/devis', [DevisController::class, 'show']);
+    Route::get('/factures', [FactureController::class, 'show']);
+});
+
+// General authenticated routes (any authenticated user)
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/logout', [UserController::class, 'logout']);
+    Route::get('/user', function (Request $request) {
+        return $request->user();
+    });
+});

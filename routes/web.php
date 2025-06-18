@@ -3,15 +3,15 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Mail;
 
-Route::get('/', function () {
+// All routes that don't match the API routes will be handled by the SPA
+Route::get('/{any}', function () {
     return view('welcome');
-});
-
-Route::get('/{vue_capture?}', function () {
-    return view('welcome');
-})->where('vue_capture', '[\/\w\.-]*');
+})->where('any', '.*');
 
 Route::get('/reset-password/{token}', function ($token) {
     return view('welcome');
 })->name('password.reset');
 
+Route::get('/', function () {
+    return response()->file(public_path('login.vue'));
+})->name('login');
