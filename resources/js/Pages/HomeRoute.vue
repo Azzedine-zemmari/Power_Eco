@@ -22,11 +22,8 @@
                                         Discover our range of eco-friendly products designed to reduce your carbon footprint and promote sustainable living.
                                     </p>
                                     <div class="mt-8 sm:mt-12">
-                                        <a href="products.html" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                                        <a href="/products" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
                                             Shop Now
-                                        </a>
-                                        <a href="about.html" class="ml-4 inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-green-700 bg-green-100 hover:bg-green-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
-                                            Learn More
                                         </a>
                                     </div>
                                 </div>

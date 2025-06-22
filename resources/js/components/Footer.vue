@@ -14,24 +14,6 @@
                         Products
                     </a>
                 </div>
-
-                <div class="px-5 py-2">
-                    <a href="about.html" class="text-base text-gray-500 hover:text-gray-900">
-                        About Us
-                    </a>
-                </div>
-
-                <div class="px-5 py-2">
-                    <a href="contact.html" class="text-base text-gray-500 hover:text-gray-900">
-                        Contact
-                    </a>
-                </div>
-
-                <div class="px-5 py-2">
-                    <a href="#" class="text-base text-gray-500 hover:text-gray-900">
-                        Blog
-                    </a>
-                </div>
             </nav>
             <div class="mt-8 flex justify-center space-x-6">
                 <a href="#" class="text-gray-400 hover:text-gray-500">
@@ -56,7 +38,7 @@
                 </a>
             </div>
             <p class="mt-8 text-center text-base text-gray-400">
-                &copy; 2023 EcoMove, Inc. All rights reserved.
+                &copy; 2025 EcoMove, Inc. All rights reserved.
             </p>
         </div>
     </footer>

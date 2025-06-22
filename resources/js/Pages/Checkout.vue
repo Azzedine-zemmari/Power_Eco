@@ -15,72 +15,88 @@
                 <section aria-labelledby="checkout-heading" class="lg:col-span-7">
                     <h2 id="checkout-heading" class="sr-only">Checkout form</h2>
 
-                    <form @submit.prevent="checkout">
+                    <form @submit.prevent="checkout" ref="checkoutForm">
                         <!-- Contact Information -->
                         <div class="bg-white shadow-sm rounded-lg p-6 mb-8">
                             <h3 class="text-lg font-medium text-gray-900 mb-4">Contact Information</h3>
                             <div class="grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
                                 <div class="sm:col-span-2">
-                                    <label for="email" class="block text-sm font-medium text-gray-700">Email address</label>
+                                    <label for="email" class="block text-sm font-medium text-gray-700">
+                                        Email address <span class="text-red-500">*</span>
+                                    </label>
                                     <div class="mt-1">
                                         <input 
                                             type="email" 
-                                            v-model="formData.email" 
+                                            v-model.trim="formData.email" 
                                             id="email" 
                                             name="email" 
                                             autocomplete="email"
                                             required
+                                            @blur="validateField('email')"
+                                            @input="clearFieldError('email')"
                                             class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 sm:text-sm"
-                                            :class="{ 'border-red-300': errors.email }">
-                                        <p v-if="errors.email" class="mt-1 text-sm text-red-600">{{ errors.email[0] }}</p>
+                                            :class="{ 'border-red-300 focus:border-red-500 focus:ring-red-500': errors.email }">
+                                        <p v-if="errors.email" class="mt-1 text-sm text-red-600">{{ errors.email }}</p>
                                     </div>
                                 </div>
 
                                 <div>
-                                    <label for="first-name" class="block text-sm font-medium text-gray-700">First name</label>
+                                    <label for="first-name" class="block text-sm font-medium text-gray-700">
+                                        First name <span class="text-red-500">*</span>
+                                    </label>
                                     <div class="mt-1">
                                         <input 
                                             type="text" 
-                                            v-model="formData.first_name" 
+                                            v-model.trim="formData.first_name" 
                                             id="first-name" 
                                             name="first-name" 
                                             autocomplete="given-name"
                                             required
+                                            @blur="validateField('first_name')"
+                                            @input="clearFieldError('first_name')"
                                             class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 sm:text-sm"
-                                            :class="{ 'border-red-300': errors.first_name }">
-                                        <p v-if="errors.first_name" class="mt-1 text-sm text-red-600">{{ errors.first_name[0] }}</p>
+                                            :class="{ 'border-red-300 focus:border-red-500 focus:ring-red-500': errors.first_name }">
+                                        <p v-if="errors.first_name" class="mt-1 text-sm text-red-600">{{ errors.first_name }}</p>
                                     </div>
                                 </div>
 
                                 <div>
-                                    <label for="last-name" class="block text-sm font-medium text-gray-700">Last name</label>
+                                    <label for="last-name" class="block text-sm font-medium text-gray-700">
+                                        Last name <span class="text-red-500">*</span>
+                                    </label>
                                     <div class="mt-1">
                                         <input 
                                             type="text" 
                                             id="last-name" 
-                                            v-model="formData.last_name" 
+                                            v-model.trim="formData.last_name" 
                                             name="last-name" 
                                             autocomplete="family-name"
                                             required
+                                            @blur="validateField('last_name')"
+                                            @input="clearFieldError('last_name')"
                                             class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 sm:text-sm"
-                                            :class="{ 'border-red-300': errors.last_name }">
-                                        <p v-if="errors.last_name" class="mt-1 text-sm text-red-600">{{ errors.last_name[0] }}</p>
+                                            :class="{ 'border-red-300 focus:border-red-500 focus:ring-red-500': errors.last_name }">
+                                        <p v-if="errors.last_name" class="mt-1 text-sm text-red-600">{{ errors.last_name }}</p>
                                     </div>
                                 </div>
 
                                 <div class="sm:col-span-2">
-                                    <label for="phone" class="block text-sm font-medium text-gray-700">Phone</label>
+                                    <label for="phone" class="block text-sm font-medium text-gray-700">
+                                        Phone <span class="text-red-500">*</span>
+                                    </label>
                                     <div class="mt-1">
                                         <input 
                                             type="tel" 
                                             id="phone" 
-                                            v-model="formData.phone" 
+                                            v-model.trim="formData.phone" 
                                             name="phone" 
                                             autocomplete="tel"
                                             required
+                                            @blur="validateField('phone')"
+                                            @input="clearFieldError('phone')"
                                             class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 sm:text-sm"
-                                            :class="{ 'border-red-300': errors.phone }">
-                                        <p v-if="errors.phone" class="mt-1 text-sm text-red-600">{{ errors.phone[0] }}</p>
+                                            :class="{ 'border-red-300 focus:border-red-500 focus:ring-red-500': errors.phone }">
+                                        <p v-if="errors.phone" class="mt-1 text-sm text-red-600">{{ errors.phone }}</p>
                                     </div>
                                 </div>
                             </div>
@@ -91,18 +107,22 @@
                             <h3 class="text-lg font-medium text-gray-900 mb-4">Shipping Address</h3>
                             <div class="grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
                                 <div class="sm:col-span-2">
-                                    <label for="address" class="block text-sm font-medium text-gray-700">Address</label>
+                                    <label for="address" class="block text-sm font-medium text-gray-700">
+                                        Address <span class="text-red-500">*</span>
+                                    </label>
                                     <div class="mt-1">
                                         <input 
                                             type="text" 
-                                            v-model="formData.address" 
+                                            v-model.trim="formData.address" 
                                             id="address" 
                                             name="address" 
                                             autocomplete="street-address"
                                             required
+                                            @blur="validateField('address')"
+                                            @input="clearFieldError('address')"
                                             class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 sm:text-sm"
-                                            :class="{ 'border-red-300': errors.address }">
-                                        <p v-if="errors.address" class="mt-1 text-sm text-red-600">{{ errors.address[0] }}</p>
+                                            :class="{ 'border-red-300 focus:border-red-500 focus:ring-red-500': errors.address }">
+                                        <p v-if="errors.address" class="mt-1 text-sm text-red-600">{{ errors.address }}</p>
                                     </div>
                                 </div>
 
@@ -113,42 +133,51 @@
                                             type="text" 
                                             id="apartment" 
                                             name="apartment" 
-                                            v-model="formData.apartment"
+                                            v-model.trim="formData.apartment"
+                                            @input="clearFieldError('apartment')"
                                             class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 sm:text-sm"
-                                            :class="{ 'border-red-300': errors.apartment }">
-                                        <p v-if="errors.apartment" class="mt-1 text-sm text-red-600">{{ errors.apartment[0] }}</p>
+                                            :class="{ 'border-red-300 focus:border-red-500 focus:ring-red-500': errors.apartment }">
+                                        <p v-if="errors.apartment" class="mt-1 text-sm text-red-600">{{ errors.apartment }}</p>
                                     </div>
                                 </div>
 
                                 <div>
-                                    <label for="city" class="block text-sm font-medium text-gray-700">City</label>
+                                    <label for="city" class="block text-sm font-medium text-gray-700">
+                                        City <span class="text-red-500">*</span>
+                                    </label>
                                     <div class="mt-1">
                                         <input 
                                             type="text" 
                                             id="city" 
                                             name="city" 
-                                            v-model="formData.city" 
+                                            v-model.trim="formData.city" 
                                             autocomplete="address-level2"
                                             required
+                                            @blur="validateField('city')"
+                                            @input="clearFieldError('city')"
                                             class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 sm:text-sm"
-                                            :class="{ 'border-red-300': errors.city }">
-                                        <p v-if="errors.city" class="mt-1 text-sm text-red-600">{{ errors.city[0] }}</p>
+                                            :class="{ 'border-red-300 focus:border-red-500 focus:ring-red-500': errors.city }">
+                                        <p v-if="errors.city" class="mt-1 text-sm text-red-600">{{ errors.city }}</p>
                                     </div>
                                 </div>
 
                                 <div>
-                                    <label for="postal-code" class="block text-sm font-medium text-gray-700">Postal code</label>
+                                    <label for="postal-code" class="block text-sm font-medium text-gray-700">
+                                        Postal code <span class="text-red-500">*</span>
+                                    </label>
                                     <div class="mt-1">
                                         <input 
                                             type="text" 
                                             id="postal-code" 
-                                            v-model="formData.postal_code" 
+                                            v-model.trim="formData.postal_code" 
                                             name="postal-code"
                                             autocomplete="postal-code"
                                             required
+                                            @blur="validateField('postal_code')"
+                                            @input="clearFieldError('postal_code')"
                                             class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 sm:text-sm"
-                                            :class="{ 'border-red-300': errors.postal_code }">
-                                        <p v-if="errors.postal_code" class="mt-1 text-sm text-red-600">{{ errors.postal_code[0] }}</p>
+                                            :class="{ 'border-red-300 focus:border-red-500 focus:ring-red-500': errors.postal_code }">
+                                        <p v-if="errors.postal_code" class="mt-1 text-sm text-red-600">{{ errors.postal_code }}</p>
                                     </div>
                                 </div>
                             </div>
@@ -163,12 +192,13 @@
                                     <textarea 
                                         id="notes" 
                                         name="notes" 
-                                        v-model="formData.notes" 
+                                        v-model.trim="formData.notes" 
                                         rows="3"
                                         placeholder="Special delivery instructions, gift message, etc."
+                                        @input="clearFieldError('notes')"
                                         class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 sm:text-sm"
-                                        :class="{ 'border-red-300': errors.notes }"></textarea>
-                                    <p v-if="errors.notes" class="mt-1 text-sm text-red-600">{{ errors.notes[0] }}</p>
+                                        :class="{ 'border-red-300 focus:border-red-500 focus:ring-red-500': errors.notes }"></textarea>
+                                    <p v-if="errors.notes" class="mt-1 text-sm text-red-600">{{ errors.notes }}</p>
                                 </div>
                             </div>
                         </div>
@@ -177,14 +207,33 @@
                         <div class="bg-white shadow-sm rounded-lg p-6">
                             <button 
                                 type="submit"
-                                :disabled="isProcessing || items.length === 0"
-                                class="w-full bg-green-600 border border-transparent rounded-md shadow-sm py-3 px-4 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed">
+                                :disabled="isProcessing || items.length === 0 || !isFormValid"
+                                class="w-full bg-green-600 border border-transparent rounded-md shadow-sm py-3 px-4 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200">
                                 <svg v-if="isProcessing" class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                                     <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                                 </svg>
                                 {{ isProcessing ? 'Processing...' : 'Place Order' }}
                             </button>
+                            
+                            <!-- Form validation summary -->
+                            <div v-if="!isFormValid && Object.keys(errors).length > 0" class="mt-4 p-3 bg-red-50 border border-red-200 rounded-md">
+                                <div class="flex">
+                                    <div class="flex-shrink-0">
+                                        <svg class="h-5 w-5 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                    </div>
+                                    <div class="ml-3">
+                                        <h3 class="text-sm font-medium text-red-800">Please fix the following errors:</h3>
+                                        <div class="mt-2 text-sm text-red-700">
+                                            <ul class="list-disc pl-5 space-y-1">
+                                                <li v-for="(error, field) in errors" :key="field">{{ error }}</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </form>
                 </section>
@@ -199,7 +248,7 @@
                             <dt class="flex items-center text-sm text-gray-600">
                                 <span>{{ item.product_name }} ({{ item.quantity }})</span>
                             </dt>
-                            <dd class="text-sm font-medium text-gray-900">MAD {{ parseFloat(item.product_price).toFixed(2) }}</dd>
+                            <dd class="text-sm font-medium text-gray-900">MAD {{ (parseFloat(item.product_price) * parseInt(item.quantity)).toFixed(2) }}</dd>
                         </div>
                         
                         <div class="flex items-center justify-between border-t border-gray-200 pt-4">
@@ -250,6 +299,7 @@
             </div>
         </div>
         <Footer/>
+        
         <!-- Toast Notifications -->
         <div v-if="toast.show" class="fixed bottom-4 right-4 z-50">
             <div class="bg-white rounded-lg shadow-lg border border-gray-200 p-4 max-w-sm w-full"
@@ -285,16 +335,25 @@
         </div>
     </div>
 </template>
+
 <script setup>
 import Navbar from '../components/Navbar.vue';
 import Footer from '../components/Footer.vue';
-import { ref,onMounted, computed,reactive } from 'vue';
+import { ref, onMounted, computed, reactive, watch } from 'vue';
 import axios from 'axios';
 import { useRouter } from 'vue-router';
 
-let items = ref([])
+const router = useRouter();
+
+const items = ref([]);
 const isProcessing = ref(false);
 const errors = ref({});
+const checkoutForm = ref(null);
+const toast = ref({
+    show: false,
+    message: '',
+    type: 'success'
+});
 
 const formData = reactive({
     email: '',
@@ -308,49 +367,157 @@ const formData = reactive({
     notes: ''
 });
 
-const router = useRouter();
+// Configure axios base URL at the top of the script
+const API_BASE_URL = 'http://localhost:8000';
 
+// Validation rules
+const validationRules = {
+    email: {
+        required: true,
+        pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+        message: 'Please enter a valid email address'
+    },
+    first_name: {
+        required: true,
+        minLength: 2,
+        message: 'First name must be at least 2 characters'
+    },
+    last_name: {
+        required: true,
+        minLength: 2,
+        message: 'Last name must be at least 2 characters'
+    },
+    phone: {
+        required: true,
+        pattern: /^[\+]?[0-9\s\-$$$$]{10,}$/,
+        message: 'Please enter a valid phone number'
+    },
+    address: {
+        required: true,
+        minLength: 5,
+        message: 'Address must be at least 5 characters'
+    },
+    city: {
+        required: true,
+        minLength: 2,
+        message: 'City must be at least 2 characters'
+    },
+    postal_code: {
+        required: true,
+        minLength: 3,
+        message: 'Please enter a valid postal code'
+    }
+};
+
+// Validate individual field
+const validateField = (fieldName) => {
+    const rule = validationRules[fieldName];
+    const value = formData[fieldName];
+    
+    if (!rule) return true;
+    
+    // Check required
+    if (rule.required && (!value || value.trim() === '')) {
+        errors.value[fieldName] = `${fieldName.replace('_', ' ')} is required`;
+        return false;
+    }
+    
+    // Check minimum length
+    if (rule.minLength && value && value.trim().length < rule.minLength) {
+        errors.value[fieldName] = rule.message;
+        return false;
+    }
+    
+    // Check pattern
+    if (rule.pattern && value && !rule.pattern.test(value.trim())) {
+        errors.value[fieldName] = rule.message;
+        return false;
+    }
+    
+    // Clear error if validation passes
+    delete errors.value[fieldName];
+    return true;
+};
+
+// Clear field error
+const clearFieldError = (fieldName) => {
+    if (errors.value[fieldName]) {
+        delete errors.value[fieldName];
+    }
+};
+
+// Validate entire form
+const validateForm = () => {
+    const requiredFields = Object.keys(validationRules);
+    let isValid = true;
+    
+    requiredFields.forEach(field => {
+        if (!validateField(field)) {
+            isValid = false;
+        }
+    });
+    
+    return isValid;
+};
+
+// Computed property to check if form is valid
+const isFormValid = computed(() => {
+    const requiredFields = Object.keys(validationRules);
+    
+    // Check if all required fields are filled
+    const allFieldsFilled = requiredFields.every(field => {
+        const value = formData[field];
+        return value && value.trim() !== '';
+    });
+    
+    // Check if there are no validation errors
+    const noErrors = Object.keys(errors.value).length === 0;
+    
+    return allFieldsFilled && noErrors;
+});
+
+// Update the cartItems function
 const cartItems = async () => {
     try {
-        const response = await axios.get('/api/cart', {
+        const response = await axios.get(`${API_BASE_URL}/api/cart`, {
             headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+                'Accept': 'application/json'
             }
         });
         
-        items.value = response.data.cart_items;
-        console.log(items.value);
+        items.value = response.data.cart_items || [];
+        console.log('Cart items loaded:', items.value);
     } catch (error) {
-        console.error(error);
-        alert('Failed to load cart');
+        console.error('Failed to load cart:', error);
+        showToast('Failed to load cart items', 'error');
     }
-}
+};
 
-const total = computed(()=>{
-    return items.value.reduce((sum,item)=>{
-        return sum+(parseFloat(item.product_price) * parseInt(item.quantity))
-    },0)
-})
+const total = computed(() => {
+    return items.value.reduce((sum, item) => {
+        return sum + (parseFloat(item.product_price) * parseInt(item.quantity));
+    }, 0);
+});
 
-// Add toast ref
-const toast = ref({
-    show: false,
-    message: '',
-    type: 'success'
-})
 
-// Add showToast method
+
 const showToast = (message, type = 'success') => {
-    toast.value = { show: true, message, type }
+    toast.value = { show: true, message, type };
     setTimeout(() => {
-        toast.value.show = false
-    }, 5000)
-}
+        toast.value.show = false;
+    }, 5000);
+};
 
+// Update the checkout function
 const checkout = async () => {
-    // Get CSRF cookie from Laravel Sanctum
-    await axios.get('http://localhost:8000/sanctum/csrf-cookie', { withCredentials: true });
-    if (isProcessing.value) return;
+    console.log('Checkout function called');
+    
+    // Prevent double submission
+    if (isProcessing.value) {
+        console.log('Already processing, returning');
+        return;
+    }
     
     // Clear previous errors
     errors.value = {};
@@ -361,18 +528,30 @@ const checkout = async () => {
         return;
     }
     
+    // Validate form
+    if (!validateForm()) {
+        console.log('Form validation failed:', errors.value);
+        showToast('Please fill in all required fields correctly.', 'error');
+        return;
+    }
+    
     isProcessing.value = true;
     
     try {
-        const response = await axios.post('/api/checkout', formData, {
+        console.log('Sending checkout request with data:', formData);
+        
+        const response = await axios.post(`${API_BASE_URL}/api/checkout`, formData, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}`,
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
             }
         });
         
+        console.log('Checkout response:', response.data);
+        
         // Handle successful checkout
-        if (response.data.message) {
+        if (response.data.success || response.data.message) {
             showToast('Order placed successfully!', 'success');
             
             // Clear the cart items from frontend
@@ -380,12 +559,10 @@ const checkout = async () => {
             
             // Reset form
             Object.keys(formData).forEach(key => {
-                if (key !== 'email' && key !== 'first_name' && key !== 'last_name') {
-                    formData[key] = '';
-                }
+                formData[key] = '';
             });
             
-            // Use router to navigate after showing toast
+            // Navigate to success page or home
             setTimeout(() => {
                 router.push('/');
             }, 2000);
@@ -394,19 +571,49 @@ const checkout = async () => {
     } catch (error) {
         console.error('Checkout failed:', error);
         
-        if (error.response && error.response.status === 422) {
-            // Handle validation errors
-            errors.value = error.response.data.errors || {};
-        } else if (error.response && error.response.status === 400) {
-            // Handle cart empty error
-            showToast(error.response.data.message || 'Cart is empty', 'error');
+        if (error.response) {
+            console.log('Error response:', error.response.data);
+            
+            if (error.response.status === 422) {
+                // Handle validation errors from server
+                const serverErrors = error.response.data.errors || {};
+                Object.keys(serverErrors).forEach(field => {
+                    errors.value[field] = Array.isArray(serverErrors[field]) 
+                        ? serverErrors[field][0] 
+                        : serverErrors[field];
+                });
+                showToast('Please check the form for errors.', 'error');
+            } else if (error.response.status === 400) {
+                showToast(error.response.data.message || 'Cart is empty', 'error');
+            } else if (error.response.status === 401) {
+                showToast('Please log in to continue with checkout.', 'error');
+                router.push('/login');
+            } else {
+                showToast('Checkout failed. Please try again.', 'error');
+            }
+        } else if (error.code === 'ERR_NETWORK') {
+            showToast('Cannot connect to server. Please check if the backend is running.', 'error');
         } else {
-            showToast('Checkout failed. Please try again.', 'error');
+            showToast('Network error. Please check your connection and try again.', 'error');
         }
     } finally {
         isProcessing.value = false;
     }
-}
+};
+
+// Watch for form changes to validate in real-time
+watch(formData, () => {
+    // Debounce validation to avoid excessive calls
+    clearTimeout(window.validationTimeout);
+    window.validationTimeout = setTimeout(() => {
+        Object.keys(validationRules).forEach(field => {
+            if (formData[field] && formData[field].trim() !== '') {
+            validateField(field);
+            }
+        });
+    }, 300);
+}, { deep: true });
+
 onMounted(() => {
     cartItems();
 });
