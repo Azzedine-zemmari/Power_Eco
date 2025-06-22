@@ -19,6 +19,8 @@ Route::post('/set-password', [UserController::class, 'setPassword']);
 Route::post('/forgot-password', [UserController::class, 'forgotPassword']);
 Route::post('/reset-password', [UserController::class, 'resetPassword']);
 Route::get('/featured-products', [ProductController::class, 'getFeaturedProducts']);
+Route::get('/products', [ProductController::class, 'show']);
+Route::get('/product/{id}', [ProductController::class, 'showProductDetails']);
 
 
 // Admin-only routes
@@ -59,10 +61,8 @@ Route::middleware('auth:sanctum')->group(function () {
 });
 
 // All authenticated user can access 
-Route::middleware(['auth:sanctum'])->group(function(){
-    Route::get('/products', [ProductController::class, 'show']);
-    Route::get('/product/{id}', [ProductController::class, 'showProductDetails']);
-});
+// Route::middleware(['auth:sanctum'])->group(function(){
+// });
 // User-only routes
 Route::middleware(['auth:sanctum', 'role:user'])->group(function(){
     Route::post('/cart/add', [CartController::class, 'addToCart']);

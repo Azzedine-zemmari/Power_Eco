@@ -1,5 +1,11 @@
 <template>
 <div class="bg-gray-50 text-gray-800 font-sans">
+    <Notification 
+      :show="showNotification" 
+      title="Success!" 
+      :message="notificationMessage"
+      @close="showNotification = false" 
+    />
     <Navbar/>
 
     <!-- Page Header -->
@@ -105,7 +111,7 @@
                             <p class="mt-1 text-sm text-gray-500">{{ product.description }}</p>
                             <div class="mt-4 flex justify-between items-center">
                                 <p class="text-lg font-bold text-gray-900">{{ product.price }} MAD</p>
-                                <button type="button" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                                <button @click="addToCart(product)" type="button" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
                                     Add to Cart
                                 </button>
                             </div>
@@ -168,6 +174,9 @@ import Navbar from '../components/Navbar.vue';
 import Footer from '../components/Footer.vue';
 import axios from 'axios';
 import { onMounted, ref, computed, watch } from 'vue';
+import { useCartStore } from '../stores/CartStore';
+import { useRouter,useRoute } from 'vue-router';
+import Notification from '../components/Notification.vue';
 
 const products = ref({
     data: [],
@@ -184,6 +193,16 @@ const filters = ref({
     minPrice: '',
     maxPrice: '',
 });
+const cart = useCartStore();
+const route = useRoute();
+const router = useRouter();
+const showNotification = ref(false);
+const notificationMessage = ref('');
+
+const isAuthenticated = computed(() => {
+    return !!localStorage.getItem('token');
+});
+
 
 const totalPages = computed(() => {
     return products.value.last_page;
@@ -271,6 +290,27 @@ const debounceSearch = () => {
     searchTimeout = setTimeout(() => {
         applyFilters();
     }, 500);
+};
+const addToCart = async (product) => {
+    if (!isAuthenticated.value) {
+        router.push(`/login?redirect=${route.fullPath}`);
+        return;
+    }
+    try {
+        await axios.post('/api/cart/add', {
+            product_id: product.id,
+            quantity: 1
+        }, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`
+            }
+        });
+        cart.cartCount += 1;
+        notificationMessage.value = `${product.name} has been added to your cart.`;
+        showNotification.value = true;
+    } catch (error) {
+        console.error(error);
+    }
 };
 
 onMounted(() => {

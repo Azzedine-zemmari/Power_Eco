@@ -50,7 +50,11 @@
                             <div v-if="errors.password" class="text-red-600 text-sm mt-1">{{ errors.password[0] }}</div>
                         </div>
                     </div>
-
+                     <div class="text-sm">
+                            <a href="/user/forgetPassword" class="font-medium text-green-600 hover:text-green-500">
+                                Forgot your password?
+                            </a>
+                        </div>
                     <div>
                         <button type="submit" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
                             Sign in
@@ -64,10 +68,11 @@
 </template>
 <script setup>
     import { ref } from 'vue';
-    import { useRouter } from 'vue-router';
+    import { useRouter, useRoute } from 'vue-router';
     import axios from 'axios';
 
     const router = useRouter();
+    const route = useRoute();
     let email = ref('');
     let password = ref('');
     let errors = ref({});
@@ -90,6 +95,12 @@
             // save token and role to localStorage for later requests
             localStorage.setItem('token',token)
             localStorage.setItem('role',role)
+
+            const redirectPath = route.query.redirect;
+            if (redirectPath) {
+                router.push(redirectPath);
+                return;
+            }
             
             switch (role) {
                 case 'admin':

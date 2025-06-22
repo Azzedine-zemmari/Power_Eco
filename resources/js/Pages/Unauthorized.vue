@@ -28,9 +28,7 @@
                     <div class="px-4 py-12 sm:p-12">
                         <div class="flex flex-col items-center">
                             <div class="flex-shrink-0">
-                                <svg class="h-24 w-24 text-red-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m0 0v2m0-2h2m-2 0H9m3-4V8a3 3 0 00-3-3H9a3 3 0 00-3 3v1m9 5h-6m-2-5a2 2 0 110-4 2 2 0 010 4z" />
-                                </svg>
+                                <svg class="h-24 w-24" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M7.5 6C6.11929 6 5 7.11929 5 8.5C5 9.00956 5.15245 9.48351 5.41423 9.87874L8.87874 6.41423C8.48351 6.15245 8.00956 6 7.5 6Z" fill="#ff0000"></path> <path d="M7.5 11C6.99048 11 6.51656 10.8476 6.12135 10.5858L9.58583 7.12135C9.84757 7.51656 10 7.99048 10 8.5C10 9.88071 8.88071 11 7.5 11Z" fill="#ff0000"></path> <path fill-rule="evenodd" clip-rule="evenodd" d="M0 2.5C0 1.67157 0.671573 1 1.5 1H5.70711L7.70711 3H13.5C14.3284 3 15 3.67157 15 4.5V12.5C15 13.3284 14.3284 14 13.5 14H1.5C0.671573 14 0 13.3284 0 12.5V2.5ZM4 8.5C4 6.567 5.567 5 7.5 5C9.433 5 11 6.567 11 8.5C11 10.433 9.433 12 7.5 12C5.567 12 4 10.433 4 8.5Z" fill="#ff0000"></path> </g></svg>
                             </div>
                             <div class="mt-6 text-center">
                                 <h3 class="text-xl font-medium text-gray-900">Unauthorized Access (403)</h3>
@@ -41,7 +39,6 @@
                                     <a href="/" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
                                         Return to Home
                                     </a>
-                                  
                                 </div>
                             </div>
                         </div>

@@ -23,7 +23,7 @@ const routes = [
         component: () => import("./Pages/login.vue"),
         meta: {
             title: "Sign In",
-            requiresGuest: true 
+            requiresGuest: true // Only guests (not authenticated users) can access
         }
     },
     {
@@ -31,7 +31,7 @@ const routes = [
         component: () => import("./Pages/Register.vue"),
         meta: {
             title: "Create Account",
-            requiresGuest: true
+            requiresGuest: true // Only guests (not authenticated users) can access
         }
     },
     {
@@ -75,7 +75,10 @@ const routes = [
     },
     {
         path: '/user/forgetPassword',
-        component: () => import('./Pages/forgotPassword.vue')
+        component: () => import('./Pages/forgotPassword.vue'),
+        meta:{
+            requiresGuest: true
+        }
     },
     {
         path: '/reset-password/:token',
@@ -193,7 +196,7 @@ router.beforeEach(async (to, from, next) => {
                     case 'commercial':
                         return next('/saleList');
                     case 'user':
-                        return next('/user/profile');
+                        return next('/');
                     default:
                         return next('/');
                 }

@@ -118,7 +118,6 @@
 </template>
 <script setup>
 import { ref, reactive, onMounted } from 'vue';
-import LogoutButton from '../../components/LogoutButton.vue';
 import UserSideBar from '../../components/UserSideBar.vue';
 import axios from 'axios';
 
@@ -160,6 +159,7 @@ const fetchProfile = async () => {
             lastName:response.data.lastName,
             email: response.data.email,
         });
+        console.log("wach",response.data.firstName)
     } catch (error) {
         console.error(error);
     }

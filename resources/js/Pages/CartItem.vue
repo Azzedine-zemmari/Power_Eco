@@ -127,9 +127,15 @@ import Navbar from '../components/Navbar.vue';
 import { ref, onMounted, computed } from 'vue';
 import axios from 'axios';
 import { useCartStore } from '../stores/CartStore';
+import { useRouter } from 'vue-router';
 
 const items = ref([])
 const cart = useCartStore();
+const router = useRouter();
+
+const isAuthenticated = computed(() => {
+    return !!localStorage.getItem('token');
+});
 
 // Computed properties for order summary
 const total = computed(() => {
@@ -137,7 +143,6 @@ const total = computed(() => {
         return sum + (parseFloat(item.product_price) * parseInt(item.quantity));
     }, 0);
 });
-
 
 const cartItems = async () => {
     try {
@@ -197,5 +202,11 @@ const removeItem = async (item) => {
     }
 };
 
-onMounted(cartItems);
+onMounted(() => {
+    if (!isAuthenticated.value) {
+        router.push('/login');
+    } else {
+        cartItems();
+    }
+});
 </script>

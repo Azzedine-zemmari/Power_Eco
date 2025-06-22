@@ -17,9 +17,6 @@
             <main class="flex-1 relative overflow-y-auto focus:outline-none">
                 <div class="py-6">
                     <div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
-                        <h1 class="text-2xl font-semibold text-gray-900">Welcome back, </h1>
-                    </div>
-                    <div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
                         <!-- Dashboard content -->
                         <div class="py-4">
                             <!-- Stats -->
@@ -49,7 +46,7 @@
                                     </div>
                                     <div class="bg-gray-50 px-4 py-4 sm:px-6">
                                         <div class="text-sm">
-                                            <a href="/product-manager/products" class="font-medium text-green-600 hover:text-green-500 flex items-center">
+                                            <a href="/productManager/Products" class="font-medium text-green-600 hover:text-green-500 flex items-center">
                                                 View all products
                                                 <svg class="ml-2 h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
@@ -84,7 +81,7 @@
                                     </div>
                                     <div class="bg-gray-50 px-4 py-4 sm:px-6">
                                         <div class="text-sm">
-                                            <a href="/product-manager/categories" class="font-medium text-green-600 hover:text-green-500 flex items-center">
+                                            <a href="/productManager/Product/Category" class="font-medium text-green-600 hover:text-green-500 flex items-center">
                                                 View all categories
                                                 <svg class="ml-2 h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
@@ -117,7 +114,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="bg-gray-50 px-4 py-4 sm:px-6">
+                                    <!-- <div class="bg-gray-50 px-4 py-4 sm:px-6">
                                         <div class="text-sm">
                                             <a href="/product-manager/sales" class="font-medium text-green-600 hover:text-green-500 flex items-center">
                                                 View sales report
@@ -126,7 +123,7 @@
                                                 </svg>
                                             </a>
                                         </div>
-                                    </div>
+                                    </div> -->
                                 </div>
                             </div>
                         </div>

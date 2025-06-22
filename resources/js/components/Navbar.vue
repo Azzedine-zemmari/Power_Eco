@@ -35,13 +35,18 @@
                                     {{ cartStore.cartCount }}
                             </span>
                         </a>
-                        <a href="/user/profile" class="p-1 rounded-full text-gray-600 hover:text-gray-800 focus:outline-none">
-                            <span class="sr-only">View profile</span>
-                            <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                            </svg>
-                        </a>
-                        <LogoutButton variant="default" />
+                        <div v-if="isAuthenticated" class="flex items-center space-x-4">
+                            <a href="/user/profile" class="p-1 rounded-full text-gray-600 hover:text-gray-800 focus:outline-none">
+                                <span class="sr-only">View profile</span>
+                                <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                </svg>
+                            </a>
+                            <LogoutButton variant="default" />
+                        </div>
+                        <div v-else>
+                            <a href="/login" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Login</a>
+                        </div>
                     </div>
                 </div>
                 <div class="-mr-2 flex items-center sm:hidden">
@@ -67,7 +72,7 @@
         </div>
 
         <!-- Mobile menu -->
-        <div v-show="isMobileMenuOpen" class="sm:hidden">
+        <div v-show="isMobileMenuOpen" class="sm:hidden z-0">
             <div class="pt-2 pb-3 space-y-1">
                 <a href="/"
                     class="bg-green-50 border-green-500 text-green-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium">
@@ -79,28 +84,27 @@
                 </a>
             </div>
             <div class="pt-4 pb-3 border-t border-gray-200">
-                <div class="flex items-center px-4">
-                    <div class="flex-shrink-0">
-                        <svg class="h-7 w-7 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none"
-                            viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                <div class="flex items-center px-4 space-x-4">
+                    <a href="/cart" class="relative p-1 rounded-full text-gray-600 hover:text-gray-800 focus:outline-none">
+                        <span class="sr-only">View cart</span>
+                        <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
                         </svg>
-                    </div>
-                    <div class="ml-3 flex items-center space-x-4">
-                        <a href="/cart" class="relative p-1 rounded-full text-gray-600 hover:text-gray-800 focus:outline-none">
-                            <span class="sr-only">View cart</span>
-                            <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                        <span v-if="cartStore.cartCount && cartStore.cartCount > 0" class="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+                            {{ cartStore.cartCount }}
+                        </span>
+                    </a>
+                    <div v-if="isAuthenticated" class="flex items-center space-x-4">
+                        <a href="/user/profile" class="p-1 rounded-full text-gray-600 hover:text-gray-800 focus:outline-none">
+                            <span class="sr-only">View profile</span>
+                            <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                             </svg>
-                            <span v-if="cartStore.cartCount && cartStore.cartCount > 0"
-                                class="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
-                                {{ cartStore.cartCount }}
-                            </span>
                         </a>
                         <LogoutButton variant="default" />
+                    </div>
+                    <div v-else>
+                        <a href="/login" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Login</a>
                     </div>
                 </div>
             </div>
@@ -110,11 +114,14 @@
 <script setup>
 import LogoutButton from './LogoutButton.vue';
 import { useCartStore } from '../stores/CartStore';
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 
 const cartStore = useCartStore();
 const isMobileMenuOpen = ref(false);
 
+const isAuthenticated = computed(() => {
+    return !!localStorage.getItem('token');
+} )
 onMounted(() => {
     cartStore.fetchCartCount();
 });

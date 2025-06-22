@@ -9,8 +9,8 @@ class CategoryController extends Controller
 {
     public function createCategory(Request $request){
         $request->validate([
-            'name' => 'required|string|min:5',
-            'description' => 'required|string|min:20'
+            'name' => 'required|string|min:5|not_regex:/<[^>]*>/',
+            'description' => 'required|string|min:20|not_regex:/<[^>]*>/'
         ]);
 
         $category = Category::create([
