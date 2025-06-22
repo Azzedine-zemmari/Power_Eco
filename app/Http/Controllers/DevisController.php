@@ -12,7 +12,4 @@ class DevisController extends Controller
         $product = Product::where('status','=','active')->get();
         return response()->json($product);
     }
-    public function downloadPdf($id){
-        $devi = Product::where('status','=','active')->get();
-    }
 }
