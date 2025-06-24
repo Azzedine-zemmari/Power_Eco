@@ -47,9 +47,6 @@
             <div class="h-0 flex-1 flex flex-col overflow-y-auto">
                 <!-- User Info -->
                 <div class="flex items-center flex-shrink-0 px-4 py-4 border-b border-green-700">
-                    <div class="flex-shrink-0">
-                        <img class="h-10 w-10 rounded-full" :src="user?.image || 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e'" alt="" />
-                    </div>
                     <div class="ml-3">
                         <p class="text-base font-medium text-white">{{ user?.firstName }} {{ user?.lastName }}</p>
                         <p class="text-sm font-medium text-green-200">Product Manager</p>

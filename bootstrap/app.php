@@ -5,6 +5,7 @@ use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use App\Http\Middleware\RoleMiddleware;
 use Illuminate\Auth\Middleware\Authenticate;
+use App\Http\Middleware\CorsMiddleware;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -18,7 +19,9 @@ return Application::configure(basePath: dirname(__DIR__))
             'role' => RoleMiddleware::class,
             'auth' => Authenticate::class,
         ]);
-    })
+        $middleware->prepend([
+            CorsMiddleware::class,
+        ]);    })
     ->withExceptions(function (Exceptions $exceptions) {
         //
     })->create();

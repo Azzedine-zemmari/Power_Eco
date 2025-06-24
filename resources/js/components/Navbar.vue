@@ -16,6 +16,10 @@
                             class="border-transparent text-gray-500 hover:border-green-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
                             Products
                         </a>
+                        <a v-if="dashboardLink" :href="dashboardLink"
+                            class="border-transparent text-gray-500 hover:border-green-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                            Dashboard
+                        </a>
                     </div>
                 </div>
                 <div class="hidden sm:ml-6 sm:flex sm:items-center">
@@ -74,7 +78,8 @@
         <!-- Mobile menu -->
         <div v-show="isMobileMenuOpen" class="sm:hidden z-0">
             <div class="pt-2 pb-3 space-y-1">
-                <a href="/"
+                <a v-if="dashboardLink" href="">l7wa</a>
+                                <a href="/"
                     class="bg-green-50 border-green-500 text-green-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium">
                     Home
                 </a>
@@ -115,14 +120,49 @@
 import LogoutButton from './LogoutButton.vue';
 import { useCartStore } from '../stores/CartStore';
 import { ref, onMounted, computed } from 'vue';
-
+import axios from 'axios';
 const cartStore = useCartStore();
 const isMobileMenuOpen = ref(false);
 
 const isAuthenticated = computed(() => {
     return !!localStorage.getItem('token');
 } )
-onMounted(() => {
-    cartStore.fetchCartCount();
+const user = ref({})
+const token = localStorage.getItem('token')
+
+async function fetchUserData() {
+    try {
+        const response = await axios.get('http://localhost:8000/api/user/data', {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Accept': 'application/json'
+            }
+        });
+        user.value = response.data;
+        console.log('navbar : ', user.value);
+        
+    } catch (error) {
+        console.error('Error fetching user data:', error);
+    }
+}
+
+const dashboardLink = computed(() => {                                                          
+    if (!user.value?.selectedRole) return null;
+    switch (user.value.selectedRole) {
+        case 'admin':
+            return '/admin/users/management';
+        case 'product-manager':
+            return '/productManager/dashboard';
+        case 'commercial':
+            return '/saleList';
+        default:
+            return null;
+    }
 });
+    onMounted(() => {
+         if (isAuthenticated.value) {
+        fetchUserData();
+    }
+        cartStore.fetchCartCount();
+    });
 </script>
