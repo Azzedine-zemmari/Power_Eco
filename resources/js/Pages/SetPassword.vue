@@ -1,7 +1,8 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import axios from 'axios';
+import { watch } from 'vue';
 
 const route = useRoute();
 const router = useRouter();
@@ -10,8 +11,19 @@ const password = ref('');
 const confirmPassword = ref('');
 const error = ref('');
 const success = ref('');
+const passwordStrength = computed(() => {
+    const pwd = password.value
+    let strength = 0
 
-async function submitPassword() {
+    if (pwd.length >= 8) strength++
+    if (/[a-z]/.test(pwd) && /[A-Z]/.test(pwd)) strength++
+    if (/\d/.test(pwd)) strength++
+    if (/[^A-Za-z0-9]/.test(pwd)) strength++
+
+    return strength
+})
+
+const submitPassword = async () => {
     if (password.value != confirmPassword.value) {
         error.value = "Password not matched"
         return;
@@ -25,79 +37,127 @@ async function submitPassword() {
         });
 
         success.value = "Password set successfully. You can now log in.";
+        localStorage.removeItem('token');
+        localStorage.removeItem('role');
         router.push('/login');
     } catch (e) {
         error.value = e.response?.data?.message || "Error setting password.";
     }
 }
+
+function getPasswordStrengthColor(index) {
+    const strength = passwordStrength.value
+    if (index <= strength) {
+        if (strength <= 1) return 'bg-red-400'
+        if (strength <= 2) return 'bg-yellow-400'
+        if (strength <= 3) return 'bg-blue-400'
+        return 'bg-green-400'
+    }
+    return 'bg-gray-200'
+}
+
+function getPasswordStrengthText() {
+    const strength = passwordStrength.value
+    if (password.value.length === 0) return 'Enter a password'
+    if (strength <= 1) return 'Weak password'
+    if (strength <= 2) return 'Fair password'
+    if (strength <= 3) return 'Good password'
+    return 'Strong password'
+}
+
+onMounted(() => {
+    password.value = '';
+    confirmPassword.value = '';
+    error.value = '';
+    success.value = '';
+});
+
 </script>
 
 <template>
-    <div class="min-h-screen flex items-center justify-center bg-gray-50 p-4">
-        <div class="w-full max-w-md">
-            <div class="bg-white rounded-lg shadow-lg overflow-hidden border border-gray-200">
-                <!-- Header -->
-                <div class="p-6 border-b border-gray-200">
-                    <h2 class="text-2xl font-bold text-center text-gray-800">Set Your Password</h2>
-                    <p class="mt-2 text-center text-gray-600">Create a secure password for your account</p>
+    <div class="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+        <div class="sm:mx-auto sm:w-full sm:max-w-md">
+            <!-- Logo/Header -->
+            <div class="flex justify-center">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <svg class="h-12 w-12 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                        </svg>
+                    </div>
+                    <div class="ml-3">
+                        <h1 class="text-3xl font-bold text-gray-900">
+                            Eco<span class="text-green-600">Move</span>
+                        </h1>
+                    </div>
                 </div>
+            </div>
 
-                <!-- Form Content -->
-                <div class="p-6 space-y-6">
+            <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
+                Set your password
+            </h2>
+            <p class="mt-2 text-center text-sm text-gray-600">
+                Create a secure password for your account
+            </p>
+        </div>
+
+        <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+            <div class="bg-white py-8 px-4 shadow-xl sm:rounded-lg sm:px-10 border border-gray-200">
+                <form @submit.prevent="submitPassword" class="space-y-6">
                     <!-- Password Field -->
-                    <div class="space-y-2">
-                        <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
-                        <div class="relative">
-                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" fill="none"
-                                    viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                                </svg>
-                            </div>
-                            <input id="password" v-model="password" type="password"
-                                class="block w-full pl-10 pr-10 py-3 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                    <div>
+                        <label for="password" class="block text-sm font-medium text-gray-700">
+                            Password
+                        </label>
+                        <div class="mt-1 relative">
+                            <input id="password" v-model="password" type="password" required
+                                class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm"
                                 placeholder="Enter your password" />
                         </div>
-                        <p class="text-xs text-gray-500">Password must be at least 8 characters long</p>
+                        <!-- Password strength indicator -->
+                        <div class="mt-2">
+                            <div class="flex space-x-1">
+                                <div v-for="i in 4" :key="i" class="h-1 flex-1 rounded-full"
+                                    :class="getPasswordStrengthColor(i)"></div>
+                            </div>
+                            <p class="text-xs text-gray-500 mt-1">
+                                {{ getPasswordStrengthText() }}
+                            </p>
+                        </div>
                     </div>
 
                     <!-- Confirm Password Field -->
-                    <div class="space-y-2">
-                        <label for="confirmPassword" class="block text-sm font-medium text-gray-700">Confirm
-                            Password</label>
-                        <div class="relative">
-                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" fill="none"
-                                    viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                                </svg>
-                            </div>
-                            <input id="confirmPassword" v-model="confirmPassword" type="password"
-                                class="block w-full pl-10 pr-10 py-3 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                    <div>
+                        <label for="confirmPassword" class="block text-sm font-medium text-gray-700">
+                            Confirm Password
+                        </label>
+                        <div class="mt-1 relative">
+                            <input id="confirmPassword" v-model="confirmPassword" type="password" required
+                                class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm"
+                                :class="{
+                                    'border-red-300 focus:border-red-500 focus:ring-red-500': confirmPassword && password !== confirmPassword,
+                                    'border-green-300 focus:border-green-500 focus:ring-green-500': confirmPassword && password === confirmPassword
+                                }"
                                 placeholder="Confirm your password" />
                         </div>
-                    </div>
-
-                    <!-- Password Match Indicator -->
-                    <div v-if="password && confirmPassword" class="flex items-center mt-1">
-                        <svg v-if="password === confirmPassword" xmlns="http://www.w3.org/2000/svg"
-                            class="h-4 w-4 text-green-500 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd"
-                                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                                clip-rule="evenodd" />
-                        </svg>
-                        <svg v-else xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-red-500 mr-2"
-                            viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd"
-                                d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
-                                clip-rule="evenodd" />
-                        </svg>
-                        <span
-                            :class="{ 'text-green-700': password === confirmPassword, 'text-red-700': password !== confirmPassword }">
-                            {{ password === confirmPassword ? 'Passwords match' : 'Passwords do not match' }}
-                        </span>
+                        <!-- Password match indicator -->
+                        <div v-if="confirmPassword" class="mt-1">
+                            <p v-if="password === confirmPassword" class="text-xs text-green-600 flex items-center">
+                                <svg class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M5 13l4 4L19 7" />
+                                </svg>
+                                Passwords match
+                            </p>
+                            <p v-else class="text-xs text-red-600 flex items-center">
+                                <svg class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                                Passwords do not match
+                            </p>
+                        </div>
                     </div>
 
                     <!-- Error Message -->
@@ -109,14 +169,37 @@ async function submitPassword() {
                     <div v-if="success" class="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-md">
                         {{ success }}
                     </div>
-                </div>
 
-                <!-- Footer -->
-                <div class="px-6 py-4 bg-gray-50 border-t border-gray-200">
-                    <button @click="submitPassword"
-                        class="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200">
-                        Set Password
-                    </button>
+                    <!-- Submit Button -->
+                    <div>
+                        <button type="submit"
+                            class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors duration-200">
+                            Set Password
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Back to Login Link -->
+                <div class="mt-6">
+                    <div class="relative">
+                        <div class="absolute inset-0 flex items-center">
+                            <div class="w-full border-t border-gray-300"></div>
+                        </div>
+                        <div class="relative flex justify-center text-sm">
+                            <span class="px-2 bg-white text-gray-500">or</span>
+                        </div>
+                    </div>
+                    <div class="mt-6">
+                        <router-link to="/login"
+                            class="w-full flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors duration-200">
+                            <svg class="h-5 w-5 mr-2 text-gray-400" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                            </svg>
+                            Back to Login
+                        </router-link>
+                    </div>
                 </div>
             </div>
         </div>

@@ -20,7 +20,7 @@ class CommercialController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-   public function sales(Request $request)
+public function sales(Request $request)
 {
     $perPage = $request->get('per_page', 10);
     $page = $request->get('page', 1);

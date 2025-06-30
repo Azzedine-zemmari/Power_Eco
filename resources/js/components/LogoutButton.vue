@@ -41,7 +41,6 @@ async function logout() {
         router.push('/login')
     }catch(error){
         console.error('Logout failed: ',error)
-        alert('Logout failed .')
     }
 }
 </script>

@@ -154,7 +154,15 @@ async function register() {
             router.push('/login');
         }, 2000);
     } catch (error) {
-        if (error.response && error.response.status === 422) {
+        // Check for unique email violation
+        if (
+            error.response &&
+            error.response.data &&
+            typeof error.response.data.message === 'string' &&
+            error.response.data.message.includes('users_email_unique')
+        ) {
+            generalError.value = 'The email is already registered.';
+        } else if (error.response && error.response.status === 422) {
             errors.value = error.response.data.errors || {};
         } else if (error.response && error.response.data.message) {
             generalError.value = error.response.data.message;

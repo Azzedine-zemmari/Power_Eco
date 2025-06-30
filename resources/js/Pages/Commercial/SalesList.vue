@@ -7,18 +7,17 @@
             <div class="flex flex-col w-0 flex-1 overflow-hidden">
                 <!-- Top header -->
                 <div class="flex-shrink-0 flex h-16 bg-white shadow">
-                    <div class="flex-1 px-4 flex justify-between items-center">
-                        <div class="flex-1 flex">
-                            <h1 class="text-xl sm:text-2xl font-semibold text-gray-900 self-center">Sales List</h1>
-                        </div>
+                    <div class="flex-1 px-4 flex gap-2 items-center">
+                            <div class="flex">
+                                <h1 class="text-xl sm:text-2xl font-semibold text-gray-900 self-center">Sales List</h1>
+                            </div>
                         <!-- Refresh button -->
-                        <button 
-                            @click="refreshData"
-                            :disabled="loading"
-                            class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-50"
-                        >
-                            <svg :class="loading ? 'animate-spin' : ''" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                        <button @click="refreshData" :disabled="loading"
+                            class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-50">
+                            <svg :class="loading ? 'animate-spin' : ''" class="h-4 w-4 mr-2" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                             </svg>
                             {{ loading ? 'Refreshing...' : 'Refresh' }}
                         </button>
@@ -37,20 +36,26 @@
                             <!-- Dashboard content -->
                             <div class="py-4">
                                 <!-- Success message -->
-                                <div v-if="successMessage" class="bg-green-50 border border-green-200 rounded-md p-4 mb-4">
+                                <div v-if="successMessage"
+                                    class="bg-green-50 border border-green-200 rounded-md p-4 mb-4">
                                     <div class="flex">
                                         <div class="flex-shrink-0">
-                                            <svg class="h-5 w-5 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            <svg class="h-5 w-5 text-green-400" fill="none" viewBox="0 0 24 24"
+                                                stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                                             </svg>
                                         </div>
                                         <div class="ml-3">
                                             <p class="text-sm font-medium text-green-800">{{ successMessage }}</p>
                                         </div>
                                         <div class="ml-auto pl-3">
-                                            <button @click="successMessage = ''" class="inline-flex text-green-400 hover:text-green-500">
-                                                <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                            <button @click="successMessage = ''"
+                                                class="inline-flex text-green-400 hover:text-green-500">
+                                                <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                                                    stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                                                 </svg>
                                             </button>
                                         </div>
@@ -59,7 +64,9 @@
 
                                 <!-- Loading state -->
                                 <div v-if="loading" class="text-center py-8">
-                                    <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
+                                    <div
+                                        class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-green-600">
+                                    </div>
                                     <p class="mt-2 text-gray-600">Loading sales data...</p>
                                 </div>
 
@@ -68,7 +75,9 @@
                                     <div class="flex">
                                         <div class="flex-shrink-0">
                                             <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
-                                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                                                <path fill-rule="evenodd"
+                                                    d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                                                    clip-rule="evenodd" />
                                             </svg>
                                         </div>
                                         <div class="ml-3">
@@ -77,7 +86,8 @@
                                                 <p>{{ error }}</p>
                                             </div>
                                             <div class="mt-4">
-                                                <button @click="refreshData" class="bg-red-100 px-3 py-2 rounded-md text-sm font-medium text-red-800 hover:bg-red-200">
+                                                <button @click="refreshData"
+                                                    class="bg-red-100 px-3 py-2 rounded-md text-sm font-medium text-red-800 hover:bg-red-200">
                                                     Try Again
                                                 </button>
                                             </div>
@@ -90,37 +100,48 @@
                                     <div class="flex justify-between items-center mb-4">
                                         <h2 class="text-lg font-semibold">Sales Orders ({{ totalItems }} orders)</h2>
                                     </div>
-                                    
+
                                     <div class="overflow-x-auto shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
-                                         <table class="min-w-full bg-white">
+                                        <table class="min-w-full bg-white">
                                             <thead class="bg-gray-50">
                                                 <tr>
-                                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                    <th
+                                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                                         Order ID</th>
-                                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                    <th
+                                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                                         Customer</th>
-                                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                    <th
+                                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                                         Contact</th>
-                                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                    <th
+                                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                                         Status</th>
-                                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                    <th
+                                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                                         Products</th>
-                                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                    <th
+                                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                                         Total Price</th>
-                                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                    <th
+                                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                                         Date</th>
-                                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                    <th
+                                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                                         Action</th>
                                                 </tr>
                                             </thead>
                                             <tbody class="bg-white divide-y divide-gray-200">
-                                                <tr v-for="item in sale" :key="item.orderId || item.id" class="hover:bg-gray-50 transition-colors duration-150">
-                                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                                <tr v-for="item in sale" :key="item.orderId || item.id"
+                                                    class="hover:bg-gray-50 transition-colors duration-150">
+                                                    <td
+                                                        class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                                                         #{{ item.orderId || item.id }}
                                                     </td>
                                                     <td class="px-6 py-4 whitespace-nowrap">
                                                         <div class="text-sm font-medium text-gray-900">
-                                                            {{ item.lastname || item.last_name }} {{ item.firstname || item.first_name }}
+                                                            {{ item.lastname || item.last_name }} {{ item.firstname ||
+                                                            item.first_name }}
                                                         </div>
                                                         <div class="text-sm text-gray-500">
                                                             {{ item.email }}
@@ -130,38 +151,42 @@
                                                         <div>{{ item.phone }}</div>
                                                     </td>
                                                     <td class="px-6 py-4 whitespace-nowrap">
-                                                        <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full"
+                                                        <span
+                                                            class="inline-flex px-2 py-1 text-xs font-semibold rounded-full"
                                                             :class="getStatusClass(item.status)">
                                                             {{ formatStatus(item.status) }}
                                                         </span>
                                                     </td>
                                                     <td class="px-6 py-4 text-sm text-gray-900">
                                                         <div class="max-w-xs">
-                                                            <div v-if="item.products && item.products.length > 0" class="space-y-1">
-                                                                <div v-for="(p, index) in item.products" :key="index" class="text-xs bg-gray-50 p-1.5 rounded">
-                                                                    <div class="font-medium text-xs">{{ p.name || `Product ID: ${p.productId || p.product_id}` }}</div>
+                                                            <div v-if="item.products && item.products.length > 0"
+                                                                class="space-y-1">
+                                                                <div v-for="(p, index) in item.products" :key="index"
+                                                                    class="text-xs bg-gray-50 p-1.5 rounded">
+                                                                    <div class="font-medium text-xs">{{ p.name ||
+                                                                        `Product ID: ${p.productId || p.product_id}` }}
+                                                                    </div>
                                                                     <div class="text-gray-600 text-xs">
-                                                                        Qty: {{ p.quantity }} × {{ formatPrice(p.price) }} MAD
+                                                                        Qty: {{ p.quantity }} × {{ formatPrice(p.price)
+                                                                        }} MAD
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                             <div v-else class="text-xs text-gray-500">No products</div>
                                                         </div>
                                                     </td>
-                                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                                    <td
+                                                        class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                                                         {{ formatPrice(item.totalPrice || item.total_price) }} MAD
                                                     </td>
                                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                                         {{ formatDate(item.created_at || item.createdAt) }}
                                                     </td>
                                                     <td class="px-6 py-4 whitespace-nowrap">
-                                                        <select 
-                                                            v-model="item.status" 
-                                                            @change="updateSale(item)"
+                                                        <select v-model="item.status" @change="updateSale(item)"
                                                             :disabled="updatingStatus === (item.orderId || item.id)"
                                                             class="block w-full px-3 py-2 text-sm border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 bg-white hover:border-gray-400 transition-colors duration-200 disabled:opacity-50"
-                                                            :class="getStatusSelectClass(item.status)"
-                                                        >
+                                                            :class="getStatusSelectClass(item.status)">
                                                             <option value="ordered">📋 Ordered</option>
                                                             <option value="paid">💳 Paid</option>
                                                             <option value="delivered">🚚 Delivered</option>
@@ -175,35 +200,37 @@
                                 </div>
 
                                 <!-- No data state -->
+                                <!-- No data state -->
                                 <div v-else class="text-center py-12">
-                                    <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                    <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24"
+                                        stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                                     </svg>
                                     <h3 class="mt-2 text-sm font-medium text-gray-900">No sales orders</h3>
                                     <p class="mt-1 text-sm text-gray-500">
                                         {{ statusFilter ? `No orders found with status "${statusFilter}"` : 'No sales orders found for the current period.' }}
                                     </p>
                                     <div class="mt-6">
-                                        <button @click="refreshData" class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                                        <button @click="refreshData"
+                                            class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
                                             Refresh Data
                                         </button>
                                     </div>
+                                </div>
 
                                 <!-- Pagination -->
-                                <div v-if="totalPages > 1" class="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6 mt-6 rounded-lg shadow">
+                                <div v-if="totalPages > 1"
+                                    class="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6 mt-6 rounded-lg shadow">
                                     <div class="flex-1 flex justify-between sm:hidden">
-                                        <button 
-                                            @click="currentPage > 1 && (currentPage--)"
+                                        <button @click="currentPage > 1 && (currentPage--)"
                                             :disabled="currentPage === 1"
-                                            class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-                                        >
+                                            class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
                                             Previous
                                         </button>
-                                        <button 
-                                            @click="currentPage < totalPages && (currentPage++)"
+                                        <button @click="currentPage < totalPages && (currentPage++)"
                                             :disabled="currentPage === totalPages"
-                                            class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-                                        >
+                                            class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
                                             Next
                                         </button>
                                     </div>
@@ -220,45 +247,42 @@
                                             </p>
                                         </div>
                                         <div>
-                                            <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
-                                                <button 
-                                                    @click="currentPage > 1 && (currentPage--)"
+                                            <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px"
+                                                aria-label="Pagination">
+                                                <button @click="currentPage > 1 && (currentPage--)"
                                                     :disabled="currentPage === 1"
-                                                    class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-                                                >
+                                                    class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
                                                     <span class="sr-only">Previous</span>
-                                                    <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                                        <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
+                                                    <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg"
+                                                        viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                                        <path fill-rule="evenodd"
+                                                            d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                                                            clip-rule="evenodd" />
                                                     </svg>
                                                 </button>
                                                 <template v-for="page in displayedPages" :key="page">
-                                                    <button 
-                                                        v-if="page !== '...'"
-                                                        @click="currentPage = page"
-                                                        :class="[
-                                                            currentPage === page 
-                                                                ? 'z-10 bg-green-50 border-green-500 text-green-600' 
-                                                                : 'bg-white border-gray-300 text-gray-500 hover:bg-gray-50',
-                                                            'relative inline-flex items-center px-4 py-2 border text-sm font-medium'
-                                                        ]"
-                                                    >
+                                                    <button v-if="page !== '...'" @click="currentPage = page" :class="[
+                                                        currentPage === page
+                                                            ? 'z-10 bg-green-50 border-green-500 text-green-600'
+                                                            : 'bg-white border-gray-300 text-gray-500 hover:bg-gray-50',
+                                                        'relative inline-flex items-center px-4 py-2 border text-sm font-medium'
+                                                    ]">
                                                         {{ page }}
                                                     </button>
-                                                    <span 
-                                                        v-else 
-                                                        class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700"
-                                                    >
+                                                    <span v-else
+                                                        class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700">
                                                         ...
                                                     </span>
                                                 </template>
-                                                <button 
-                                                    @click="currentPage < totalPages && (currentPage++)"
+                                                <button @click="currentPage < totalPages && (currentPage++)"
                                                     :disabled="currentPage === totalPages"
-                                                    class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-                                                >
+                                                    class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
                                                     <span class="sr-only">Next</span>
-                                                    <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                                        <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+                                                    <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg"
+                                                        viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                                        <path fill-rule="evenodd"
+                                                            d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                                            clip-rule="evenodd" />
                                                     </svg>
                                                 </button>
                                             </nav>
@@ -268,10 +292,9 @@
                             </div>
                         </div>
                     </div>
-                    </div>
-                </main>
-            </div>
+            </main>
         </div>
+    </div>
     </div>
 </template>
 
@@ -310,7 +333,7 @@ const paginationEnd = computed(() => {
 const displayedPages = computed(() => {
     const pages = [];
     const maxVisiblePages = 5;
-    
+
     if (totalPages.value <= maxVisiblePages) {
         for (let i = 1; i <= totalPages.value; i++) {
             pages.push(i);
@@ -338,7 +361,7 @@ const displayedPages = computed(() => {
             pages.push(totalPages.value);
         }
     }
-    
+
     return pages;
 });
 
@@ -404,7 +427,7 @@ function showSuccess(message) {
 const sales = async () => {
     loading.value = true;
     error.value = null;
-    
+
     try {
         if (!token) {
             throw new Error('Authentication token missing');
@@ -422,7 +445,7 @@ const sales = async () => {
         }
 
         console.log('🔄 Fetching sales data with params:', params);
-        
+
         const response = await axios.get(`${API_BASE_URL}/api/sales/data`, {
             params: params,
             headers: {
@@ -432,7 +455,7 @@ const sales = async () => {
         });
 
         console.log('✅ Sales API response:', response.data);
-        
+
         // Handle different response structures
         if (response.data.data) {
             sale.value = response.data.data;
@@ -444,14 +467,14 @@ const sales = async () => {
             sale.value = [];
             totalItems.value = 0;
         }
-        
+
         console.log('✅ Processed sales data:', sale.value);
         console.log('📊 Total items:', totalItems.value);
     } catch (err) {
         console.error('❌ Error fetching sales:', err);
         console.error('❌ Status:', err.response?.status);
         console.error('❌ Response:', err.response?.data);
-        
+
         if (err.response?.status === 401) {
             error.value = 'Session expired. Please log in again.';
         } else if (err.response?.status === 403) {
@@ -467,14 +490,14 @@ const sales = async () => {
 const updateSale = async (item) => {
     const orderId = item.orderId || item.id;
     updatingStatus.value = orderId;
-    
+
     try {
         if (!token) {
             throw new Error('Authentication token missing');
         }
 
         console.log('🔄 Updating sale status:', { orderId, status: item.status });
-        
+
         const response = await axios.put(`${API_BASE_URL}/api/sales/update/${orderId}`, {
             status: item.status
         }, {
@@ -487,13 +510,13 @@ const updateSale = async (item) => {
 
         console.log('✅ Sale updated successfully:', response.data);
         showSuccess(`Order #${orderId} status updated to ${formatStatus(item.status)}`);
-        
+
         // Refresh the current page data
         await sales();
     } catch (err) {
         console.error('❌ Error updating sale:', err);
         console.error('❌ Response:', err.response?.data);
-        
+
         if (err.response?.status === 401) {
             error.value = 'Session expired. Please log in again.';
         } else if (err.response?.status === 403) {
@@ -503,7 +526,7 @@ const updateSale = async (item) => {
         } else {
             error.value = err.response?.data?.message || 'Failed to update sale status';
         }
-        
+
         // Revert the status change in UI
         await sales();
     } finally {
@@ -525,14 +548,14 @@ const fetchUserData = async () => {
                 'Accept': 'application/json'
             }
         });
-        
+
         user.value = response.data;
         console.log('✅ User data:', user.value);
     } catch (err) {
         console.error('❌ Error fetching user data:', err);
         console.error('❌ Status:', err.response?.status);
         console.error('❌ Response:', err.response?.data);
-        
+
         // Don't show error for user data fetch failure
         // as it's not critical for the sales list functionality
     }

@@ -73,16 +73,11 @@
             </h2>
             <div class="mt-8 flex lg:mt-0 lg:flex-shrink-0">
                 <div class="inline-flex rounded-md shadow">
-                    <a href="products.html" class="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-green-600 bg-white hover:bg-green-50">
+                    <a href="/products" class="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-green-600 bg-white hover:bg-green-50">
                         Shop Products
                     </a>
                 </div>
-                <div class="ml-3 inline-flex rounded-md shadow">
-                    <a href="about.html" class="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-green-600 hover:bg-green-700">
-                        Learn More
-                    </a>
                 </div>
-            </div>
         </div>
     </div>
 

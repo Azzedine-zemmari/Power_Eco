@@ -7,7 +7,7 @@
             <div class="flex flex-col w-0 flex-1 overflow-hidden">
                 <!-- Top header -->
                 <div class="flex-shrink-0 flex h-16 bg-white shadow">
-                    <div class="flex-1 px-4 sm:px-6 flex justify-between items-center">
+                    <div class="flex-1 px-4 sm:px-6 flex gap-2 items-center">
                         <div class="flex items-center">
                             <h1 class="text-xl sm:text-2xl font-semibold text-gray-900">Products</h1>
                         </div>
@@ -156,7 +156,7 @@
                                             <div class="flex">
                                                 <div class="flex-shrink-0">
                                                     <svg class="h-5 w-5 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m-1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                                     </svg>
                                                 </div>
                                                 <div class="ml-3">
@@ -286,15 +286,24 @@
                                                     >
                                                 </div>
                                                 <div class="p-4">
-                                                    <h3 class="text-lg leading-6 font-medium text-gray-900 truncate">{{ product.name }}</h3>
-                                                    <div class="mt-2">
+                                                    <div class="flex items-center gap-1">
+                                                        <h3
+                                                        class="text-lg leading-6 font-medium text-gray-900 truncate"
+                                                        :class="{ 'line-through text-gray-400': product.status === 'inactive' }"
+                                                        >
+                                                        {{ product.name }}
+                                                    </h3>                                       
+                                                    <span v-if="product.status === 'inactive'" class="ml-1 text-xs text-red-500">(inactive)</span>
+                                                    </div>
+                                                <div class="mt-2">
                                                         <p class="text-sm text-gray-500 line-clamp-2">{{ product.description }}</p>
                                                     </div>
                                                     <div class="mt-3 flex items-center justify-between">
                                                         <div class="flex items-center space-x-2">
-                                                            <span class="text-xl font-bold text-gray-900">{{ formatPrice(product.price) }} DH</span>
-                                                            <span v-if="product.sell_price && product.sell_price !== product.price" class="text-sm line-through text-gray-500">
-                                                                {{ formatPrice(product.sell_price) }} DH
+                                                            <span class="text-xl font-bold text-gray-900">{{ formatPrice(product.sell_price) }} DH</span>
+                                                            <span class="text-sm text-gray-500 ">
+                                                                {{ formatPrice(product.price) }} DH
+                                                                <span class="ml-1" title="Price before margin/benefit">(cost)</span>
                                                             </span>
                                                         </div>
                                                     </div>
@@ -321,14 +330,14 @@
                                                             </svg>
                                                             Edit
                                                         </button>
-                                                        <button @click="confirmDelete(product)"
+                                                        <!-- <button @click="confirmDelete(product)"
                                                             :disabled="submitting"
                                                             class="flex-1 inline-flex justify-center items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 disabled:opacity-50">
                                                             <svg class="-ml-0.5 mr-2 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                                                                 <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
                                                             </svg>
                                                             Delete
-                                                        </button>
+                                                        </button> -->
                                                     </div>
                                                 </div>
                                             </div>
@@ -630,13 +639,13 @@
         </div>
 
         <!-- Delete Confirmation Modal -->
-        <div v-if="isDeleteModalOpen" class="fixed z-50 inset-0 overflow-y-auto" id="delete-confirmation-modal">
-            <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+        <!-- <div v-if="isDeleteModalOpen" class="fixed z-50 inset-0 overflow-y-auto" id="delete-confirmation-modal">
+            <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0"> -->
                 <!-- Background overlay -->
-                <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" @click="closeDeleteModal"></div>
+                <!-- <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" @click="closeDeleteModal"></div> -->
 
                 <!-- Modal panel -->
-                <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                <!-- <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
                     <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                         <div class="sm:flex sm:items-start">
                             <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
@@ -676,9 +685,10 @@
                             {{ submitting ? 'Deleting...' : 'Delete Product' }}
                         </button>
                     </div>
-                </div>
-            </div>
+                </div> -->
+            <!-- </div>
         </div>
+    -->
     </div>
 </template>
 
