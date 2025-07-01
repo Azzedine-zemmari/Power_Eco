@@ -77,6 +77,8 @@
     let password = ref('');
     let errors = ref({});
     let generalError = ref('');
+    const API_BASE_URL = 'http://localhost:8000';
+
 
     async function login(){
         // Reset errors
@@ -84,17 +86,19 @@
         generalError.value = '';
 
         try{
-            const response = await axios.post('http://localhost:8000/api/login',{
+            const response = await axios.post(`${API_BASE_URL}/api/login`,{
                 email:email.value,
                 password:password.value
             })
+            console.log(response.data)
 
-            const role = response.data.role
+            const role = response.data.user.role_id
             const token = response.data.token
 
             // save token and role to localStorage for later requests
             localStorage.setItem('token',token)
             localStorage.setItem('role',role)
+            axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
             const redirectPath = route.query.redirect;
             if (redirectPath) {
@@ -103,16 +107,16 @@
             }
             
             switch (role) {
-                case 'admin':
+                case 4:
                     router.push('/admin/users/management');
                     break;
-                case 'user':
+                case 1:
                     router.push('/');
                     break;
-                case 'commercial':
+                case 3:
                     router.push('/saleList');
                     break;
-                case 'product-manager':
+                case 2:
                     router.push('/productManager/dashboard');
                     break;
                 default:

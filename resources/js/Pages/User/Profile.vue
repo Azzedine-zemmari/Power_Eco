@@ -149,7 +149,13 @@
                                                     <div>
                                                         <label class="block text-sm font-medium text-gray-700 mb-1">Role</label>
                                                         <p class="text-gray-900 bg-gray-50 px-3 py-2 rounded-md capitalize">
-                                                            {{ profile.selectedRole || profile.role || 'User' }}
+                                                            {{ 
+                                                                profile.selectedRole == 1 ? 'User' :
+                                                                profile.selectedRole == 2 ? 'Product Manager' :
+                                                                profile.selectedRole == 3 ? 'Commercial' :
+                                                                profile.selectedRole == 4 ? 'Admin' :
+                                                                profile.role || 'User'
+                                                            }}
                                                         </p>
                                                     </div>
     
@@ -308,7 +314,7 @@
                 firstName: userData.firstName || '',
                 lastName: userData.lastName ||  '',
                 email: userData.email || '',
-                selectedRole: userData.selectedRole || '',
+                selectedRole: userData.role_id || '',
                 status: userData.status || 'active',
                 joinDate: userData.created_at || '',
                 created_at: userData.created_at || ''

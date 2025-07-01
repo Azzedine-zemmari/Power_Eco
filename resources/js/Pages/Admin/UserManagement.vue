@@ -185,9 +185,9 @@
                                             </select>
                                             <select v-model="roleFilter"
                                                 class="focus:ring-green-500 focus:border-green-500 block w-full sm:w-auto rounded-md sm:text-sm border-gray-300">
-                                                <option value="">All Roles</option>
-                                                <option value="commercial">Commercial</option>
-                                                <option value="product-manager">Product Manager</option>
+                                                <option :value="0">All Roles</option>
+                                                <option :value="3">Commercial</option>
+                                                <option :value="2">Product Manager</option>
                                             </select>
                                         </div>
                                     </div>
@@ -245,8 +245,8 @@
                                                 <td class="px-6 py-4 whitespace-nowrap">
                                                     <span
                                                         class="inline-flex px-2 py-1 text-xs font-semibold rounded-full"
-                                                        :class="getRoleBadgeClass(user.selectedRole)">
-                                                        {{ formatRole(user.selectedRole) }}
+                                                        :class="getRoleBadgeClass(user.role_id)">
+                                                        {{ formatRole(user.role_id) }}
                                                     </span>
                                                 </td>
                                                 <td class="px-6 py-4 whitespace-nowrap">
@@ -294,8 +294,8 @@
                                                         <div class="mt-2 flex items-center space-x-2">
                                                             <span
                                                                 class="inline-flex px-2 py-1 text-xs font-semibold rounded-full"
-                                                                :class="getRoleBadgeClass(user.selectedRole)">
-                                                                {{ formatRole(user.selectedRole) }}
+                                                                :class="getRoleBadgeClass(user.role_id)">
+                                                                {{ formatRole(user.role_id) }}
                                                             </span>
                                                             <span
                                                                 class="inline-flex px-2 py-1 text-xs font-semibold rounded-full"
@@ -418,15 +418,15 @@
                                             <label class="block text-sm font-medium text-gray-700">User Role</label>
                                             <div class="mt-2 space-y-4">
                                                 <div class="flex items-center">
-                                                    <input id="role-commercial" v-model="selectedRole" type="radio"
-                                                        value="commercial"
+                                                    <input id="role-commercial" v-model="role_id" type="radio"
+                                                        :value="3"
                                                         class="focus:ring-green-500 h-4 w-4 text-green-600 border-gray-300">
                                                     <label for="role-commercial"
                                                         class="ml-3 block text-sm font-medium text-gray-700">Commercial</label>
                                                 </div>
                                                 <div class="flex items-center">
-                                                    <input id="role-product-manager" v-model="selectedRole" type="radio"
-                                                        value="product-manager"
+                                                    <input id="role-product-manager" v-model="role_id" type="radio"
+                                                        :value="2"
                                                         class="focus:ring-green-500 h-4 w-4 text-green-600 border-gray-300">
                                                     <label for="role-product-manager"
                                                         class="ml-3 block text-sm font-medium text-gray-700">Product
@@ -512,13 +512,13 @@ const perPage = ref(6)
 const totalPages = ref(1)
 const searchTerm = ref('')
 const statusFilter = ref('')
-const roleFilter = ref('')
+const roleFilter = ref(0)
 
 // Form data
 const firstName = ref('')
 const lastName = ref('')
 const email = ref('')
-const selectedRole = ref('commercial')
+const role_id = ref(2)
 
 // Toast notification
 const toast = ref({
@@ -536,7 +536,7 @@ const filteredUsers = computed(() => {
             user.email.toLowerCase().includes(searchTerm.value.toLowerCase())
 
         const matchesStatus = !statusFilter.value || user.status === statusFilter.value
-        const matchesRole = !roleFilter.value || user.selectedRole === roleFilter.value
+        const matchesRole = !roleFilter.value || user.role_id === roleFilter.value
 
         return matchesSearch && matchesStatus && matchesRole
     })
@@ -554,8 +554,14 @@ const getUserInitials = (user) => {
     return `${user.firstName.charAt(0)}${user.lastName.charAt(0)}`.toUpperCase()
 }
 
-const formatRole = (role) => {
-    return role.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
+const formatRole = (role_id) => {
+    const map = {
+        1: 'User',
+        2: 'Product Manager',
+        3: 'Commercial',
+        4: 'Admin'
+    }
+    return map[role_id] || 'Unknown'
 }
 
 const formatDate = (dateString) => {
@@ -563,13 +569,14 @@ const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString()
 }
 
-const getRoleBadgeClass = (role) => {
+const getRoleBadgeClass = (role_id) => {
     const classes = {
-        'commercial': 'bg-blue-100 text-blue-800',
-        'product-manager': 'bg-purple-100 text-purple-800',
-        'admin': 'bg-red-100 text-red-800'
+        3: 'bg-blue-100 text-blue-800', // Commercial
+        2: 'bg-purple-100 text-purple-800', // Product Manager
+        4: 'bg-red-100 text-red-800', // Admin
+        1: 'bg-gray-100 text-gray-800' // User
     }
-    return classes[role] || 'bg-gray-100 text-gray-800'
+    return classes[role_id] || 'bg-gray-100 text-gray-800'
 }
 
 const getStatusBadgeClass = (status) => {
@@ -594,7 +601,7 @@ const resetForm = () => {
     firstName.value = ''
     lastName.value = ''
     email.value = ''
-    selectedRole.value = 'commercial'
+    role_id.value = 2
 }
 
 const fetchUsers = async (page = 1) => {
@@ -619,7 +626,7 @@ const fetchUsers = async (page = 1) => {
 }
 
 const submitForm = async () => {
-    if (!firstName.value || !lastName.value || !email.value || !selectedRole.value) {
+    if (!firstName.value || !lastName.value || !email.value || !role_id.value) {
         showToast('Please fill in all required fields', 'error')
         return
     }
@@ -628,8 +635,9 @@ const submitForm = async () => {
         firstName: firstName.value,
         lastName: lastName.value,
         email: email.value,
-        selectedRole: selectedRole.value
+        role_id: parseInt(role_id.value)
     }
+    console.log(formData)
 
     try {
         isLoading.value = true

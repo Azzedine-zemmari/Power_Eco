@@ -12,14 +12,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FactureController;
 
-// For cors error
-Route::options('/{any}', function () {
-    return response()->noContent()
-        ->header('Access-Control-Allow-Origin', '*')
-        ->header('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS')
-        ->header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-})->where('any', '.*');
-
 // Public routes (no authentication required)
 Route::post('/login', [UserController::class, 'login']);
 Route::post('/UserRegister', [UserController::class, 'UserRegistre']);
@@ -32,7 +24,7 @@ Route::get('/product/{id}', [ProductController::class, 'showProductDetails']);
 
 
 // Admin-only routes
-Route::middleware(['auth:sanctum', 'role:admin'])->group(function(){
+Route::middleware(['auth:sanctum', 'role:4'])->group(function(){
     Route::delete('/users/{id}/archive', [UserController::class, 'archiveUser']);
     Route::get('/Users', [UserController::class, 'show']);
     Route::post('/users/{id}/active', [UserController::class, 'activeUser']);
@@ -40,7 +32,7 @@ Route::middleware(['auth:sanctum', 'role:admin'])->group(function(){
 });
 
 // Product Manager-only routes
-Route::middleware(['auth:sanctum', 'role:product-manager'])->group(function(){
+Route::middleware(['auth:sanctum', 'role:2'])->group(function(){
     Route::get('/categories', [CategoryController::class, 'show']);
     Route::post('/categories/create', [CategoryController::class, 'createCategory']);
     Route::put('/categories/{id}', [CategoryController::class, 'update']);
@@ -53,7 +45,7 @@ Route::middleware(['auth:sanctum', 'role:product-manager'])->group(function(){
 });
 
 // Commercial-only routes
-Route::middleware(['auth:sanctum', 'role:commercial'])->group(function(){
+Route::middleware(['auth:sanctum', 'role:3'])->group(function(){
     Route::get('/sales/data', [CommercialController::class, 'sales']);
 Route::put('/sales/update/{id}', [CommercialController::class, 'update']);
 });
@@ -72,7 +64,7 @@ Route::middleware('auth:sanctum')->group(function () {
 // Route::middleware(['auth:sanctum'])->group(function(){
 // });
 // User-only routes
-Route::middleware(['auth:sanctum', 'role:user'])->group(function(){
+Route::middleware(['auth:sanctum', 'role:1'])->group(function(){
     Route::post('/cart/add', [CartController::class, 'addToCart']);
     Route::get('/cart', [CartController::class, 'getCartItem']);
     Route::put('/cart/{productId}', [CartController::class, 'update']);

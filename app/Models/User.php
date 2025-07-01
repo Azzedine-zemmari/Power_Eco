@@ -23,7 +23,7 @@ class User extends Authenticatable
         'lastName',
         'email',
         'password',
-        'selectedRole',
+        'role_id',
         'set_password_token'
     ];
 

@@ -17,7 +17,7 @@ class UserController extends Controller
             'firstName'=>'required|string|max:255',
             'lastName'=>'required|string|max:255',
             'email'=>'required|email|unique:users,email',
-            'selectedRole'=>'required'
+            'role_id'=>'required'
         ]);
         $token = Str::random(10);
         $user = User::create([
@@ -25,7 +25,7 @@ class UserController extends Controller
             'lastName'=>$request->lastName,
             'email'=>$request->email,
             'password' => Hash::make(Str::random(10)), // Temporary password
-            'selectedRole' =>  $request->selectedRole,
+            'role_id' =>  $request->role_id,
             'set_password_token' => $token,
         ]);
 
@@ -62,7 +62,7 @@ class UserController extends Controller
     // to show the admin all the user that he register
     public function show(Request $request){
         $perPage = $request->get('per_page', 6);
-        $user = User::withTrashed()->where('selectedRole', '!=', 'admin')->paginate($perPage);
+        $user = User::withTrashed()->where('role_id', '!=', 4)->paginate($perPage);
         return response()->json($user);
     }
     // to soft delete a user by the admin 
@@ -138,13 +138,15 @@ class UserController extends Controller
         // Revoke previous tokens if needed
         $user->tokens()->delete();
 
-        // Create new token
-        $token = $user->createToken('auth_token')->plainTextToken;
+        // Create token with 1-day expiry
+        $token = $user->createToken('auth_token');
+        $accessToken = $token->accessToken;
+        $accessToken->expires_at = now()->addDay(); // Token expires in 1 day
+        $accessToken->save();
 
         return response()->json([
             'user' => $user,
-            'role' => $user->selectedRole,
-            'token' => $token
+            'token' => $token->plainTextToken
         ], 200);
     }
 
@@ -173,7 +175,7 @@ class UserController extends Controller
             $existingUser->firstName = $request->firstName;
             $existingUser->lastName = $request->lastName;
             $existingUser->password = Hash::make($request->password);
-            $existingUser->selectedRole = 'user';
+            $existingUser->role_id = 1;
             $existingUser->status = 'pending';
             $existingUser->save();
 
@@ -188,7 +190,7 @@ class UserController extends Controller
             'lastName'=>$request->lastName,
             'email'=>$request->email,
             'password' =>Hash::make($request->password),
-            'selectedRole' =>  'user',
+            'role_id' =>  1,
             'status'=>'pending',
             ]);
 

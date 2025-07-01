@@ -15,7 +15,7 @@ const routes = [
         meta: {
             title: "User Management",
             requiresAuth: true,
-            role: "admin"
+            role: 4
         }
     },
     {
@@ -40,7 +40,7 @@ const routes = [
         meta: {
             title: "Product Manager Dashboard",
             requiresAuth: true,
-            role: "product-manager"
+            role: 2
         }
     },
     {
@@ -57,7 +57,7 @@ const routes = [
         meta: {
             title: "Categories - Product Manager Dashboard",
             requiresAuth: true,
-            role: "product-manager"
+            role: 2
         }
     },
     {
@@ -70,7 +70,7 @@ const routes = [
         meta: {
             title: "Products - Product Manager Dashboard",
             requiresAuth: true,
-            role: "product-manager"
+            role: 2
         }
     },
     {
@@ -101,7 +101,7 @@ const routes = [
         component: () => import('./Pages/CartItem.vue'),
         meta: {
             requiresAuth: true,
-            role: "user"
+            role: 1
         }
     },
     {
@@ -110,7 +110,7 @@ const routes = [
         meta: {
             title: 'Checkout Page',
             requiresAuth: true,
-            role: "user"
+            role: 1
         }
     },
     {
@@ -119,7 +119,7 @@ const routes = [
         meta: {
             title: 'User Profile',
             requiresAuth: true,
-            role: "user"
+            role: 1
         }
     },
     {
@@ -128,7 +128,7 @@ const routes = [
         meta: {
             title: 'Sales list',
             requiresAuth: true,
-            role: "commercial"
+            role: 3
         }
     },
     {
@@ -137,7 +137,7 @@ const routes = [
         meta: {
             title: 'Devis',
             requiresAuth: true,
-            role: "user"
+            role: 1
         }
     },
     {
@@ -146,7 +146,7 @@ const routes = [
         meta: {
             title: 'facture',
             requiresAuth: true,
-            role: "user"
+            role: 1
         }
     }
 ];
@@ -189,13 +189,13 @@ router.beforeEach(async (to, from, next) => {
             if (isValidToken) {
                 // Redirect to appropriate dashboard based on role
                 switch (userRole) {
-                    case 'admin':
+                    case 4:
                         return next('/admin/users/management');
-                    case 'product-manager':
+                    case 2:
                         return next('/productManager/dashboard');
-                    case 'commercial':
+                    case 3:
                         return next('/saleList');
-                    case 'user':
+                    case 1:
                         return next('/');
                     default:
                         return next('/');
@@ -223,7 +223,7 @@ router.beforeEach(async (to, from, next) => {
         }
 
         // Check role authorization
-        if (to.meta.role && to.meta.role !== userRole) {
+        if (to.meta.role && Number(to.meta.role) !== Number(userRole)) {
             return next('/unauthorized');
         }
     }

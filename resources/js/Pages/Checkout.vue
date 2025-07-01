@@ -248,7 +248,7 @@
                             <dt class="flex items-center text-sm text-gray-600">
                                 <span>{{ item.product_name }} ({{ item.quantity }})</span>
                             </dt>
-                            <dd class="text-sm font-medium text-gray-900">MAD {{ (parseFloat(item.product_price) * parseInt(item.quantity)).toFixed(2) }}</dd>
+                            <dd class="text-sm font-medium text-gray-900">MAD {{ parseFloat(item.product_price) }}</dd>
                         </div>
                         
                         <div class="flex items-center justify-between border-t border-gray-200 pt-4">
