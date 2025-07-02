@@ -15,15 +15,15 @@
                             <div class="mx-auto max-w-md px-4 sm:max-w-2xl sm:px-6 sm:text-center lg:px-0 lg:text-left lg:flex lg:items-center">
                                 <div class="lg:py-24">
                                     <h1 class="mt-4 text-4xl tracking-tight font-extrabold text-gray-900 sm:mt-5 sm:text-5xl lg:mt-6 xl:text-6xl">
-                                        <span class="block">Sustainable Solutions</span>
-                                        <span class="block text-green-600">for a Greener Future</span>
+                                        <span class="block">{{ $t('home.hero.title_1') }}</span>
+                                        <span class="block text-green-600">{{ $t('home.hero.title_2') }}</span>
                                     </h1>
                                     <p class="mt-3 text-base text-gray-500 sm:mt-5 sm:text-xl lg:text-lg xl:text-xl">
-                                        Discover our range of eco-friendly products designed to reduce your carbon footprint and promote sustainable living.
+                                        {{ $t('home.hero.description') }}
                                     </p>
                                     <div class="mt-8 sm:mt-12">
                                         <a href="/products" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
-                                            Shop Now
+                                            {{ $t('home.hero.shop_now') }}
                                         </a>
                                     </div>
                                 </div>
@@ -34,7 +34,7 @@
             </div>
         </div>
         <div class="lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2">
-            <img class="h-56 w-full object-cover sm:h-72 md:h-96 lg:w-full lg:h-full" src="/public/photo-1497440001374-f26997328c1b.avif" loading="lazy" alt="Solar panels on a green field">
+            <img class="h-56 w-full object-cover sm:h-72 md:h-96 lg:w-full lg:h-full" src="/public/photo-1497440001374-f26997328c1b.avif" loading="lazy" alt="{{ $t('home.hero.image_alt') }}">
         </div>
     </div>
 
@@ -43,7 +43,7 @@
     <div class="bg-gray-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="max-w-2xl mx-auto py-16 sm:py-24 lg:py-32 lg:max-w-none">
-                <h2 class="text-3xl font-extrabold text-gray-900">Featured Products</h2>
+                <h2 class="text-3xl font-extrabold text-gray-900">{{ $t('home.featured_products.title') }}</h2>
                 <div class="mt-6 space-y-12 lg:space-y-0 lg:grid lg:grid-cols-4 lg:gap-x-6">
                     <!-- Product Card -->
                     <div v-for="product in featuredProducts" :key="product.id" class="group relative">
@@ -57,7 +57,7 @@
                             </a>
                         </h3>
                         <p class="text-base font-semibold text-gray-900">${{ product.sell_price }}</p>
-                        <p class="mt-1 text-sm text-gray-500">Stock: {{ product.stock }}</p>
+                        <p class="mt-1 text-sm text-gray-500">{{ $t('home.featured_products.stock') }}: {{ product.stock }}</p>
                     </div>
                 </div>
             </div>
@@ -68,13 +68,13 @@
     <div class="bg-green-700">
         <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:py-16 lg:px-8 lg:flex lg:items-center lg:justify-between">
             <h2 class="text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
-                <span class="block">Ready to go green?</span>
-                <span class="block text-green-200">Start your sustainable journey today.</span>
+                <span class="block">{{ $t('home.sustainability.title_1') }}</span>
+                <span class="block text-green-200">{{ $t('home.sustainability.title_2') }}</span>
             </h2>
             <div class="mt-8 flex lg:mt-0 lg:flex-shrink-0">
                 <div class="inline-flex rounded-md shadow">
                     <a href="/products" class="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-green-600 bg-white hover:bg-green-50">
-                        Shop Products
+                        {{ $t('home.sustainability.shop_products') }}
                     </a>
                 </div>
                 </div>

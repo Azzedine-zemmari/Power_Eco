@@ -119,19 +119,19 @@ class UserController extends Controller
 
         if (!$user) {
             return response()->json([
-                'message' => 'No account found with this email address.'
+                'message' => __('messages.no_account')
             ], 401);
         }
 
         if (!Hash::check($request->password, $user->password)) {
             return response()->json([
-                'message' => 'The password you entered is incorrect.'
+                'message' => __('messages.invalid_password')
             ], 401);
         }
 
         if ($user->status !== 'active') {
             return response()->json([
-                'message' => 'Your account is not active yet. Please wait for admin approval.'
+                'message' => __('messages.account_inactive')
             ], 403);
         }
 
@@ -180,7 +180,7 @@ class UserController extends Controller
             $existingUser->save();
 
             return response()->json([
-                'message' => 'Account restored and registration successful. Please log in.',
+                'message' => __('messages.account_restored'),
             ], 201);
         }
 
@@ -195,7 +195,7 @@ class UserController extends Controller
             ]);
 
         return response()->json([
-            'message' => 'Registration successful. Please log in.',
+            'message' => __('messages.registration_success'),
         ],201);
     }
     public function logout(Request $request){

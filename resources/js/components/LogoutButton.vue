@@ -1,6 +1,6 @@
 <template>
     <button @click="logout" :class="computedClass">
-    Logout
+    {{ $t('nav.links.logout') }}
   </button>
 </template>
 <script setup>

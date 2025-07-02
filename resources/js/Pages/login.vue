@@ -3,13 +3,14 @@
     <!-- Login Form -->
     <div class="min-h-screen flex flex-col justify-center py-12 sm:px-6 lg:px-8">
         <div class="sm:mx-auto sm:w-full sm:max-w-md">
-            <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">Sign in to your account</h2>
+            <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">{{ $t('ui.home_title') }}</h2>
             <p class="mt-2 text-center text-sm text-gray-600">
-                Or
+                {{ $t('ui.or') }}
                 <a href="/register" class="font-medium text-green-600 hover:text-green-500">
-                    create a new account
+                    {{ $t('auth.create_account') }}
                 </a>
             </p>
+
         </div>
 
         <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
@@ -29,7 +30,7 @@
                     </div>
                     <div>
                         <label for="email" class="block text-sm font-medium text-gray-700">
-                            Email address
+                            {{ $t('auth.email') }}
                         </label>
                         <div class="mt-1">
                             <input v-model="email" id="email" name="email" type="email" autocomplete="email" required 
@@ -41,7 +42,7 @@
 
                     <div>
                         <label for="password" class="block text-sm font-medium text-gray-700">
-                            Password
+                            {{ $t('auth.password') }}
                         </label>
                         <div class="mt-1">
                             <input v-model="password" id="password" name="password" type="password" autocomplete="current-password" required 
@@ -52,12 +53,12 @@
                     </div>
                      <div class="text-sm">
                             <a href="/user/forgetPassword" class="font-medium text-green-600 hover:text-green-500">
-                                Forgot your password?
+                                {{ $t('auth.forgot_password') }}
                             </a>
                         </div>
                     <div>
                         <button type="submit" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
-                            Sign in
+                            {{ $t('auth.sign_in') }}
                         </button>
                     </div>
                 </form>

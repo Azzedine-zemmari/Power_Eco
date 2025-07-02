@@ -4,11 +4,11 @@
     <!-- Registration Form -->
     <div class="min-h-screen flex flex-col justify-center py-12 sm:px-6 lg:px-8">
         <div class="sm:mx-auto sm:w-full sm:max-w-md">
-            <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">Create your account</h2>
+            <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">{{ $t('auth.create_your_account') }}</h2>
             <p class="mt-2 text-center text-sm text-gray-600">
-                Or
+                {{ $t('ui.or') }}
                 <a href="/login" class="font-medium text-green-600 hover:text-green-500">
-                    sign in to your existing account
+                    {{ $t('auth.sign_in_existing') }}
                 </a>
             </p>
         </div>
@@ -46,7 +46,7 @@
 
                     <div>
                         <label for="first-name" class="block text-sm font-medium text-gray-700">
-                            First name
+                            {{ $t('auth.first_name') }}
                         </label>
                         <div class="mt-1">
                             <input v-model="firstName" id="first-name" name="first-name" type="text" autocomplete="given-name" required 
@@ -58,7 +58,7 @@
 
                     <div>
                         <label for="last-name" class="block text-sm font-medium text-gray-700">
-                            Last name
+                            {{ $t('auth.last_name')}}
                         </label>
                         <div class="mt-1">
                             <input v-model="lastName" id="last-name" name="last-name" type="text" autocomplete="family-name" required 
@@ -70,7 +70,7 @@
 
                     <div>
                         <label for="email" class="block text-sm font-medium text-gray-700">
-                            Email address
+                            {{ $t('auth.email') }}
                         </label>
                         <div class="mt-1">
                             <input v-model="email" id="email" name="email" type="email" autocomplete="email" required 
@@ -82,7 +82,7 @@
 
                     <div>
                         <label for="password" class="block text-sm font-medium text-gray-700">
-                            Password
+                            {{ $t('auth.password') }}
                         </label>
                         <div class="mt-1">
                             <input v-model="password" id="password" name="password" type="password" autocomplete="new-password" required 
@@ -90,7 +90,7 @@
                                 class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm">
                         </div>
                         <div v-if="errors.password" class="text-red-600 text-xs mt-1">
-                            Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character.
+                            {{ $t('validation.password_strength') }}
                         </div>
                     </div>
 
@@ -99,17 +99,17 @@
                             :class="{'border-red-300': errors.terms || generalError}"
                             class="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded">
                         <label for="terms" class="ml-2 block text-sm text-gray-900">
-                            I agree to the 
-                            <a href="#" class="font-medium text-green-600 hover:text-green-500">Terms of Service</a>
-                            and
-                            <a href="#" class="font-medium text-green-600 hover:text-green-500">Privacy Policy</a>
+                            {{ $t('auth.terms_agreement') }}
+                            <a href="#" class="font-medium text-green-600 hover:text-green-500">{{ $t('auth.terms_of_service') }}</a>
+                                {{ $t('ui.and') }}
+                            <a href="#" class="font-medium text-green-600 hover:text-green-500">{{ $t('auth.privacy_policy') }}</a>
                         </label>
                     </div>
                     <div v-if="errors.terms" class="text-red-600 text-xs mt-1">{{ errors.terms[0] }}</div>
 
                     <div>
                         <button type="submit" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
-                            Create account
+                            {{ $t('button.create_account_button') }}
                         </button>
                     </div>
                 </form>
