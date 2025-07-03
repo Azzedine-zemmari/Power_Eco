@@ -23,24 +23,25 @@
                         Eco<span class="text-green-300">Move</span>
                     </span>
                 </a>
-
+                
                 <div class="h-0 flex-1 flex flex-col overflow-y-auto">
                     <!-- User Info -->
                     <div class="flex items-center flex-shrink-0 px-4 py-4 border-b border-green-700">
                         <div class="ml-3">
                             <p class="text-base font-medium text-white">{{ user?.firstName }} {{ user?.lastName }}</p>
-                            <p class="text-sm font-medium text-green-200">User</p>
+                            <p class="text-sm font-medium text-green-200">{{ t('sidebar.userRole') }}</p>
                         </div>
                     </div>
 
                     <!-- Navigation -->
+                    <LanguageSwitcher variant="sidebar" />
                     <nav class="mt-5 px-2 space-y-1">
-                        <SidebarLink to="/user/profile" icon="user" label="Profile"
-                            :active="current === '/user/profile'" />
-                        <SidebarLink to="/user/devis" icon="folder" label="Devis"
-                            :active="current === '/user/devis'" />
-                        <SidebarLink to="/user/facture" icon="cube" label="Facture"
-                            :active="current === '/user/facture'" />
+                        <SidebarLink to="/user/profile" icon="user" :label="t('sidebar.profile')"
+                        :active="current === '/user/profile'" />
+                        <SidebarLink to="/user/devis" icon="folder" :label="t('sidebar.quote')"
+                        :active="current === '/user/devis'" />
+                        <SidebarLink to="/user/facture" icon="cube" :label="t('sidebar.invoice')"
+                        :active="current === '/user/facture'" />
                         <LogoutButton variant="sidebar" />
                     </nav>
                 </div>
@@ -61,11 +62,15 @@ import SidebarLink from './SidebarLink.vue'
 import LogoutButton from './LogoutButton.vue'
 import { onMounted, ref } from 'vue'
 import axios from 'axios'
+import LanguageSwitcher from './LanguageSwitcher.vue'
+import { useI18n } from 'vue-i18n'
+import Sidebar from './Sidebar.vue'
 
 const route = useRoute()
 const current = route.path
 const isOpen = ref(false)
 const user = ref('')
+const { t } = useI18n()
 
 const userData = async () =>{
     try{

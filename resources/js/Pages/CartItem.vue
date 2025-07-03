@@ -5,7 +5,7 @@
         <!-- Page Header -->
         <div class="bg-white shadow">
             <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                <h1 class="text-3xl font-bold text-gray-900">Your Cart</h1>
+                <h1 class="text-3xl font-bold text-gray-900">{{ $t('cart.page_title') }}</h1>
             </div>
         </div>
 
@@ -14,7 +14,7 @@
             <div class="lg:grid lg:grid-cols-12 lg:gap-x-12 lg:items-start xl:gap-x-16">
                 <!-- Cart Items -->
                 <section aria-labelledby="cart-heading" class="lg:col-span-7">
-                    <h2 id="cart-heading" class="sr-only">Items in your shopping cart</h2>
+                    <h2 id="cart-heading" class="sr-only">{{ $t('cart.heading') }}</h2>
 
                     <ul role="list" class="border-t border-b border-gray-200 divide-y divide-gray-200">
                         <!-- Cart Item -->
@@ -40,7 +40,7 @@
                                 <div class="mt-4 flex-1 flex items-end justify-between">
                                     <div class="flex items-center space-x-2">
                                         <label :for="`quantity-${item.product_id}`" class="text-sm font-medium text-gray-700">
-                                            Quantity:
+                                            {{ $t('cart.quantity') }}:
                                         </label>
                                         <select 
                                             :id="`quantity-${item.product_id}`"
@@ -54,7 +54,7 @@
 
                                     <button @click="removeItem(item)" type="button"
                                         class="ml-4 text-sm font-medium text-red-600 hover:text-red-500">
-                                        <span>Remove</span>
+                                        <span>{{ $t('cart.remove') }}</span>
                                     </button>
                                 </div>
                             </div>
@@ -66,11 +66,11 @@
                         <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                         </svg>
-                        <h3 class="mt-2 text-sm font-medium text-gray-900">Your cart is empty</h3>
-                        <p class="mt-1 text-sm text-gray-500">Start adding some eco-friendly products!</p>
+                        <h3 class="mt-2 text-sm font-medium text-gray-900">{{ $t('cart.empty_title') }}</h3>
+                        <p class="mt-1 text-sm text-gray-500">{{ $t('cart.empty_description') }}</p>
                         <div class="mt-6">
                             <a href="/products" class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700">
-                                Continue Shopping
+                                {{ $t('cart.continue_shopping') }}
                             </a>
                         </div>
                     </div>
@@ -79,11 +79,11 @@
                 <!-- Order Summary -->
                 <section v-if="items.length > 0" aria-labelledby="summary-heading"
                     class="mt-16 bg-white rounded-lg px-4 py-6 sm:p-6 lg:p-8 lg:mt-0 lg:col-span-5">
-                    <h2 id="summary-heading" class="text-lg font-medium text-gray-900">Order summary</h2>
+                    <h2 id="summary-heading" class="text-lg font-medium text-gray-900">{{ $t('cart.order_summary') }}</h2>
 
                     <dl class="mt-6 space-y-4">
                         <div class="border-t border-gray-200 pt-4 flex items-center justify-between">
-                            <dt class="text-base font-medium text-gray-900">Order total</dt>
+                            <dt class="text-base font-medium text-gray-900">{{ $t('cart.order_total') }}</dt>
                             <dd class="text-base font-medium text-gray-900">MAD {{ total.toFixed(2) }}</dd>
                         </div>
                     </dl>
@@ -91,14 +91,13 @@
                     <div class="mt-6">
                         <a href="/checkout"
                             class="w-full bg-green-600 border border-transparent rounded-md shadow-sm py-3 px-4 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 flex items-center justify-center">
-                            Proceed to Checkout
+                            {{ $t('cart.proceed_to_checkout') }}
                         </a>
                     </div>
 
                     <div class="mt-6 text-sm text-center text-gray-500">
                         <p>
-                            or <a href="/products" class="text-green-600 font-medium hover:text-green-500">Continue
-                                Shopping<span aria-hidden="true"> &rarr;</span></a>
+                            {{ $t('cart.or') }} <a href="/products" class="text-green-600 font-medium hover:text-green-500">{{ $t('cart.continue_shopping') }}<span aria-hidden="true"> &rarr;</span></a>
                         </p>
                     </div>
 
@@ -112,7 +111,7 @@
                                     clip-rule="evenodd" />
                             </svg>
                             <p class="ml-2 text-sm text-gray-500">
-                                Your purchase helps reduce carbon emissions and supports sustainable living.
+                                {{ $t('cart.eco_message') }}
                             </p>
                         </div>
                     </div>

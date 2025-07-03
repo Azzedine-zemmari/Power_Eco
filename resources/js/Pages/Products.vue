@@ -11,7 +11,7 @@
     <!-- Page Header -->
     <div class="bg-white shadow">
         <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-            <h1 class="text-3xl font-bold text-gray-900">Products</h1>
+            <h1 class="text-3xl font-bold text-gray-900">{{ $t('products.page_title') }}</h1>
         </div>
     </div>
 
@@ -21,11 +21,11 @@
             <!-- Sidebar / Filters -->
             <div class="w-full md:w-64 mb-6 md:mb-0 md:mr-8">
                 <div class="bg-white p-4 rounded-lg shadow">
-                    <h2 class="font-bold text-lg mb-4">Filters</h2>
+                    <h2 class="font-bold text-lg mb-4">{{ $t('products.filters') }}</h2>
                     
                     <!-- Search -->
                     <div class="mb-6">
-                        <label for="search" class="block text-sm font-medium text-gray-700 mb-1">Search</label>
+                        <label for="search" class="block text-sm font-medium text-gray-700 mb-1">{{ $t('products.search') }}</label>
                         <div class="mt-1 relative rounded-md shadow-sm">
                             <input 
                                 v-model="filters.search" 
@@ -33,7 +33,7 @@
                                 name="search" 
                                 id="search" 
                                 class="focus:ring-green-500 focus:border-green-500 block w-full pr-10 sm:text-sm border-gray-300 rounded-md" 
-                                placeholder="Search products..."
+                                :placeholder="$t('products.search_placeholder')"
                                 @input="debounceSearch"
                             >
                             <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
@@ -46,7 +46,7 @@
                     
                     <!-- Categories -->
                     <div class="mb-6">
-                        <h3 class="font-medium text-sm text-gray-900 mb-2">Categories</h3>
+                        <h3 class="font-medium text-sm text-gray-900 mb-2">{{ $t('products.categories') }}</h3>
                         <div class="space-y-2">
                             <div v-for="category in categories" :key="category.id" class="flex items-center">
                                 <input 
@@ -64,13 +64,13 @@
                     
                     <!-- Price Range -->
                     <div class="mb-6">
-                        <h3 class="font-medium text-sm text-gray-900 mb-2">Price Range</h3>
+                        <h3 class="font-medium text-sm text-gray-900 mb-2">{{ $t('products.price_range') }}</h3>
                         <div class="space-y-4">
                             <div class="flex items-center space-x-2">
                                 <input 
                                     v-model="filters.minPrice" 
                                     type="number" 
-                                    placeholder="Min"
+                                    :placeholder=" $t('products.min') "
                                     class="focus:ring-green-500 focus:border-green-500 block w-full sm:text-sm border-gray-300 rounded-md"
                                     @change="applyFilters"
                                 >
@@ -78,7 +78,7 @@
                                 <input 
                                     v-model="filters.maxPrice" 
                                     type="number" 
-                                    placeholder="Max"
+                                    :placeholder=" $t('products.max') "
                                     class="focus:ring-green-500 focus:border-green-500 block w-full sm:text-sm border-gray-300 rounded-md"
                                     @change="applyFilters"
                                 >
@@ -91,7 +91,7 @@
                         type="button" 
                         class="w-full bg-gray-100 border border-gray-300 rounded-md shadow-sm py-2 px-4 text-sm font-medium text-gray-700 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
                     >
-                        Reset Filters
+                        {{ $t('products.reset_filters') }}
                     </button>
                 </div>
             </div>
@@ -112,7 +112,7 @@
                             <div class="mt-4 flex justify-between items-center">
                                 <p class="text-lg font-bold text-gray-900">{{ product.price }} MAD</p>
                                 <button @click="addToCart(product)" type="button" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
-                                    Add to Cart
+                                    {{ $t('products.add_to_cart') }}
                                 </button>
                             </div>
                         </div>
@@ -129,7 +129,7 @@
                             :disabled="products.current_page === 1"
                             class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
                         >
-                            <span class="sr-only">Previous</span>
+                            <span class="sr-only">{{ $t('products.previous') }}</span>
                             <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                 <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
                             </svg>
@@ -156,7 +156,7 @@
                             :disabled="products.current_page === products.last_page"
                             class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
                         >
-                            <span class="sr-only">Next</span>
+                            <span class="sr-only">{{ $t('products.next') }}</span>
                             <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                 <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
                             </svg>
@@ -177,6 +177,9 @@ import { onMounted, ref, computed, watch } from 'vue';
 import { useCartStore } from '../stores/CartStore';
 import { useRouter,useRoute } from 'vue-router';
 import Notification from '../components/Notification.vue';
+import { useI18n } from 'vue-i18n';
+
+const {t} = useI18n();
 
 const products = ref({
     data: [],
@@ -306,7 +309,9 @@ const addToCart = async (product) => {
             }
         });
         cart.cartCount += 1;
-        notificationMessage.value = `${product.name} has been added to your cart.`;
+        notificationMessage.value =  t('cart.added_message', {
+            product: product.name
+        });
         showNotification.value = true;
     } catch (error) {
         console.error(error);

@@ -1,6 +1,6 @@
 <template>
 <div class="bg-gray-50 text-gray-800 font-sans">
-
+        <LanguageSwitcher variant="sidebar" />
     <!-- Registration Form -->
     <div class="min-h-screen flex flex-col justify-center py-12 sm:px-6 lg:px-8">
         <div class="sm:mx-auto sm:w-full sm:max-w-md">
@@ -123,6 +123,7 @@
 import { ref } from 'vue';
 import axios from 'axios';
 import { useRouter } from 'vue-router';
+import LanguageSwitcher from '../components/LanguageSwitcher.vue';
 
 const router = useRouter();
 

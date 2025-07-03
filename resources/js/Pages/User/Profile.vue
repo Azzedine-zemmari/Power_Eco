@@ -6,7 +6,7 @@
             <div class="flex flex-col w-0 flex-1 overflow-hidden">
                 <div class="md:hidden pl-1 pt-1 sm:pl-3 sm:pt-3">
                     <button type="button" class="-ml-0.5 -mt-0.5 h-12 w-12 inline-flex items-center justify-center rounded-md text-gray-500 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-green-500">
-                        <span class="sr-only">Open sidebar</span>
+                        <span class="sr-only">{{$t('profile.open_sidebar') || 'Open sidebar'}}</span>
                         <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                         </svg>
@@ -16,7 +16,7 @@
                 <div class="flex-shrink-0 flex h-16 bg-white shadow">
                     <div class="flex-1 px-4 flex justify-between">
                         <div class="flex-1 flex">
-                            <h1 class="text-xl md:text-2xl font-semibold text-gray-900 self-center">Profile</h1>
+                            <h1 class="text-xl md:text-2xl font-semibold text-gray-900 self-center">{{$t('profile.title')}}</h1>
                         </div>
                     </div>
                 </div>
@@ -26,7 +26,7 @@
                             <!-- Loading State -->
                             <div v-if="loading" class="flex justify-center items-center py-12">
                                 <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-green-500"></div>
-                                <span class="ml-3 text-gray-600">Loading profile...</span>
+                                <span class="ml-3 text-gray-600">{{$t('profile.loading')}}</span>
                             </div>
     
                             <!-- Error State -->
@@ -38,13 +38,13 @@
                                         </svg>
                                     </div>
                                     <div class="ml-3">
-                                        <h3 class="text-sm font-medium text-red-800">Error loading profile</h3>
+                                        <h3 class="text-sm font-medium text-red-800">{{$t('profile.error_loading')}}</h3>
                                         <div class="mt-2 text-sm text-red-700">
                                             <p>{{ error }}</p>
                                         </div>
                                         <div class="mt-4">
                                             <button @click="fetchProfile" class="bg-red-100 px-3 py-2 rounded-md text-sm font-medium text-red-800 hover:bg-red-200">
-                                                Try Again
+                                                {{$t('profile.try_again')}}
                                             </button>
                                         </div>
                                     </div>
@@ -54,7 +54,7 @@
                             <!-- Profile Content -->
                             <div v-else>
                                 <h1 class="text-xl md:text-2xl font-semibold text-gray-900 mb-4">
-                                    Welcome back, {{ profile.firstName || 'User' }}
+                                    {{$t('profile.welcome', { name: profile.firstName || 'User' })}}
                                 </h1>
                             </div>
                         </div>
@@ -64,7 +64,7 @@
                             <div class="bg-white shadow rounded-lg">
                                 <!-- Profile Header -->
                                 <div class="px-4 md:px-6 py-4 md:py-5 border-b border-gray-200 flex flex-col md:flex-row justify-between items-start md:items-center space-y-4 md:space-y-0">
-                                    <h2 class="text-lg font-medium text-gray-900">Profile Information</h2>
+                                    <h2 class="text-lg font-medium text-gray-900">{{$t('profile.info_title')}}</h2>
                                     <button 
                                         @click="toggleEdit" 
                                         :disabled="saving"
@@ -77,7 +77,7 @@
                                         <svg v-else class="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                                         </svg>
-                                        {{ isEditing ? 'Cancel' : 'Edit Profile' }}
+                                        {{ isEditing ? $t('profile.cancel') : $t('profile.edit') }}
                                     </button>
                                 </div>
     
@@ -90,7 +90,7 @@
                                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                                                     <!-- First Name -->
                                                     <div>
-                                                        <label class="block text-sm font-medium text-gray-700 mb-1">First Name</label>
+                                                        <label class="block text-sm font-medium text-gray-700 mb-1">{{$t('profile.first_name')}}</label>
                                                         <input 
                                                             v-if="isEditing"
                                                             v-model="editProfile.firstName"
@@ -100,7 +100,7 @@
                                                             :class="{ 'border-red-300': validationErrors.firstName }"
                                                         >
                                                         <p v-else class="text-gray-900 bg-gray-50 px-3 py-2 rounded-md">
-                                                            {{ profile.firstName || 'Not provided' }}
+                                                            {{ profile.firstName || $t('profile.not_provided') }}
                                                         </p>
                                                         <p v-if="validationErrors.firstName" class="mt-1 text-sm text-red-600">
                                                             {{ validationErrors.firstName }}
@@ -109,7 +109,7 @@
     
                                                     <!-- Last Name -->
                                                     <div>
-                                                        <label class="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
+                                                        <label class="block text-sm font-medium text-gray-700 mb-1">{{$t('profile.last_name')}}</label>
                                                         <input 
                                                             v-if="isEditing"
                                                             v-model="editProfile.lastName"
@@ -119,7 +119,7 @@
                                                             :class="{ 'border-red-300': validationErrors.lastName }"
                                                         >
                                                         <p v-else class="text-gray-900 bg-gray-50 px-3 py-2 rounded-md">
-                                                            {{ profile.lastName || 'Not provided' }}
+                                                            {{ profile.lastName || $t('profile.not_provided') }}
                                                         </p>
                                                         <p v-if="validationErrors.lastName" class="mt-1 text-sm text-red-600">
                                                             {{ validationErrors.lastName }}
@@ -128,7 +128,7 @@
     
                                                     <!-- Email -->
                                                     <div class="md:col-span-2">
-                                                        <label class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+                                                        <label class="block text-sm font-medium text-gray-700 mb-1">{{$t('profile.email')}}</label>
                                                         <input 
                                                             v-if="isEditing"
                                                             v-model="editProfile.email"
@@ -138,7 +138,7 @@
                                                             :class="{ 'border-red-300': validationErrors.email }"
                                                         >
                                                         <p v-else class="text-gray-900 bg-gray-50 px-3 py-2 rounded-md">
-                                                            {{ profile.email || 'Not provided' }}
+                                                            {{ profile.email || $t('profile.not_provided') }}
                                                         </p>
                                                         <p v-if="validationErrors.email" class="mt-1 text-sm text-red-600">
                                                             {{ validationErrors.email }}
@@ -147,31 +147,25 @@
     
                                                     <!-- Role (Read-only) -->
                                                     <div>
-                                                        <label class="block text-sm font-medium text-gray-700 mb-1">Role</label>
+                                                        <label class="block text-sm font-medium text-gray-700 mb-1">{{$t('profile.role')}}</label>
                                                         <p class="text-gray-900 bg-gray-50 px-3 py-2 rounded-md capitalize">
-                                                            {{ 
-                                                                profile.selectedRole == 1 ? 'User' :
-                                                                profile.selectedRole == 2 ? 'Product Manager' :
-                                                                profile.selectedRole == 3 ? 'Commercial' :
-                                                                profile.selectedRole == 4 ? 'Admin' :
-                                                                profile.role || 'User'
-                                                            }}
+                                                            {{ $t('profile.roles.' + (profile.selectedRole || 1)) }}
                                                         </p>
                                                     </div>
     
                                                     <!-- Status (Read-only) -->
                                                     <div>
-                                                        <label class="block text-sm font-medium text-gray-700 mb-1">Account Status</label>
+                                                        <label class="block text-sm font-medium text-gray-700 mb-1">{{$t('profile.status')}}</label>
                                                         <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium"
                                                               :class="profile.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'">
-                                                            {{ profile.status || 'Active' }}
+                                                            {{ profile.status ? $t('profile.active') : $t('profile.not_provided') }}
                                                         </span>
                                                     </div>
                                                 </div>
     
                                                 <!-- Member Since -->
                                                 <div class="mt-6">
-                                                    <label class="block text-sm font-medium text-gray-700 mb-1">Member Since</label>
+                                                    <label class="block text-sm font-medium text-gray-700 mb-1">{{$t('profile.member_since')}}</label>
                                                     <p class="text-gray-900 bg-gray-50 px-3 py-2 rounded-md">
                                                         {{ formatDate(profile.joinDate || profile.created_at) }}
                                                     </p>
@@ -185,7 +179,7 @@
                                                         :disabled="saving"
                                                         class="w-full sm:w-auto inline-flex items-center justify-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-50 disabled:cursor-not-allowed"
                                                     >
-                                                        Cancel
+                                                        {{$t('profile.cancel')}}
                                                     </button>
                                                     <button 
                                                         type="submit"
@@ -199,7 +193,7 @@
                                                         <svg v-else class="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
                                                         </svg>
-                                                        {{ saving ? 'Saving...' : 'Save Changes' }}
+                                                        {{ saving ? $t('profile.saving') : $t('profile.save_changes') }}
                                                     </button>
                                                 </div>
                                             </div>
@@ -240,6 +234,8 @@
     import { ref, reactive, onMounted } from 'vue';
     import UserSideBar from '../../components/UserSideBar.vue';
     import axios from 'axios';
+    import { useI18n } from 'vue-i18n';
+    const { t } = useI18n();
     
     const isEditing = ref(false);
     const loading = ref(true);
@@ -370,17 +366,17 @@
         validationErrors.value = {};
         
         if (!editProfile.firstName.trim()) {
-            validationErrors.value.firstName = 'First name is required';
+            validationErrors.value.firstName = t('profile.error_required_first');
         }
         
         if (!editProfile.lastName.trim()) {
-            validationErrors.value.lastName = 'Last name is required';
+            validationErrors.value.lastName = t('profile.error_required_last');
         }
         
         if (!editProfile.email.trim()) {
-            validationErrors.value.email = 'Email is required';
+            validationErrors.value.email = t('profile.error_required_email');
         } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(editProfile.email)) {
-            validationErrors.value.email = 'Please enter a valid email address';
+            validationErrors.value.email = t('profile.error_invalid_email');
         }
         
         return Object.keys(validationErrors.value).length === 0;
@@ -442,7 +438,7 @@
             });
     
             isEditing.value = false;
-            successMessage.value = 'Profile updated successfully!';
+            successMessage.value = t('profile.updated_success');
             
             // Clear success message after 5 seconds
             setTimeout(() => {
@@ -462,12 +458,12 @@
                             : serverErrors[field];
                     });
                 } else if (err.response.status === 401) {
-                    error.value = 'Authentication failed. Please log in again.';
+                    error.value = t('auth.no_account');
                 } else {
-                    error.value = err.response.data?.message || 'Failed to update profile.';
+                    error.value = err.response.data?.message || t('profile.error_loading');
                 }
             } else {
-                error.value = err.message || 'Network error. Please try again.';
+                error.value = err.message || t('checkout.toast_network_error');
             }
         } finally {
             saving.value = false;
@@ -475,7 +471,7 @@
     };
     
     const formatDate = (dateString) => {
-        if (!dateString) return 'Not available';
+        if (!dateString) return t('profile.not_provided');
         
         try {
             return new Date(dateString).toLocaleDateString('en-US', {
@@ -484,7 +480,7 @@
                 day: 'numeric'
             });
         } catch (err) {
-            return 'Invalid date';
+            return t('profile.not_provided');
         }
     };
     

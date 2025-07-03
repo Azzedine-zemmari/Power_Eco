@@ -8,7 +8,7 @@
                 <div class="flex-shrink-0 flex h-16 bg-white shadow">
                     <div class="flex-1 px-4 flex justify-between items-center">
                         <div class="flex-1 flex">
-                            <h1 class="text-xl md:text-2xl font-semibold text-gray-900 self-center">Factures</h1>
+                            <h1 class="text-xl md:text-2xl font-semibold text-gray-900 self-center">{{$t('invoice.title')}}</h1>
                         </div>
                         <!-- Refresh button -->
                         <button 
@@ -19,7 +19,7 @@
                             <svg :class="loading ? 'animate-spin' : ''" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                             </svg>
-                            {{ loading ? 'Actualisation...' : 'Actualiser' }}
+                            {{ loading ? $t('invoice.refreshing') : $t('invoice.refresh') }}
                         </button>
                     </div>
                 </div>
@@ -30,7 +30,7 @@
                             <!-- Loading State -->
                             <div v-if="loading" class="flex justify-center items-center py-12">
                                 <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-green-500"></div>
-                                <span class="ml-3 text-gray-600">Chargement des factures...</span>
+                                <span class="ml-3 text-gray-600">{{$t('invoice.loading')}}</span>
                             </div>
 
                             <!-- Error State -->
@@ -42,13 +42,13 @@
                                         </svg>
                                     </div>
                                     <div class="ml-3">
-                                        <h3 class="text-sm font-medium text-red-800">Erreur de chargement</h3>
+                                        <h3 class="text-sm font-medium text-red-800">{{$t('invoice.error.title')}}</h3>
                                         <div class="mt-2 text-sm text-red-700">
                                             <p>{{ error }}</p>
                                         </div>
                                         <div class="mt-4">
                                             <button @click="data" class="bg-red-100 px-3 py-2 rounded-md text-sm font-medium text-red-800 hover:bg-red-200">
-                                                Réessayer
+                                                {{$t('invoice.retry')}}
                                             </button>
                                         </div>
                                     </div>
@@ -61,8 +61,8 @@
                                     <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                                     </svg>
-                                    <h3 class="mt-2 text-sm font-medium text-gray-900">Aucune facture</h3>
-                                    <p class="mt-1 text-sm text-gray-500">Vous n'avez pas encore de factures.</p>
+                                    <h3 class="mt-2 text-sm font-medium text-gray-900">{{$t('invoice.empty.title')}}</h3>
+                                    <p class="mt-1 text-sm text-gray-500">{{$t('invoice.empty.description')}}</p>
                                 </div>
                             </div>
 
@@ -70,8 +70,8 @@
                             <div v-else class="bg-white shadow rounded-lg overflow-hidden">
                                 <div class="px-4 py-5 sm:px-6 border-b border-gray-200 flex justify-between items-center">
                                     <div>
-                                        <h2 class="text-lg font-medium text-gray-900">Liste des Factures</h2>
-                                        <p class="mt-1 text-sm text-gray-500">{{ orders.length }} facture(s) au total</p>
+                                        <h2 class="text-lg font-medium text-gray-900">{{$t('invoice.list.title')}}</h2>
+                                        <p class="mt-1 text-sm text-gray-500">{{$t('invoice.list.count', { count: orders.length })}}</p>
                                     </div>
                                 </div>
                                 
@@ -81,19 +81,19 @@
                                         <thead class="bg-gray-50">
                                             <tr>
                                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                    ID Commande
+                                                    {{$t('invoice.list.id')}}
                                                 </th>
                                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                    Date
+                                                    {{$t('invoice.list.date')}}
                                                 </th>
                                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                    Montant Total
+                                                    {{$t('invoice.list.total')}}
                                                 </th>
                                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                    Statut
+                                                    {{$t('invoice.list.status')}}
                                                 </th>
                                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                    Actions
+                                                    {{$t('invoice.list.actions')}}
                                                 </th>
                                             </tr>
                                         </thead>
@@ -124,7 +124,7 @@
                                                             @click="openModal(order)" 
                                                             :disabled="modalLoading"
                                                             class="text-green-600 hover:text-green-900 disabled:opacity-50 disabled:cursor-not-allowed"
-                                                            title="Voir les détails"
+                                                            :title="$t('invoice.list.actions')"
                                                         >
                                                             <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -135,7 +135,7 @@
                                                             @click="downloadPDF(order)" 
                                                             :disabled="downloadingIds.includes(order.orderId)"
                                                             class="text-blue-600 hover:text-blue-900 disabled:opacity-50 disabled:cursor-not-allowed"
-                                                            title="Télécharger PDF"
+                                                            :title="$t('invoice.modal.download')"
                                                         >
                                                             <svg v-if="downloadingIds.includes(order.orderId)" class="animate-spin h-5 w-5" fill="none" viewBox="0 0 24 24">
                                                                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -144,6 +144,7 @@
                                                             <svg v-else class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                                                             </svg>
+                                                            <!-- Only SVG, no text for download -->
                                                         </button>
                                                     </div>
                                                 </td>
@@ -183,7 +184,7 @@
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                                                     </svg>
-                                                    Voir détails
+                                                    {{$t('invoice.modal.title')}}
                                                 </button>
                                                 <button 
                                                     @click="downloadPDF(order)" 
@@ -197,7 +198,7 @@
                                                     <svg v-else class="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                                                     </svg>
-                                                    {{ downloadingIds.includes(order.orderId) ? 'Téléchargement...' : 'PDF' }}
+                                                    <!-- Only SVG, no text for download -->
                                                 </button>
                                             </div>
                                         </div>
@@ -243,7 +244,7 @@
                     <div v-if="modalLoading" class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                         <div class="flex justify-center items-center py-12">
                             <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-green-500"></div>
-                            <span class="ml-3 text-gray-600">Chargement des détails...</span>
+                            <span class="ml-3 text-gray-600">{{$t('invoice.loading')}}</span>
                         </div>
                     </div>
 
@@ -253,12 +254,12 @@
                         <div class="border-b border-gray-200 pb-4 mb-4">
                             <div class="flex justify-between items-start">
                                 <div>
-                                    <h2 class="text-2xl font-bold text-gray-900">Facture</h2>
+                                    <h2 class="text-2xl font-bold text-gray-900">{{$t('invoice.modal.title')}}</h2>
                                     <p class="text-gray-600">#ORD_{{ selectedOrder?.orderId }}</p>
                                 </div>
                                 <div class="text-right">
-                                    <p class="text-gray-600">Date: {{ formatDate(selectedOrder?.created_at) }}</p>
-                                    <p class="text-gray-600">Statut: {{ formatStatus(selectedOrder?.status) }}</p>
+                                    <p class="text-gray-600">{{$t('invoice.modal.date')}}: {{ formatDate(selectedOrder?.created_at) }}</p>
+                                    <p class="text-gray-600">{{$t('invoice.modal.status')}}: {{ formatStatus(selectedOrder?.status) }}</p>
                                 </div>
                             </div>
                         </div>
@@ -266,7 +267,7 @@
                         <!-- Customer Information -->
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                             <div>
-                                <h3 class="text-lg font-medium text-gray-900 mb-2">Client</h3>
+                                <h3 class="text-lg font-medium text-gray-900 mb-2">{{$t('invoice.modal.client')}}</h3>
                                 <p class="text-gray-600">{{ selectedOrder?.firstname }} {{ selectedOrder?.lastname }}</p>
                                 <p class="text-gray-600">{{ selectedOrder?.email }}</p>
                                 <p class="text-gray-600">{{ selectedOrder?.phone }}</p>
@@ -279,23 +280,23 @@
                                 <thead class="bg-gray-50">
                                     <tr>
                                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                            Produit
+                                            {{$t('invoice.modal.product')}}
                                         </th>
                                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                            Quantité
+                                            {{$t('invoice.modal.quantity')}}
                                         </th>
                                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                            Prix Unitaire
+                                            {{$t('invoice.modal.unitPrice')}}
                                         </th>
                                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                            Total
+                                            {{$t('invoice.modal.total')}}
                                         </th>
                                     </tr>
                                 </thead>
                                 <tbody class="bg-white divide-y divide-gray-200">
                                     <tr v-for="product in selectedOrder?.products" :key="product.productId">
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                            Produit #{{ product.productId }}
+                                            {{$t('invoice.modal.product')}} #{{ product.productId }}
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                             {{ product.quantity }}
@@ -311,7 +312,7 @@
                                 <tfoot class="bg-gray-50">
                                     <tr>
                                         <td colspan="3" class="px-6 py-4 text-right text-sm font-medium text-gray-900">
-                                            Total
+                                            {{$t('invoice.modal.total')}}
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900">
                                             {{ formatPrice(selectedOrder?.totalPrice) }} DH
@@ -337,7 +338,7 @@
                             <svg v-else class="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                             </svg>
-                            {{ downloadingIds.includes(selectedOrder?.orderId) ? 'Téléchargement...' : 'Télécharger PDF' }}
+                            {{ downloadingIds.includes(selectedOrder?.orderId) ? $t('invoice.modal.downloading') : $t('invoice.modal.download') }}
                         </button>
                         <button 
                             type="button" 
@@ -345,7 +346,7 @@
                             :disabled="modalLoading"
                             class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm disabled:opacity-50 disabled:cursor-not-allowed"
                         >
-                            Fermer
+                            {{$t('invoice.modal.close')}}
                         </button>
                     </div>
                 </div>
@@ -360,6 +361,8 @@ import axios from 'axios';
 import UserSideBar from '../../components/UserSideBar.vue';
 import { jsPDF } from 'jspdf';
 import autoTable from 'jspdf-autotable';
+import { useI18n } from 'vue-i18n';
+const { t } = useI18n();
 
 const orders = ref([]);
 const showModal = ref(false);
@@ -387,16 +390,16 @@ const data = async () => {
         
         if (err.response) {
             if (err.response.status === 401) {
-                error.value = 'Session expirée. Veuillez vous reconnecter.';
+                error.value = t('invoice.error.expired');
             } else if (err.response.status === 404) {
-                error.value = 'Service non trouvé.';
+                error.value = t('invoice.error.notFound');
             } else {
-                error.value = err.response.data?.message || 'Erreur lors du chargement des factures.';
+                error.value = err.response.data?.message || t('invoice.error.general');
             }
         } else if (err.code === 'ERR_NETWORK') {
-            error.value = 'Impossible de se connecter au serveur.';
+            error.value = t('invoice.error.network');
         } else {
-            error.value = 'Erreur réseau. Vérifiez votre connexion.';
+            error.value = t('checkout.toast_network_error');
         }
     } finally {
         loading.value = false;
@@ -427,9 +430,9 @@ const formatPrice = (price) => {
 
 const formatStatus = (status) => {
     const statusMap = {
-        'pending': 'En attente',
-        'completed': 'Complété',
-        'cancelled': 'Annulé'
+        'pending': t('invoice.status.pending'),
+        'completed': t('invoice.status.completed'),
+        'cancelled': t('invoice.status.cancelled'),
     };
     return statusMap[status] || status;
 };
@@ -460,31 +463,36 @@ const downloadPDF = async (order) => {
         
         // Add company logo or header
         doc.setFontSize(20);
-        doc.text('EcoMove - Facture', 105, 20, { align: 'center' });
+        doc.text('EcoMove - ' + t('invoice.modal.title'), 105, 20, { align: 'center' });
         
         // Add order information
         doc.setFontSize(12);
-        doc.text(`Commande #ORD_${order.orderId}`, 20, 40);
-        doc.text(`Date: ${formatDate(order.created_at)}`, 20, 50);
-        doc.text(`Statut: ${formatStatus(order.status)}`, 20, 60);
+        doc.text(`${t('invoice.list.id')} #ORD_${order.orderId}`, 20, 40);
+        doc.text(`${t('invoice.modal.date')}: ${formatDate(order.created_at)}`, 20, 50);
+        doc.text(`${t('invoice.modal.status')}: ${formatStatus(order.status)}`, 20, 60);
         
         // Add customer information
-        doc.text('Informations Client:', 20, 80);
+        doc.text(t('invoice.modal.client') + ':', 20, 80);
         doc.text(`${order.firstname} ${order.lastname}`, 20, 90);
         doc.text(`Email: ${order.email}`, 20, 100);
         doc.text(`Téléphone: ${order.phone}`, 20, 110);
         
         // Add products table
-        const tableColumn = ['Produit', 'Quantité', 'Prix Unitaire', 'Total'];
+        const tableColumn = [
+            t('invoice.modal.product'),
+            t('invoice.modal.quantity'),
+            t('invoice.modal.unitPrice'),
+            t('invoice.modal.total')
+        ];
         const tableRows = order.products.map(product => [
-            `Produit #${product.productId}`,
+            t('invoice.modal.product') + ' #' + product.productId,
             product.quantity.toString(),
             `${formatPrice(product.price)} DH`,
             `${formatPrice(product.price * product.quantity)} DH`
         ]);
         
         // Add total row
-        tableRows.push(['', '', 'Total', `${formatPrice(order.totalPrice)} DH`]);
+        tableRows.push(['', '', t('invoice.modal.total'), `${formatPrice(order.totalPrice)} DH`]);
         
         autoTable(doc, {
             startY: 130,
@@ -514,20 +522,20 @@ const downloadPDF = async (order) => {
         const pageHeight = doc.internal.pageSize.height;
         doc.setFontSize(8);
         doc.text('EcoMove - Solutions écologiques pour un avenir durable', 105, pageHeight - 20, { align: 'center' });
-        doc.text(`Généré le ${new Date().toLocaleDateString('fr-FR')}`, 105, pageHeight - 10, { align: 'center' });
+        doc.text(`${t('invoice.modal.download')} ${new Date().toLocaleDateString('fr-FR')}`, 105, pageHeight - 10, { align: 'center' });
         
         // Save the PDF
-        doc.save(`facture_ORD_${order.orderId}.pdf`);
+        doc.save(`${t('invoice.modal.title').toLowerCase()}_ORD_${order.orderId}.pdf`);
         
         // Show success message
-        successMessage.value = `Facture #ORD_${order.orderId} téléchargée avec succès!`;
+        successMessage.value = t('invoice.success.download', { id: order.orderId });
         setTimeout(() => {
             successMessage.value = '';
         }, 3000);
         
     } catch (err) {
         console.error('Error generating PDF:', err);
-        error.value = 'Erreur lors de la génération du PDF.';
+        error.value = t('invoice.error.pdf');
         setTimeout(() => {
             error.value = '';
         }, 5000);

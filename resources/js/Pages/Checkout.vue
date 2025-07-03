@@ -4,7 +4,7 @@
         <!-- Page Header -->
         <div class="bg-white shadow">
             <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                <h1 class="text-3xl font-bold text-gray-900">Checkout</h1>
+                <h1 class="text-3xl font-bold text-gray-900">{{$t('checkout.checkout')}}</h1>
             </div>
         </div>
 
@@ -13,16 +13,16 @@
             <div class="lg:grid lg:grid-cols-12 lg:gap-x-12 lg:items-start xl:gap-x-16">
                 <!-- Checkout Form -->
                 <section aria-labelledby="checkout-heading" class="lg:col-span-7">
-                    <h2 id="checkout-heading" class="sr-only">Checkout form</h2>
+                    <h2 id="checkout-heading" class="sr-only">{{$t('checkout.checkout_form')}}</h2>
 
                     <form @submit.prevent="checkout" ref="checkoutForm">
                         <!-- Contact Information -->
                         <div class="bg-white shadow-sm rounded-lg p-6 mb-8">
-                            <h3 class="text-lg font-medium text-gray-900 mb-4">Contact Information</h3>
+                            <h3 class="text-lg font-medium text-gray-900 mb-4">{{$t('checkout.contact_information')}}</h3>
                             <div class="grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
                                 <div class="sm:col-span-2">
                                     <label for="email" class="block text-sm font-medium text-gray-700">
-                                        Email address <span class="text-red-500">*</span>
+                                        {{$t('checkout.email_address')}} <span class="text-red-500">*</span>
                                     </label>
                                     <div class="mt-1">
                                         <input 
@@ -42,7 +42,7 @@
 
                                 <div>
                                     <label for="first-name" class="block text-sm font-medium text-gray-700">
-                                        First name <span class="text-red-500">*</span>
+                                        {{$t('checkout.first_name')}} <span class="text-red-500">*</span>
                                     </label>
                                     <div class="mt-1">
                                         <input 
@@ -62,7 +62,7 @@
 
                                 <div>
                                     <label for="last-name" class="block text-sm font-medium text-gray-700">
-                                        Last name <span class="text-red-500">*</span>
+                                        {{$t('checkout.last_name')}} <span class="text-red-500">*</span>
                                     </label>
                                     <div class="mt-1">
                                         <input 
@@ -82,7 +82,7 @@
 
                                 <div class="sm:col-span-2">
                                     <label for="phone" class="block text-sm font-medium text-gray-700">
-                                        Phone <span class="text-red-500">*</span>
+                                        {{$t('checkout.phone')}} <span class="text-red-500">*</span>
                                     </label>
                                     <div class="mt-1">
                                         <input 
@@ -104,11 +104,11 @@
 
                         <!-- Shipping Address -->
                         <div class="bg-white shadow-sm rounded-lg p-6 mb-8">
-                            <h3 class="text-lg font-medium text-gray-900 mb-4">Shipping Address</h3>
+                            <h3 class="text-lg font-medium text-gray-900 mb-4">{{$t('checkout.shipping_address')}}</h3>
                             <div class="grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
                                 <div class="sm:col-span-2">
                                     <label for="address" class="block text-sm font-medium text-gray-700">
-                                        Address <span class="text-red-500">*</span>
+                                        {{$t('checkout.address')}} <span class="text-red-500">*</span>
                                     </label>
                                     <div class="mt-1">
                                         <input 
@@ -127,7 +127,7 @@
                                 </div>
 
                                 <div class="sm:col-span-2">
-                                    <label for="apartment" class="block text-sm font-medium text-gray-700">Apartment, suite, etc.</label>
+                                    <label for="apartment" class="block text-sm font-medium text-gray-700">{{$t('checkout.apartment')}}</label>
                                     <div class="mt-1">
                                         <input 
                                             type="text" 
@@ -143,7 +143,7 @@
 
                                 <div>
                                     <label for="city" class="block text-sm font-medium text-gray-700">
-                                        City <span class="text-red-500">*</span>
+                                        {{$t('checkout.city')}} <span class="text-red-500">*</span>
                                     </label>
                                     <div class="mt-1">
                                         <input 
@@ -163,7 +163,7 @@
 
                                 <div>
                                     <label for="postal-code" class="block text-sm font-medium text-gray-700">
-                                        Postal code <span class="text-red-500">*</span>
+                                        {{$t('checkout.postal_code')}} <span class="text-red-500">*</span>
                                     </label>
                                     <div class="mt-1">
                                         <input 
@@ -185,16 +185,16 @@
 
                         <!-- Additional Notes -->
                         <div class="bg-white shadow-sm rounded-lg p-6 mb-8">
-                            <h3 class="text-lg font-medium text-gray-900 mb-4">Additional Notes</h3>
+                            <h3 class="text-lg font-medium text-gray-900 mb-4">{{$t('checkout.additional_notes')}}</h3>
                             <div>
-                                <label for="notes" class="block text-sm font-medium text-gray-700">Order notes (optional)</label>
+                                <label for="notes" class="block text-sm font-medium text-gray-700">{{$t('checkout.order_notes')}}</label>
                                 <div class="mt-1">
                                     <textarea 
                                         id="notes" 
                                         name="notes" 
                                         v-model.trim="formData.notes" 
                                         rows="3"
-                                        placeholder="Special delivery instructions, gift message, etc."
+                                        :placeholder="$t('checkout.placeholder_notes')"
                                         @input="clearFieldError('notes')"
                                         class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 sm:text-sm"
                                         :class="{ 'border-red-300 focus:border-red-500 focus:ring-red-500': errors.notes }"></textarea>
@@ -213,7 +213,7 @@
                                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                                     <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                                 </svg>
-                                {{ isProcessing ? 'Processing...' : 'Place Order' }}
+                                {{ isProcessing ? $t('checkout.processing') : $t('checkout.place_order') }}
                             </button>
                             
                             <!-- Form validation summary -->
@@ -225,7 +225,7 @@
                                         </svg>
                                     </div>
                                     <div class="ml-3">
-                                        <h3 class="text-sm font-medium text-red-800">Please fix the following errors:</h3>
+                                        <h3 class="text-sm font-medium text-red-800">{{$t('checkout.form_errors')}}</h3>
                                         <div class="mt-2 text-sm text-red-700">
                                             <ul class="list-disc pl-5 space-y-1">
                                                 <li v-for="(error, field) in errors" :key="field">{{ error }}</li>
@@ -241,7 +241,7 @@
                 <!-- Order Summary -->
                 <section aria-labelledby="summary-heading"
                     class="mt-16 bg-white rounded-lg px-4 py-6 sm:p-6 lg:p-8 lg:mt-0 lg:col-span-5">
-                    <h2 id="summary-heading" class="text-lg font-medium text-gray-900">Order summary</h2>
+                    <h2 id="summary-heading" class="text-lg font-medium text-gray-900">{{$t('checkout.order_summary')}}</h2>
 
                     <div v-if="items.length > 0" class="mt-6 space-y-4">
                         <div v-for="item in items" :key="item.id" class="flex items-center justify-between border-t border-gray-200 pt-4">
@@ -252,7 +252,7 @@
                         </div>
                         
                         <div class="flex items-center justify-between border-t border-gray-200 pt-4">
-                            <dt class="text-base font-medium text-gray-900">Order total</dt>
+                            <dt class="text-base font-medium text-gray-900">{{$t('checkout.order_total')}}</dt>
                             <dd class="text-base font-medium text-gray-900">MAD {{ total.toFixed(2) }}</dd>
                         </div>
                     </div>
@@ -261,11 +261,11 @@
                         <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                         </svg>
-                        <h3 class="mt-2 text-sm font-medium text-gray-900">Your cart is empty</h3>
-                        <p class="mt-1 text-sm text-gray-500">Add some products to continue with checkout.</p>
+                        <h3 class="mt-2 text-sm font-medium text-gray-900">{{$t('checkout.empty_cart')}}</h3>
+                        <p class="mt-1 text-sm text-gray-500">{{$t('checkout.add_products')}}</p>
                         <div class="mt-6">
                             <a href="/products" class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700">
-                                Continue Shopping
+                                {{$t('checkout.continue_shopping')}}
                             </a>
                         </div>
                     </div>
@@ -280,7 +280,7 @@
                                     clip-rule="evenodd" />
                             </svg>
                             <p class="ml-2 text-sm text-gray-500">
-                                Your purchase helps reduce carbon emissions and supports sustainable living.
+                                {{$t('checkout.eco_message')}}
                             </p>
                         </div>
                         <div class="flex items-center mt-4">
@@ -291,7 +291,7 @@
                                     clip-rule="evenodd" />
                             </svg>
                             <p class="ml-2 text-sm text-gray-500">
-                                Secure checkout
+                                {{$t('checkout.secure_checkout')}}
                             </p>
                         </div>
                     </div>
@@ -342,7 +342,9 @@ import Footer from '../components/Footer.vue';
 import { ref, onMounted, computed, reactive, watch } from 'vue';
 import axios from 'axios';
 import { useRouter } from 'vue-router';
+import { useI18n } from 'vue-i18n';
 
+const { t } = useI18n();
 const router = useRouter();
 
 const items = ref([]);
@@ -490,7 +492,7 @@ const cartItems = async () => {
         console.log('Cart items loaded:', items.value);
     } catch (error) {
         console.error('Failed to load cart:', error);
-        showToast('Failed to load cart items', 'error');
+        showToast(t('checkout.toast_load_cart_failed'), 'error');
     }
 };
 
@@ -499,8 +501,6 @@ const total = computed(() => {
         return sum + (parseFloat(item.product_price) * parseInt(item.quantity));
     }, 0);
 });
-
-
 
 const showToast = (message, type = 'success') => {
     toast.value = { show: true, message, type };
@@ -524,14 +524,14 @@ const checkout = async () => {
     
     // Check if cart is empty
     if (items.value.length === 0) {
-        showToast('Your cart is empty. Please add some products before checkout.', 'error');
+        showToast(t('checkout.toast_cart_empty'), 'error');
         return;
     }
     
     // Validate form
     if (!validateForm()) {
         console.log('Form validation failed:', errors.value);
-        showToast('Please fill in all required fields correctly.', 'error');
+        showToast(t('checkout.toast_form_invalid'), 'error');
         return;
     }
     
@@ -552,16 +552,13 @@ const checkout = async () => {
         
         // Handle successful checkout
         if (response.data.success || response.data.message) {
-            showToast('Order placed successfully!', 'success');
-            
-            // Clear the cart items from frontend
+            showToast(t('checkout.toast_order_success'), 'success');
+            // Clear the cart items from frontend only on success
             items.value = [];
-            
             // Reset form
             Object.keys(formData).forEach(key => {
                 formData[key] = '';
             });
-            
             // Navigate to success page or home
             setTimeout(() => {
                 router.push('/');
@@ -582,20 +579,21 @@ const checkout = async () => {
                         ? serverErrors[field][0] 
                         : serverErrors[field];
                 });
-                showToast('Please check the form for errors.', 'error');
+                showToast(t('checkout.toast_check_form_errors'), 'error');
             } else if (error.response.status === 400) {
-                showToast(error.response.data.message || 'Cart is empty', 'error');
+                showToast(error.response.data.message || t('checkout.toast_cart_empty'), 'error');
             } else if (error.response.status === 401) {
-                showToast('Please log in to continue with checkout.', 'error');
+                showToast(t('checkout.toast_login_required'), 'error');
                 router.push('/login');
             } else {
-                showToast('Checkout failed. Please try again.', 'error');
+                showToast(t('checkout.toast_checkout_failed'), 'error');
             }
         } else if (error.code === 'ERR_NETWORK') {
-            showToast('Cannot connect to server. Please check if the backend is running.', 'error');
+            showToast(t('checkout.toast_server_unreachable'), 'error');
         } else {
-            showToast('Network error. Please check your connection and try again.', 'error');
+            showToast(t('checkout.toast_network_error'), 'error');
         }
+        console.error('Checkout error details:', error);
     } finally {
         isProcessing.value = false;
     }

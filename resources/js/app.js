@@ -9,7 +9,7 @@ import en from './i18n/en';
 import fr from './i18n/fr';
 import validation from './i18n/validation';
 
-const lang = window.appLocale || 'en';
+const lang = localStorage.getItem('lang') || 'en';
 const i18n = createI18n({
     legacy: false,
     locale: lang, // or 'en'

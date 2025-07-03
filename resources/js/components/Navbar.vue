@@ -40,12 +40,8 @@
                                 {{ cartStore.cartCount }}
                             </span>
                         </a>
-                        <div>
-                            <select v-model="locale" @change="setLang">
-                                <option value="en">English</option>
-                                <option value="fr">Français</option>
-                            </select>
-                        </div>
+                        <LanguageSwitcher variant="navbar" />
+
                         <div v-if="isAuthenticated" class="flex items-center space-x-4">
                             <a href="/user/profile"
                                 class="p-1 rounded-full text-gray-600 hover:text-gray-800 focus:outline-none">
@@ -117,6 +113,7 @@
                             {{ cartStore.cartCount }}
                         </span>
                     </a>
+                    <LanguageSwitcher variant="sidebar" />
                     <div v-if="isAuthenticated" class="flex items-center space-x-4">
                         <a href="/user/profile"
                             class="p-1 rounded-full text-gray-600 hover:text-gray-800 focus:outline-none">
@@ -144,15 +141,12 @@ import { useCartStore } from '../stores/CartStore';
 import { ref, onMounted, computed } from 'vue';
 import axios from 'axios';
 import { useI18n } from 'vue-i18n';
+import LanguageSwitcher from './LanguageSwitcher.vue';
 
-const { locale } = useI18n();
+
 const cartStore = useCartStore();
 const isMobileMenuOpen = ref(false);
 
-function setLang() {
-    localStorage.setItem('lang', locale.value);
-    axios.defaults.headers.common['Accept-Language'] = locale.value;
-}
 
 const isAuthenticated = computed(() => {
     return !!localStorage.getItem('token');
