@@ -1,11 +1,11 @@
 <template>
-    <a :href="to" :class="[
+    <RouterLink :to="{name:to}" :class="[
         'group flex items-center px-2 py-2 text-base font-medium rounded-md',
         active ? 'bg-green-700 text-white' : 'text-green-100 hover:bg-green-700'
     ]">
         <component :is="iconComponent" class="mr-3 h-6 w-6 text-green-300" />
         {{ label }}
-    </a>
+    </RouterLink>
 </template>
 <script setup>
 import { computed } from 'vue';

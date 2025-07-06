@@ -24,7 +24,7 @@
                         </span>
                     </div>
                     <nav class="mt-5 px-2 space-y-1">
-                        <SidebarLink to="/saleList" icon="cube" label="Sales list" :active="current === '/saleList'" />
+                        <SidebarLink to="salesList" icon="cube" label="Sales list" :active="current === '/saleList'" />
                         <LogoutButton variant="sidebar" />
                     </nav>
                 </div>
@@ -88,7 +88,7 @@
 
                 <!-- Navigation -->
                 <nav class="mt-5 px-2 space-y-1">
-                    <SidebarLink to="/saleList" icon="cube" label="Sales list" :active="current === '/saleList'" />
+                    <SidebarLink to="salesList" icon="cube" label="Sales list" :active="current === '/saleList'" />
                     <LogoutButton variant="sidebar" />
                 </nav>
             </div>

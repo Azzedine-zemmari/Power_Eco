@@ -7,9 +7,9 @@
             <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">{{ $t('ui.home_title') }}</h2>
             <p class="mt-2 text-center text-sm text-gray-600">
                 {{ $t('ui.or') }}
-                <a href="/register" class="font-medium text-green-600 hover:text-green-500">
+                <RouterLink :to="{name:'register'}" class="font-medium text-green-600 hover:text-green-500">
                     {{ $t('auth.create_account') }}
-                </a>
+                </RouterLink>
             </p>
 
         </div>
@@ -53,9 +53,9 @@
                         </div>
                     </div>
                      <div class="text-sm">
-                            <a href="/user/forgetPassword" class="font-medium text-green-600 hover:text-green-500">
+                            <RouterLink :to="{name:'forgetPassword'}" class="font-medium text-green-600 hover:text-green-500">
                                 {{ $t('auth.forgot_password') }}
-                            </a>
+                            </RouterLink>
                         </div>
                     <div>
                         <button type="submit" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
@@ -70,7 +70,7 @@
 </template>
 <script setup>
     import { ref } from 'vue';
-    import { useRouter, useRoute } from 'vue-router';
+    import { useRouter, useRoute, RouterLink } from 'vue-router';
     import axios from 'axios';
     import LanguageSwitcher from '../components/LanguageSwitcher.vue';
 

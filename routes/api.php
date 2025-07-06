@@ -11,6 +11,7 @@ use App\Http\Controllers\ProductManagerController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FactureController;
+use App\Http\Controllers\DownloadController;
 
 // Public routes (no authentication required)
 Route::post('/login', [UserController::class, 'login']);
@@ -62,7 +63,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
 // All authenticated user can access 
 // Route::middleware(['auth:sanctum'])->group(function(){
-// });
+    // });
 // User-only routes
 Route::middleware(['auth:sanctum', 'role:1'])->group(function(){
     Route::post('/cart/add', [CartController::class, 'addToCart']);
@@ -74,3 +75,4 @@ Route::middleware(['auth:sanctum', 'role:1'])->group(function(){
     Route::get('/devis', [DevisController::class, 'show']);
     Route::get('/factures', [FactureController::class, 'show']);
 });
+Route::get('/download-excel/{filename}', [DownloadController::class, 'downloadExcel'])->name('download.excel');

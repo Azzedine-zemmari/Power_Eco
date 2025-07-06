@@ -8,9 +8,20 @@
                 <!-- Top header -->
                 <div class="flex-shrink-0 flex h-16 bg-white shadow">
                     <div class="flex-1 px-4 flex gap-2 items-center">
-                            <div class="flex">
-                                <h1 class="text-xl sm:text-2xl font-semibold text-gray-900 self-center">Sales List</h1>
-                            </div>
+                        <div class="flex">
+                            <h1 class="text-xl sm:text-2xl font-semibold text-gray-900 self-center">Sales List</h1>
+                        </div>
+                        
+                        <!-- CSV Download button -->
+                        <button @click="downloadCSV" :disabled="loading || sale.length === 0"
+                            class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-50 disabled:cursor-not-allowed">
+                            <svg class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            </svg>
+                            Download CSV
+                        </button>
+
                         <!-- Refresh button -->
                         <button @click="refreshData" :disabled="loading"
                             class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-50">
@@ -43,7 +54,8 @@
                                             <svg class="h-5 w-5 text-green-400" fill="none" viewBox="0 0 24 24"
                                                 stroke="currentColor">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                                                    clip-rule="evenodd" />
                                             </svg>
                                         </div>
                                         <div class="ml-3">
@@ -200,7 +212,6 @@
                                 </div>
 
                                 <!-- No data state -->
-                                <!-- No data state -->
                                 <div v-else class="text-center py-12">
                                     <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24"
                                         stroke="currentColor">
@@ -278,8 +289,7 @@
                                                     :disabled="currentPage === totalPages"
                                                     class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
                                                     <span class="sr-only">Next</span>
-                                                    <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg"
-                                                        viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                                    <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/xmlns=http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                                         <path fill-rule="evenodd"
                                                             d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
                                                             clip-rule="evenodd" />
@@ -292,9 +302,9 @@
                             </div>
                         </div>
                     </div>
-            </main>
+                </main>
+            </div>
         </div>
-    </div>
     </div>
 </template>
 
@@ -333,7 +343,6 @@ const paginationEnd = computed(() => {
 const displayedPages = computed(() => {
     const pages = [];
     const maxVisiblePages = 5;
-
     if (totalPages.value <= maxVisiblePages) {
         for (let i = 1; i <= totalPages.value; i++) {
             pages.push(i);
@@ -361,7 +370,6 @@ const displayedPages = computed(() => {
             pages.push(totalPages.value);
         }
     }
-
     return pages;
 });
 
@@ -423,11 +431,103 @@ function showSuccess(message) {
     }, 5000);
 }
 
+// CSV Download function
+function csvEscape(value) {
+    if (value === null || value === undefined) return '';
+    const str = String(value);
+    // Escape double quotes by doubling them
+    const escaped = str.replace(/"/g, '""');
+    // Quote if contains comma, quote, or newline
+    if (/[",\n]/.test(escaped)) {
+        return `"${escaped}"`;
+    }
+    return escaped;
+}
+
+function downloadCSV() {
+    try {
+        if (!sale.value || sale.value.length === 0) {
+            alert('No data available to download');
+            return;
+        }
+
+        // Define CSV headers
+        const headers = [
+            'Order ID',
+            'Customer Name',
+            'Email',
+            'Phone',
+            'Status',
+            'Products',
+            'Total Price (MAD)',
+            'Date'
+        ];
+
+        // Convert data to CSV format
+        const csvData = sale.value.map(item => {
+            // Format products list with '|' as separator
+            let productsText = '';
+            if (item.products && item.products.length > 0) {
+                productsText = item.products.map(p => 
+                    `${p.name || `Product ID: ${p.productId || p.product_id}`} (Qty: ${p.quantity} × ${formatPrice(p.price)} MAD)`
+                ).join(' | ');
+            } else {
+                productsText = 'No products';
+            }
+            // Remove newlines and extra spaces
+            productsText = productsText.replace(/\r?\n|\r/g, ' ').replace(/\s+/g, ' ').trim();
+
+            return [
+                `#${item.orderId || item.id}`,
+                `${item.lastname || item.last_name || ''} ${item.firstname || item.first_name || ''}`.trim(),
+                item.email || '',
+                item.phone || '',
+                formatStatus(item.status),
+                productsText,
+                formatPrice(item.totalPrice || item.total_price),
+                formatDate(item.created_at || item.createdAt)
+            ].map(csvEscape);
+        });
+
+        // Combine headers and data
+        const csvContent = [headers.map(csvEscape), ...csvData]
+            .map(row => row.join(';'))
+            .join('\n');
+
+        // Add UTF-8 BOM for Excel compatibility
+        const BOM = '\uFEFF';
+        const blob = new Blob([BOM + csvContent], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        
+        if (link.download !== undefined) {
+            const url = URL.createObjectURL(blob);
+            link.setAttribute('href', url);
+            
+            // Generate filename with current date
+            const now = new Date();
+            const dateStr = now.toISOString().split('T')[0]; // YYYY-MM-DD format
+            link.setAttribute('download', `sales_report_${dateStr}.csv`);
+            
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            showSuccess('CSV file downloaded successfully!');
+        } else {
+            // Fallback for older browsers
+            alert('CSV download is not supported in this browser');
+        }
+    } catch (error) {
+        console.error('Error downloading CSV:', error);
+        alert('Error downloading CSV file. Please try again.');
+    }
+}
+
 // API functions
 const sales = async () => {
     loading.value = true;
     error.value = null;
-
     try {
         if (!token) {
             throw new Error('Authentication token missing');
@@ -470,11 +570,11 @@ const sales = async () => {
 
         console.log('✅ Processed sales data:', sale.value);
         console.log('📊 Total items:', totalItems.value);
+
     } catch (err) {
         console.error('❌ Error fetching sales:', err);
         console.error('❌ Status:', err.response?.status);
         console.error('❌ Response:', err.response?.data);
-
         if (err.response?.status === 401) {
             error.value = 'Session expired. Please log in again.';
         } else if (err.response?.status === 403) {
@@ -490,7 +590,6 @@ const sales = async () => {
 const updateSale = async (item) => {
     const orderId = item.orderId || item.id;
     updatingStatus.value = orderId;
-
     try {
         if (!token) {
             throw new Error('Authentication token missing');
@@ -510,13 +609,12 @@ const updateSale = async (item) => {
 
         console.log('✅ Sale updated successfully:', response.data);
         showSuccess(`Order #${orderId} status updated to ${formatStatus(item.status)}`);
-
         // Refresh the current page data
         await sales();
+
     } catch (err) {
         console.error('❌ Error updating sale:', err);
         console.error('❌ Response:', err.response?.data);
-
         if (err.response?.status === 401) {
             error.value = 'Session expired. Please log in again.';
         } else if (err.response?.status === 403) {
@@ -526,7 +624,6 @@ const updateSale = async (item) => {
         } else {
             error.value = err.response?.data?.message || 'Failed to update sale status';
         }
-
         // Revert the status change in UI
         await sales();
     } finally {
@@ -542,6 +639,7 @@ const fetchUserData = async () => {
         }
 
         console.log('🔄 Fetching user data...');
+
         const response = await axios.get(`${API_BASE_URL}/api/user/data`, {
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -551,11 +649,11 @@ const fetchUserData = async () => {
 
         user.value = response.data;
         console.log('✅ User data:', user.value);
+
     } catch (err) {
         console.error('❌ Error fetching user data:', err);
         console.error('❌ Status:', err.response?.status);
         console.error('❌ Response:', err.response?.data);
-
         // Don't show error for user data fetch failure
         // as it's not critical for the sales list functionality
     }

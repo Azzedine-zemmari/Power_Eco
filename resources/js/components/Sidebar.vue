@@ -24,9 +24,9 @@
                         </span>
                     </div>
                     <nav class="mt-5 px-2 space-y-1">
-                        <SidebarLink to="/productManager/dashboard" icon="home" label="Dashboard" :active="current === '/productManager/dashboard'" />
-                        <SidebarLink to="/productManager/Product/Category" icon="folder" label="Categories" :active="current === '/productManager/Product/Category'" />
-                        <SidebarLink to="/productManager/Products" icon="cube" label="Products" :active="current === '/productManager/Products'" />
+                        <SidebarLink to="dashboard" icon="home" label="Dashboard" :active="current === '/productManager/dashboard'" />
+                        <SidebarLink to="categories" icon="folder" label="Categories" :active="current === '/productManager/Product/Category'" />
+                        <SidebarLink to="products" icon="cube" label="Products" :active="current === '/productManager/Products'" />
                         <LogoutButton variant="sidebar" />
                     </nav>
                 </div>
@@ -55,9 +55,9 @@
 
                 <!-- Navigation -->
                 <nav class="mt-5 px-2 space-y-1">
-                    <SidebarLink to="/productManager/dashboard" icon="home" label="Dashboard" :active="current === '/productManager/dashboard'" />
-                    <SidebarLink to="/productManager/Product/Category" icon="folder" label="Categories" :active="current === '/productManager/Product/Category'" />
-                    <SidebarLink to="/productManager/Products" icon="cube" label="Products" :active="current === '/productManager/Products'" />
+                    <SidebarLink to="dashboard" icon="home" label="Dashboard" :active="current === '/productManager/dashboard'" />
+                    <SidebarLink to="categories" icon="folder" label="Categories" :active="current === '/productManager/Product/Category'" />
+                    <SidebarLink to="products" icon="cube" label="Products" :active="current === '/productManager/Products'" />
                     <LogoutButton variant="sidebar" />
                 </nav>
             </div>

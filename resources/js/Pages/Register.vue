@@ -7,9 +7,9 @@
             <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">{{ $t('auth.create_your_account') }}</h2>
             <p class="mt-2 text-center text-sm text-gray-600">
                 {{ $t('ui.or') }}
-                <a href="/login" class="font-medium text-green-600 hover:text-green-500">
+                <RouterLink :to="{name:'login'}" class="font-medium text-green-600 hover:text-green-500">
                     {{ $t('auth.sign_in_existing') }}
-                </a>
+                </RouterLink>
             </p>
         </div>
 
@@ -122,7 +122,7 @@
 <script setup>
 import { ref } from 'vue';
 import axios from 'axios';
-import { useRouter } from 'vue-router';
+import { RouterLink, useRouter } from 'vue-router';
 import LanguageSwitcher from '../components/LanguageSwitcher.vue';
 
 const router = useRouter();

@@ -7,7 +7,8 @@ const routes = [
         component: () => import("./Pages/HomeRoute.vue"),
         meta: {
             title: 'EcoMove - Sustainable Energy & Mobility'
-        }
+        },
+        name:'Home'
     },
     {
         path: "/admin/users/management",
@@ -16,7 +17,8 @@ const routes = [
             title: "User Management",
             requiresAuth: true,
             role: 4
-        }
+        },
+        name:'userManagement'
     },
     {
         path: "/login",
@@ -24,7 +26,8 @@ const routes = [
         meta: {
             title: "Sign In",
             requiresGuest: true // Only guests (not authenticated users) can access
-        }
+        },
+        name:'login'
     },
     {
         path: "/register",
@@ -32,7 +35,8 @@ const routes = [
         meta: {
             title: "Create Account",
             requiresGuest: true // Only guests (not authenticated users) can access
-        }
+        },
+        name:"register"
     },
     {
         path: "/productManager/dashboard",
@@ -41,7 +45,8 @@ const routes = [
             title: "Product Manager Dashboard",
             requiresAuth: true,
             role: 2
-        }
+        },
+        name:'dashboard'
     },
     {
         path: "/unauthorized",
@@ -58,7 +63,8 @@ const routes = [
             title: "Categories - Product Manager Dashboard",
             requiresAuth: true,
             role: 2
-        }
+        },
+        name:'categories'
     },
     {
         path: '/set-password/:token',
@@ -71,14 +77,16 @@ const routes = [
             title: "Products - Product Manager Dashboard",
             requiresAuth: true,
             role: 2
-        }
+        },
+        name:'products'
     },
     {
         path: '/user/forgetPassword',
         component: () => import('./Pages/forgotPassword.vue'),
         meta:{
             requiresGuest: true
-        }
+        },
+        name:'forgetPassword'
     },
     {
         path: '/reset-password/:token',
@@ -87,7 +95,8 @@ const routes = [
     },
     {
         path: '/products',
-        component: () => import('./Pages/Products.vue')
+        component: () => import('./Pages/Products.vue'),
+        name:'Userproducts'
     },
     {
         path: '/product/:id',
@@ -102,7 +111,8 @@ const routes = [
         meta: {
             requiresAuth: true,
             role: 1
-        }
+        },
+        name:'cart'
     },
     {
         path: '/checkout',
@@ -111,7 +121,8 @@ const routes = [
             title: 'Checkout Page',
             requiresAuth: true,
             role: 1
-        }
+        },
+        name:'checkout'
     },
     {
         path: '/user/profile',
@@ -120,7 +131,8 @@ const routes = [
             title: 'User Profile',
             requiresAuth: true,
             role: 1
-        }
+        },
+        name:'profile'
     },
     {
         path: '/saleList',
@@ -129,7 +141,8 @@ const routes = [
             title: 'Sales list',
             requiresAuth: true,
             role: 3
-        }
+        },
+        name:'salesList'
     },
     {
         path: '/user/devis',
@@ -138,7 +151,8 @@ const routes = [
             title: 'Devis',
             requiresAuth: true,
             role: 1
-        }
+        },
+        name:'devis'
     },
     {
         path: '/user/facture',
@@ -147,7 +161,8 @@ const routes = [
             title: 'facture',
             requiresAuth: true,
             role: 1
-        }
+        },
+        name:'facture'
     }
 ];
 

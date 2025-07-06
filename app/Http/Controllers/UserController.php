@@ -14,19 +14,29 @@ class UserController extends Controller
     // for admin to create new unique users 
     public function createUser(Request $request){
         $request->validate([
-            'firstName'=>'required|string|max:255',
-            'lastName'=>'required|string|max:255',
-            'email'=>'required|email|unique:users,email',
+            'firstName' => [
+                'required','string','max:255','not_regex:/<[^>]*>/'
+            ],
+            'lastName' => [
+                'required','string','max:255','not_regex:/<[^>]*>/'
+            ],
+            'email' => [
+                'required','email','unique:users,email','not_regex:/<[^>]*>/'
+            ],
             'role_id'=>'required'
+        ], [
+            'firstName.not_regex' => 'HTML tags are not allowed in the first name.',
+            'lastName.not_regex' => 'HTML tags are not allowed in the last name.',
+            'email.not_regex' => 'HTML tags are not allowed in the email.'
         ]);
         $token = Str::random(10);
         $user = User::create([
-            'firstName'=>$request->firstName,
-            'lastName'=>$request->lastName,
-            'email'=>$request->email,
+            'firstName'=>strip_tags(trim($request->firstName)),
+            'lastName'=>strip_tags(trim($request->lastName)),
+            'email'=>strip_tags(trim($request->email)),
             'password' => Hash::make(Str::random(10)), // Temporary password
             'role_id' =>  $request->role_id,
-            'set_password_token' => $token,
+            'set_password_token' => $token, 
         ]);
 
         $url = url("/set-password/{$token}");
@@ -34,8 +44,6 @@ class UserController extends Controller
         Mail::to($user->email)->send(new \App\Mail\SetPasswordMail($url));
 
         return response()->json(['message' => 'User created and email sent.']);
-
-
     }
     // to send the users created by the admin 
     public function setPassword(Request $request)
@@ -119,19 +127,19 @@ class UserController extends Controller
 
         if (!$user) {
             return response()->json([
-                'message' => __('messages.no_account')
+                'message' => __('messages.auth.no_account')
             ], 401);
         }
 
         if (!Hash::check($request->password, $user->password)) {
             return response()->json([
-                'message' => __('messages.invalid_password')
+                'message' => __('messages.auth.invalid_password')
             ], 401);
         }
 
         if ($user->status !== 'active') {
             return response()->json([
-                'message' => __('messages.account_inactive')
+                'message' => __('messages.auth.account_inactive')
             ], 403);
         }
 
@@ -180,7 +188,7 @@ class UserController extends Controller
             $existingUser->save();
 
             return response()->json([
-                'message' => __('messages.account_restored'),
+                'message' => __('messages.auth.account_restored'),
             ], 201);
         }
 
@@ -195,7 +203,7 @@ class UserController extends Controller
             ]);
 
         return response()->json([
-            'message' => __('messages.registration_success'),
+            'message' => __('messages.auth.registration_success'),
         ],201);
     }
     public function logout(Request $request){
@@ -257,21 +265,31 @@ class UserController extends Controller
         $user = $request->user();
         if($user){
             $request->validate([
-                'firstName' => 'sometimes|required|string|max:255',
-                'lastName' => 'sometimes|required|string|max:255',
-                'email' => 'sometimes|required|email|unique:users,email,' . $user->id,
+                'firstName' => [
+                    'sometimes','required','string','max:255', 'not_regex:/<[^>]*>/'
+                ],
+                'lastName' => [
+                    'sometimes','required','string','max:255', 'not_regex:/<[^>]*>/'
+                ],
+                'email' => [
+                    'sometimes','required','email','unique:users,email,' . $user->id, 'not_regex:/<[^>]*>/'
+                ],
+            ], [
+                'firstName.not_regex' => 'HTML tags are not allowed in the first name.',
+                'lastName.not_regex' => 'HTML tags are not allowed in the last name.',
+                'email.not_regex' => 'HTML tags are not allowed in the email.'
             ]);
 
             $data = User::find($user->id);
 
             if ($request->has('firstName')) {
-                $data->firstName = $request->firstName;
+                $data->firstName = strip_tags(trim($request->firstName));
             }
             if ($request->has('lastName')) {
-                $data->lastName = $request->lastName;
+                $data->lastName = strip_tags(trim($request->lastName));
             }
             if ($request->has('email')) {
-                $data->email = $request->email;
+                $data->email = strip_tags(trim($request->email));
             }
 
             $data->save();

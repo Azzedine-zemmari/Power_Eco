@@ -18,11 +18,11 @@
         ]">
             <div class="flex flex-col w-64 bg-green-800 h-full">
                 <!-- Logo -->
-                <a href="/" class="flex items-center h-16 flex-shrink-0 px-4 bg-green-900">
+                <RouterLink :to="{name:'Home'}" class="flex items-center h-16 flex-shrink-0 px-4 bg-green-900">
                     <span class="text-white font-bold text-xl">
                         Eco<span class="text-green-300">Move</span>
                     </span>
-                </a>
+                </RouterLink>
                 
                 <div class="h-0 flex-1 flex flex-col overflow-y-auto">
                     <!-- User Info -->
@@ -36,11 +36,11 @@
                     <!-- Navigation -->
                     <LanguageSwitcher variant="sidebar" />
                     <nav class="mt-5 px-2 space-y-1">
-                        <SidebarLink to="/user/profile" icon="user" :label="t('sidebar.profile')"
+                        <SidebarLink to="profile" icon="user" :label="t('sidebar.profile')"
                         :active="current === '/user/profile'" />
-                        <SidebarLink to="/user/devis" icon="folder" :label="t('sidebar.quote')"
+                        <SidebarLink to="devis" icon="folder" :label="t('sidebar.quote')"
                         :active="current === '/user/devis'" />
-                        <SidebarLink to="/user/facture" icon="cube" :label="t('sidebar.invoice')"
+                        <SidebarLink to="facture" icon="cube" :label="t('sidebar.invoice')"
                         :active="current === '/user/facture'" />
                         <LogoutButton variant="sidebar" />
                     </nav>
@@ -57,7 +57,7 @@
 </template>
 
 <script setup>
-import { useRoute } from 'vue-router'
+import { RouterLink, useRoute } from 'vue-router'
 import SidebarLink from './SidebarLink.vue'
 import LogoutButton from './LogoutButton.vue'
 import { onMounted, ref } from 'vue'

@@ -362,23 +362,33 @@
         successMessage.value = '';
     };
     
+    const containsHTML = (str) => {
+        return /<[^>]*>/g.test(str);
+    };
+    
     const validateForm = () => {
         validationErrors.value = {};
-        
+
         if (!editProfile.firstName.trim()) {
             validationErrors.value.firstName = t('profile.error_required_first');
+        } else if (containsHTML(editProfile.firstName)) {
+            validationErrors.value.firstName = "HTML tags are not allowed.";
         }
-        
+
         if (!editProfile.lastName.trim()) {
             validationErrors.value.lastName = t('profile.error_required_last');
+        } else if (containsHTML(editProfile.lastName)) {
+            validationErrors.value.lastName = "HTML tags are not allowed.";
         }
-        
+
         if (!editProfile.email.trim()) {
             validationErrors.value.email = t('profile.error_required_email');
         } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(editProfile.email)) {
             validationErrors.value.email = t('profile.error_invalid_email');
+        } else if (containsHTML(editProfile.email)) {
+            validationErrors.value.email = "HTML tags are not allowed.";
         }
-        
+
         return Object.keys(validationErrors.value).length === 0;
     };
     

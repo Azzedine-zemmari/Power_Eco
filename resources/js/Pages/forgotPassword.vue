@@ -46,10 +46,10 @@
                             class="w-full flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors duration-200">
                             Send to different email
                         </button>
-                        <router-link to="/login"
+                        <RouterLink :to="{name:'login'}"
                             class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors duration-200">
                             Back to Login
-                        </router-link>
+                        </RouterLink>
                     </div>
                 </div>
 
@@ -147,7 +147,7 @@
                     </div>
 
                     <div class="mt-6">
-                        <router-link to="/login"
+                        <RouterLink :to="{name:'login'}"
                             class="w-full flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors duration-200">
                             <svg class="h-5 w-5 mr-2 text-gray-400" fill="none" viewBox="0 0 24 24"
                                 stroke="currentColor">
@@ -155,7 +155,7 @@
                                     d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                             </svg>
                             Back to Login
-                        </router-link>
+                        </RouterLink>
                     </div>
                 </div>
 
@@ -163,9 +163,9 @@
                 <div v-if="!emailSent" class="mt-6 text-center">
                     <p class="text-xs text-gray-500">
                         Remember your password?
-                        <router-link to="/login" class="font-medium text-green-600 hover:text-green-500">
+                        <RouterLink :to="{name:'register'}" class="font-medium text-green-600 hover:text-green-500">
                             Sign in here
-                        </router-link>
+                        </RouterLink>
                     </p>
                 </div>
             </div>
@@ -208,6 +208,7 @@
 <script setup>
 import { ref, computed, onUnmounted } from 'vue'
 import axios from 'axios'
+import { RouterLink } from 'vue-router'
 
 const email = ref('')
 const message = ref('')

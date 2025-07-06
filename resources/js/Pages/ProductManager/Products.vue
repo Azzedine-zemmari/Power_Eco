@@ -132,10 +132,7 @@
                                                     </svg>
                                                     Clear File
                                                 </button>
-                                                
-                                                <a href="#" class="text-sm text-green-600 hover:text-green-500 font-medium text-center sm:text-left">
-                                                    Download Sample Template
-                                                </a>
+                                                <a :href="`${API_BASE_URL}/api/download-excel/Classeur.xlsx`" download>Download Example</a>
                                             </div>
 
                                             <button type="submit" :disabled="!file || importing"
@@ -172,6 +169,35 @@
                                             </div>
                                         </div>
                                     </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Import Errors with Auto-dismiss and Close Button -->
+                        <div v-if="importErrors.length" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4">
+                            <div class="bg-red-50 border border-red-200 rounded-md p-4 transition-all duration-300">
+                                <div class="flex">
+                                    <div class="flex-shrink-0">
+                                        <svg class="h-5 w-5 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                    </div>
+                                    <div class="ml-3 flex-1">
+                                        <h3 class="text-sm font-medium text-red-800 mb-2">Import Errors:</h3>
+                                        <div class="max-h-32 overflow-y-auto">
+                                            <ul class="list-disc pl-5 text-red-600 text-sm space-y-1">
+                                                <li v-for="(err, idx) in importErrors" :key="idx">{{ err }}</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="ml-auto pl-3">
+                                        <button @click="clearImportErrors" class="inline-flex text-red-400 hover:text-red-500 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 focus:ring-offset-red-50 rounded-md p-1">
+                                            <span class="sr-only">Dismiss</span>
+                                            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                            </svg>
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -330,14 +356,6 @@
                                                             </svg>
                                                             Edit
                                                         </button>
-                                                        <!-- <button @click="confirmDelete(product)"
-                                                            :disabled="submitting"
-                                                            class="flex-1 inline-flex justify-center items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 disabled:opacity-50">
-                                                            <svg class="-ml-0.5 mr-2 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                                                <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
-                                                            </svg>
-                                                            Delete
-                                                        </button> -->
                                                     </div>
                                                 </div>
                                             </div>
@@ -637,111 +655,397 @@
                 </div>
             </div>
         </div>
-
-        <!-- Delete Confirmation Modal -->
-        <!-- <div v-if="isDeleteModalOpen" class="fixed z-50 inset-0 overflow-y-auto" id="delete-confirmation-modal">
-            <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0"> -->
-                <!-- Background overlay -->
-                <!-- <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" @click="closeDeleteModal"></div> -->
-
-                <!-- Modal panel -->
-                <!-- <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-                    <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                        <div class="sm:flex sm:items-start">
-                            <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
-                                <svg class="h-6 w-6 text-red-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                                </svg>
-                            </div>
-                            <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-                                <h3 class="text-lg leading-6 font-medium text-gray-900">Delete Product</h3>
-                                <div class="mt-2">
-                                    <p class="text-sm text-gray-500">
-                                        Are you sure you want to delete "<strong>{{ selectedProduct?.name }}</strong>"? This action cannot be undone.
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="bg-gray-50 px-4 py-3 sm:px-6 flex flex-col-reverse sm:flex-row sm:justify-end space-y-3 space-y-reverse sm:space-y-0 sm:space-x-3">
-                        <button 
-                            type="button" 
-                            @click="closeDeleteModal" 
-                            id="cancel-delete-btn"
-                            :disabled="submitting"
-                            class="w-full sm:w-auto inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:text-sm disabled:opacity-50">
-                            Cancel
-                        </button>
-                        <button 
-                            type="button" 
-                            @click="deleteProduct" 
-                            id="confirm-delete-btn"
-                            :disabled="submitting"
-                            class="w-full sm:w-auto inline-flex justify-center items-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:text-sm disabled:opacity-50">
-                            <svg v-if="submitting" class="animate-spin -ml-1 mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24">
-                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                            </svg>
-                            {{ submitting ? 'Deleting...' : 'Delete Product' }}
-                        </button>
-                    </div>
-                </div> -->
-            <!-- </div>
-        </div>
-    -->
     </div>
 </template>
 
 <script setup>
-import { ref, onMounted, reactive, computed } from 'vue';
+import { ref, onMounted, reactive, computed, watch } from 'vue';
 import axios from 'axios';
 import Sidebar from '../../components/Sidebar.vue';
 
+// API Configuration
+const API_BASE_URL = 'http://localhost:8000';
+
 // State variables
 const isModalOpen = ref(false);
-const isDeleteModalOpen = ref(false);
 const isEditing = ref(false);
 const loading = ref(true);
-const submitting = ref(false);
 const error = ref(null);
-const successMessage = ref('');
 const products = ref([]);
 const categories = ref([]);
 const selectedProduct = ref(null);
 const errors = ref({});
-
-// Filter states
 const selectedCategoryFilter = ref('');
 const minPriceFilter = ref('');
 const maxPriceFilter = ref('');
 const minStockFilter = ref('');
-const maxStockFilter = ref('');
+const maxStockFilter = ref('10000');
 const searchQuery = ref('');
+const submitting = ref(false);
+const successMessage = ref('');
 
-// Import states
+// Import related state
 const showImportSection = ref(false);
-const importing = ref(false);
 const file = ref(null);
-
-// API configuration
-const API_BASE_URL = 'http://localhost:8000';
-const token = localStorage.getItem('token');
+const importing = ref(false);
+const importErrors = ref([]);
+let importErrorTimeout = null;
 
 // Form state
 const productForm = reactive({
     id: null,
     name: '',
     description: '',
-    price: '',
+    price: 0,
     stock: '',
-    marge: '',
-    Sprice: '',
+    marge: 0,
+    Sprice: 0,
     categorie_id: '',
     image: null,
     imagePreview: null,
     imageFile: null,
     status: 'active'
 });
+
+// Get token from localStorage
+const token = localStorage.getItem('token');
+
+// Import error management functions
+function clearImportErrors() {
+    importErrors.value = [];
+    if (importErrorTimeout) {
+        clearTimeout(importErrorTimeout);
+        importErrorTimeout = null;
+    }
+}
+
+function setImportErrors(errors) {
+    importErrors.value = Array.isArray(errors) ? errors : [errors];
+    
+    // Clear any existing timeout
+    if (importErrorTimeout) {
+        clearTimeout(importErrorTimeout);
+    }
+    
+    // Auto-dismiss after 10 seconds
+    importErrorTimeout = setTimeout(() => {
+        clearImportErrors();
+    }, 10000);
+}
+
+// Import functions
+function toggleImportSection() {
+    showImportSection.value = !showImportSection.value;
+    if (!showImportSection.value) {
+        clearImportErrors();
+        file.value = null;
+    }
+}
+
+function handleFile(e) {
+    file.value = e.target.files[0];
+    clearImportErrors(); // Clear errors when new file is selected
+}
+
+function clearFile() {
+    file.value = null;
+    clearImportErrors();
+}
+
+const importProducts = async () => {
+    if (!file.value) {
+        setImportErrors(['Please select a file.']);
+        return;
+    }
+    
+    importing.value = true;
+    clearImportErrors();
+    
+    const formData = new FormData();
+    formData.append('excel_file', file.value);
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/import-products`, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: formData,
+        });
+
+        const data = await response.json();
+        
+        if (response.ok) {
+            file.value = null;
+            showImportSection.value = false;
+            successMessage.value = data.message || 'Products imported successfully!';
+            setTimeout(() => successMessage.value = '', 5000);
+            await fetchProducts(); // Refresh the products list
+        } else {
+            // Handle validation errors or other errors
+            if (data.errors) {
+                const errorMessages = [];
+                Object.keys(data.errors).forEach(key => {
+                    if (Array.isArray(data.errors[key])) {
+                        errorMessages.push(...data.errors[key]);
+                    } else {
+                        errorMessages.push(data.errors[key]);
+                    }
+                });
+                setImportErrors(errorMessages);
+            } else {
+                setImportErrors([data.message || 'Failed to import products']);
+            }
+        }
+    } catch (err) {
+        console.error('Import error:', err);
+        setImportErrors(['Network error occurred while importing products']);
+    } finally {
+        importing.value = false;
+    }
+};
+
+// Modal functions
+function openModal() {
+    isModalOpen.value = true;
+    isEditing.value = false;
+    resetForm();
+}
+
+function closeModal() {
+    isModalOpen.value = false;
+    errors.value = {};
+}
+
+function editProduct(product) {
+    isEditing.value = true;
+    productForm.id = product.id;
+    productForm.name = product.name;
+    productForm.description = product.description;
+    productForm.price = product.price;
+    productForm.stock = product.stock;
+    productForm.marge = product.marge || 0;
+    productForm.Sprice = product.sell_price || product.Sprice || 0;
+    productForm.categorie_id = product.categorie_id;
+    productForm.status = product.status || 'active';
+
+    // For existing image, store the URL/path but not as a file
+    if (product.image) {
+        productForm.image = product.image;
+        productForm.imagePreview = product.image;
+        productForm.imageFile = null;
+    } else {
+        productForm.image = null;
+        productForm.imagePreview = null;
+        productForm.imageFile = null;
+    }
+
+    isModalOpen.value = true;
+}
+
+function resetForm() {
+    productForm.id = null;
+    productForm.name = '';
+    productForm.description = '';
+    productForm.price = '';
+    productForm.stock = '';
+    productForm.marge = 0;
+    productForm.Sprice = 0;
+    productForm.categorie_id = '';
+    productForm.image = null;
+    productForm.imagePreview = null;
+    productForm.imageFile = null;
+    productForm.status = 'active';
+}
+
+function handleImageChange(event) {
+    const file = event.target.files[0];
+    if (file) {
+        productForm.imageFile = file;
+        productForm.imagePreview = URL.createObjectURL(file);
+    }
+}
+
+function removeImage() {
+    productForm.imageFile = null;
+    productForm.imagePreview = null;
+    productForm.image = null;
+}
+
+function getPreviewImage() {
+    if (productForm.imagePreview) {
+        return productForm.imagePreview;
+    }
+    if (productForm.image && !productForm.imagePreview) {
+        return getImageUrl(productForm.image);
+    }
+    return null;
+}
+
+function getImageUrl(imagePath) {
+    if (!imagePath) return '/placeholder.svg?height=200&width=200';
+    if (imagePath.startsWith('http')) return imagePath;
+    return `${API_BASE_URL}/storage/${imagePath}`;
+}
+
+function handleImageError(event) {
+    event.target.src = '/placeholder.svg?height=200&width=200';
+}
+
+// API functions
+async function fetchProducts() {
+    loading.value = true;
+    error.value = null;
+    try {
+        if (!token) {
+            throw new Error("Authentication token is missing. Please log in.");
+        }
+        
+        const response = await axios.get(`${API_BASE_URL}/api/product-manager/products`, {
+            headers: {
+                'Accept': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
+        let productsData;
+        if (response.data && Array.isArray(response.data.products)) {
+            productsData = response.data.products;
+        } else if (response.data && Array.isArray(response.data.data)) {
+            productsData = response.data.data;
+        } else if (Array.isArray(response.data)) {
+            productsData = response.data;
+        } else {
+            productsData = [];
+        }
+        
+        products.value = productsData;
+
+    } catch (err) {
+        console.error('Error fetching products:', err);
+        
+        if (err.response) {
+            if (err.response.status === 401) {
+                error.value = 'Session expired. Please log in again.';
+            } else if (err.response.status === 403) {
+                error.value = 'Access denied. You do not have permission to view products.';
+            } else {
+                error.value = err.response.data?.message || 'An error occurred while loading products.';
+            }
+        } else if (err.request) {
+            error.value = 'Could not connect to the server. Please check your network and make sure the backend is running.';
+        } else {
+            error.value = err.message || 'An unknown error occurred.';
+        }
+    } finally {
+        loading.value = false;
+    }
+}
+
+async function fetchCategories() {
+    try {
+        const response = await axios.get(`${API_BASE_URL}/api/categories`, {
+            headers: {
+                'Accept': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        });
+        
+        let categoriesData;
+        if (response.data && Array.isArray(response.data.categories)) {
+            categoriesData = response.data.categories;
+        } else if (response.data && Array.isArray(response.data.data)) {
+            categoriesData = response.data.data;
+        } else if (Array.isArray(response.data)) {
+            categoriesData = response.data;
+        } else {
+            categoriesData = [];
+        }
+        categories.value = categoriesData;
+
+    } catch (err) {
+        console.error('Failed to load categories:', err);
+    }
+}
+
+async function submitProduct() {
+    try {
+        submitting.value = true;
+        errors.value = {};
+
+        const formData = new FormData();
+        formData.append('name', productForm.name);
+        formData.append('description', productForm.description);
+        formData.append('price', productForm.price);
+        formData.append('sell_price', productForm.Sprice);
+        formData.append('marge', productForm.marge);
+        formData.append('stock', productForm.stock);
+        formData.append('categorie_id', productForm.categorie_id);
+        formData.append('status', productForm.status);
+
+        if (productForm.imageFile) {
+            formData.append('image', productForm.imageFile);
+        }
+
+        let response;
+        
+        if (isEditing.value) {
+            formData.append('_method', 'PUT');
+            const updateUrl = `${API_BASE_URL}/api/products/${productForm.id}/update`;
+            
+            response = await axios.post(updateUrl, formData, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Accept': 'application/json',
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+        } else {
+            const createUrl = `${API_BASE_URL}/api/products/create`;
+            
+            response = await axios.post(createUrl, formData, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Accept': 'application/json',
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+        }
+
+        successMessage.value = isEditing.value ? 'Product updated successfully!' : 'Product created successfully!';
+        setTimeout(() => successMessage.value = '', 5000);
+        
+        closeModal();
+        await fetchProducts();
+
+    } catch (err) {
+        console.error('Error submitting product:', err);
+        
+        if (err.response) {
+            const status = err.response.status;
+            const data = err.response.data;
+            
+            if (status === 401) {
+                errors.value = { general: ['Authentication failed. Please log in again.'] };
+            } else if (status === 403) {
+                errors.value = { general: ['Access denied. You do not have permission to perform this action.'] };
+            } else if (status === 422 && data.errors) {
+                errors.value = data.errors;
+            } else if (data.message) {
+                errors.value = { general: [data.message] };
+            } else {
+                errors.value = { general: [`Server error (${status}). Please try again.`] };
+            }
+        } else if (err.request) {
+            errors.value = { general: ['Network error. Please check your connection.'] };
+        } else {
+            errors.value = { general: ['An unexpected error occurred.'] };
+        }
+    } finally {
+        submitting.value = false;
+    }
+}
 
 // Utility functions
 function formatPrice(price) {
@@ -754,130 +1058,7 @@ function formatPrice(price) {
 
 function getCategoryName(categoryId) {
     const category = categories.value.find(cat => cat.id == categoryId);
-    return category ? category.name : 'Non catégorisé';
-}
-
-function getImageUrl(imagePath) {
-    if (!imagePath) return '/placeholder.svg?height=200&width=200';
-    
-    if (imagePath.startsWith('http') || imagePath.startsWith('blob:')) {
-        return imagePath;
-    }
-    
-    if (imagePath.startsWith('storage/')) {
-        return `${API_BASE_URL}/${imagePath}`;
-    }
-    
-    return `${API_BASE_URL}/storage/${imagePath}`;
-}
-
-function getPreviewImage() {
-    if (productForm.imagePreview) {
-        return productForm.imagePreview;
-    }
-    if (productForm.image) {
-        return getImageUrl(productForm.image);
-    }
-    return null;
-}
-
-function handleImageError(event) {
-    event.target.src = '/placeholder.svg?height=200&width=200';
-}
-
-function showSuccess(message) {
-    successMessage.value = message;
-    setTimeout(() => {
-        successMessage.value = '';
-    }, 5000);
-}
-
-// Modal functions
-function openModal() {
-    isModalOpen.value = true;
-    isEditing.value = false;
-    resetForm();
-    errors.value = {};
-}
-
-function closeModal() {
-    isModalOpen.value = false;
-    errors.value = {};
-    resetForm();
-}
-
-function editProduct(product) {
-    console.log('🔧 Editing product:', product);
-    isEditing.value = true;
-    
-    console.log('🔧 Editing product:', product);
-    isEditing.value = true;
-    
-    // Populate form with product data
-    productForm.id = product.id;
-    productForm.name = product.name || '';
-    productForm.description = product.description || '';
-    productForm.price = parseFloat(product.price) || '';
-    productForm.stock = parseInt(product.stock) || '';
-    productForm.marge = product.marge ? parseFloat(product.marge) : '';
-    productForm.Sprice = product.sell_price ? parseFloat(product.sell_price) : '';
-    productForm.categorie_id = product.categorie_id ? String(product.categorie_id) : '';
-    productForm.status = product.status || 'active';
-
-    // Handle existing image
-    if (product.image) {
-        productForm.image = product.image;
-        productForm.imagePreview = null; // Will use getPreviewImage() to show existing image
-        productForm.imageFile = null;
-    } else {
-        productForm.image = null;
-        productForm.imagePreview = null;
-        productForm.imageFile = null;
-    }
-
-    isModalOpen.value = true;
-    errors.value = {};
-}
-
-function resetForm() {
-    productForm.id = null;
-    productForm.name = '';
-    productForm.description = '';
-    productForm.price = '';
-    productForm.stock = '';
-    productForm.marge = '';
-    productForm.Sprice = '';
-    productForm.categorie_id = '';
-    productForm.image = null;
-    productForm.imagePreview = null;
-    productForm.imageFile = null;
-    productForm.status = 'active';
-}
-
-function confirmDelete(product) {
-    selectedProduct.value = product;
-    isDeleteModalOpen.value = true;
-}
-
-function closeDeleteModal() {
-    isDeleteModalOpen.value = false;
-    selectedProduct.value = null;
-}
-
-function handleImageChange(event) {
-    const file = event.target.files[0];
-    if (file) {
-        productForm.imageFile = file;
-        productForm.imagePreview = URL.createObjectURL(file);
-        // Clear existing image reference when new file is selected
-        productForm.image = null;
-    }
-}
-
-function removeImage() {
-    productForm.imageFile = null;
-    productForm.imagePreview = null;
-    productForm.image = null;
+    return category ? category.name : 'Unknown';
 }
 
 function countMarge() {
@@ -891,233 +1072,35 @@ function countMarge() {
         return;
     }
 
-    if (!isNaN(marge) && (isNaN(sellPrice) || document.activeElement?.id === 'product-marge')) {
+    if (!isNaN(marge) && (isNaN(sellPrice) || document.activeElement.id === 'product-marge')) {
         const calculatedSellPrice = price * (1 + marge / 100);
         productForm.Sprice = isFinite(calculatedSellPrice) ? calculatedSellPrice.toFixed(2) : '';
         return;
     }
 
-    if (!isNaN(sellPrice) && (isNaN(marge) || document.activeElement?.id === 'product-SellPrice')) {
+    if (!isNaN(sellPrice) && (isNaN(marge) || document.activeElement.id === 'product-SellPrice')) {
         const calculatedMargin = ((sellPrice - price) / price) * 100;
         productForm.marge = isFinite(calculatedMargin) ? calculatedMargin.toFixed(2) : '';
         return;
     }
 }
 
-// API functions with improved error handling
-async function fetchProducts() {
-    console.log('🔄 Starting fetchProducts...');
-    loading.value = true;
-    error.value = null;
-
-    try {
-        if (!token) {
-            throw new Error('Authentication token missing');
-        }
-
-        console.log('📡 Making API request to fetch products...');
-        const response = await axios.get(`${API_BASE_URL}/api/product-manager/products`, {
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Accept': 'application/json'
-            }
-        });
-
-        console.log('📡 Response status:', response.status);
-        console.log('✅ Raw API response:', response.data);
-
-        // Handle different response structures
-        let productsData;
-        if (response.data.products) {
-            productsData = response.data.products;
-        } else if (response.data.data) {
-            productsData = response.data.data;
-        } else if (Array.isArray(response.data)) {
-            productsData = response.data;
-        } else {
-            productsData = [];
-        }
-
-        console.log('✅ Processed products data:', productsData);
-        products.value = productsData;
-    } catch (err) {
-        console.error('❌ Error in fetchProducts:', err);
-        if (err.response?.status === 401) {
-            error.value = 'Session expired. Please log in again.';
-        } else {
-            error.value = 'Failed to load products.';
-        }
-    } finally {
-        loading.value = false;
-        console.log('🏁 fetchProducts completed');
-    }
-}
-
-async function fetchCategories() {
-    try {
-        if (!token) {
-            throw new Error('Authentication token missing');
-        }
-
-        const response = await axios.get(`${API_BASE_URL}/api/categories`, {
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Accept': 'application/json'
-            }
-        });
-
-        // Handle different response structures
-        let categoriesData;
-        if (response.data.categories) {
-            categoriesData = response.data.categories;
-        } else if (response.data.data) {
-            categoriesData = response.data.data;
-        } else if (Array.isArray(response.data)) {
-            categoriesData = response.data;
-        } else {
-            categoriesData = [];
-        }
-
-        categories.value = categoriesData;
-    } catch (err) {
-        console.error('Error fetching categories:', err);
-    }
-}
-
-async function submitProduct() {
-    if (submitting.value) return;
-    
-    console.log('🚀 Starting product submission...');
-    console.log('📝 Form data:', productForm);
-    
-    submitting.value = true;
-    errors.value = {};
-
-    try {
-        if (!token) {
-            throw new Error('Authentication token missing');
-        }
-
-        const formData = new FormData();
-        
-        // Ensure all required fields are properly set
-        formData.append('name', String(productForm.name).trim());
-        formData.append('description', String(productForm.description || '').trim());
-        formData.append('price', String(productForm.price));
-        formData.append('stock', String(productForm.stock));
-        formData.append('categorie_id', String(productForm.categorie_id));
-        formData.append('status', String(productForm.status));
-
-        // Optional fields
-        if (productForm.marge !== '' && productForm.marge !== null && productForm.marge !== undefined) {
-            formData.append('marge', String(productForm.marge));
-        }
-        if (productForm.Sprice !== '' && productForm.Sprice !== null && productForm.Sprice !== undefined) {
-            formData.append('sell_price', String(productForm.Sprice));
-        }
-
-        // Only append image if there's a new file selected
-        if (productForm.imageFile) {
-            formData.append('image', productForm.imageFile);
-        }
-
-        let url, method;
-        if (isEditing.value) {
-            url = `${API_BASE_URL}/api/products/${productForm.id}/update`;
-            method = 'post'; // Using POST with _method override for file uploads
-            formData.append('_method', 'PUT');
-        } else {
-            url = `${API_BASE_URL}/api/products/create`;
-            method = 'post';
-        }
-
-        console.log('📡 Sending request to:', url);
-        console.log('📡 Method:', method);
-
-        const response = await axios[method](url, formData, {
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Accept': 'application/json',
-                'Content-Type': 'multipart/form-data'
-            }
-        });
-
-        console.log('📡 Response status:', response.status);
-        console.log('✅ Product submitted successfully:', response.data);
-
-        // Close modal and show success message
-        closeModal();
-        showSuccess(isEditing.value ? 'Product updated successfully!' : 'Product created successfully!');
-        
-        // Refresh products list
-        setTimeout(async () => {
-            await fetchProducts();
-        }, 300);
-
-    } catch (err) {
-        console.error('❌ Error submitting product:', err);
-        
-        if (err.response) {
-            console.log('❌ Error response:', err.response.data);
-            if (err.response.status === 422) {
-                errors.value = err.response.data.errors || {};
-                console.log('❌ Validation errors:', errors.value);
-            } else if (err.response.status === 401) {
-                error.value = 'Session expired. Please log in again.';
-            } else if (err.response.status === 403) {
-                error.value = 'Access denied. You must be a product manager.';
-            } else if (err.response.status === 404 && isEditing.value) {
-                error.value = 'Product not found.';
-            } else {
-                error.value = err.response.data?.message || 'Error submitting product.';
-            }
-        } else {
-            error.value = 'Network error. Please try again.';
-        }
-    } finally {
-        submitting.value = false;
-    }
-}
-async function deleteProduct() {
-    if (submitting.value || !selectedProduct.value) return;
-    submitting.value = true;
-    try {
-        await axios.post(`${API_BASE_URL}/api/products/${selectedProduct.value.id}/delete`, {}, {
-            headers: { 'Authorization': `Bearer ${token}` }
-        });
-        // Remove from local list immediately
-        products.value = products.value.filter(p => p.id !== selectedProduct.value.id);
-        closeDeleteModal();
-        showSuccess('Product deleted successfully!');
-        // Optionally refresh from server
-        // Avoid calling fetchProducts here if it causes a loop
-        fetchProducts();
-    } catch (err) {
-        error.value = 'Network error. Please try again.';
-    } finally {
-        submitting.value = false;
-    }
-}
-
-// Filter functions
+// Computed properties
 const filteredProducts = computed(() => {
     let filtered = products.value;
 
-    // Search filter
     if (searchQuery.value) {
         const query = searchQuery.value.toLowerCase();
         filtered = filtered.filter(product => 
             product.name.toLowerCase().includes(query) ||
-            (product.description && product.description.toLowerCase().includes(query))
+            product.description.toLowerCase().includes(query)
         );
     }
 
-    // Category filter
     if (selectedCategoryFilter.value && selectedCategoryFilter.value !== '') {
         filtered = filtered.filter(product => product.categorie_id == selectedCategoryFilter.value);
     }
 
-    // Price filter
     const min = parseFloat(minPriceFilter.value);
     const max = parseFloat(maxPriceFilter.value);
     if (!isNaN(min)) {
@@ -1127,13 +1110,12 @@ const filteredProducts = computed(() => {
         filtered = filtered.filter(product => parseFloat(product.price) <= max);
     }
 
-    // Stock filter
     const minStock = parseInt(minStockFilter.value);
     const maxStock = parseInt(maxStockFilter.value);
     if (!isNaN(minStock)) {
         filtered = filtered.filter(product => parseInt(product.stock) >= minStock);
     }
-    if (!isNaN(maxStock)) {
+    if (!isNaN(maxStock) && maxStock < 10000) {
         filtered = filtered.filter(product => parseInt(product.stock) <= maxStock);
     }
 
@@ -1145,7 +1127,7 @@ const hasActiveFilters = computed(() => {
            minPriceFilter.value !== '' ||
            maxPriceFilter.value !== '' ||
            minStockFilter.value !== '' ||
-           maxStockFilter.value !== '' ||
+           maxStockFilter.value !== '10000' ||
            searchQuery.value !== '';
 });
 
@@ -1154,65 +1136,21 @@ function resetFilters() {
     minPriceFilter.value = '';
     maxPriceFilter.value = '';
     minStockFilter.value = '';
-    maxStockFilter.value = '';
+    maxStockFilter.value = '10000';
     searchQuery.value = '';
 }
 
-// Import functions
-function toggleImportSection() {
-    showImportSection.value = !showImportSection.value;
-}
-
-function handleFile(e) {
-    file.value = e.target.files[0];
-}
-
-function clearFile() {
-    file.value = null;
-}
-
-const importProducts = async () => {
-    if (!file.value) {
-        alert("Please select a file.");
-        return;
-    }
-    
-    importing.value = true;
-    const formData = new FormData();
-    formData.append('excel_file', file.value);
-
-    try {
-        const response = await axios.post(`${API_BASE_URL}/api/import-products`, formData, {
-            headers: {
-                'Accept': 'application/json',
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'multipart/form-data'
-            }
-        });
-
-        if (response.data.success || response.status === 200) {
-            file.value = null;
-            showImportSection.value = false;
-            await fetchProducts();
-            showSuccess('Products imported successfully!');
-        } else {
-            alert('Failed to import: ' + (response.data.message || 'Unknown error'));
-        }
-    } catch (err) {
-        console.error('Import error:', err);
-        if (err.response?.status === 403) {
-            alert('Access denied. You must be a product manager.');
-        } else {
-            alert('Error: ' + (err.response?.data?.message || err.message));
-        }
-    } finally {
-        importing.value = false;
-    }
-};
-
-// Initialize
+// Cleanup function for timeouts
 onMounted(() => {
     fetchProducts();
     fetchCategories();
+});
+
+// Cleanup timeout on unmount
+watch(() => importErrors.value.length, (newLength) => {
+    if (newLength === 0 && importErrorTimeout) {
+        clearTimeout(importErrorTimeout);
+        importErrorTimeout = null;
+    }
 });
 </script>

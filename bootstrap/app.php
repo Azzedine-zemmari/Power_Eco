@@ -6,6 +6,7 @@ use Illuminate\Foundation\Configuration\Middleware;
 use App\Http\Middleware\RoleMiddleware;
 use Illuminate\Auth\Middleware\Authenticate;
 use App\Http\Middleware\CorsMiddleware;
+use App\Http\Middleware\CookieAuthentication;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -18,6 +19,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'role' => RoleMiddleware::class,
             'auth' => Authenticate::class,
+            'cookie.auth' => CookieAuthentication::class,
         ]);
         $middleware->prepend([
             CorsMiddleware::class,
