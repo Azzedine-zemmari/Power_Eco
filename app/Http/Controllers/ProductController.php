@@ -6,6 +6,9 @@ use App\Models\Product;
 use Illuminate\Http\Request;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class ProductController extends Controller
 {
@@ -56,33 +59,125 @@ class ProductController extends Controller
         ], 201);
     }
     // this function for the user to see the data with some advanced filters
-    public function show(Request $request){
+   public function show(Request $request)
+    {
+        $startTime = microtime(true);
+        
         $perPage = $request->get('per_page', 6);
-        $query = Product::query()->where('status', 'active');
-
-        // Search filter
-        if ($request->has('search')) {
-            $query->where(function($q) use ($request) {
-                $q->where('name', 'like', '%' . $request->search . '%')
-                    ->orWhere('description', 'like', '%' . $request->search . '%');
+        $cacheKey = 'products_' . md5(serialize($request->all()));
+        
+        // Check if cached
+        if (Cache::has($cacheKey)) {
+            $products = Cache::get($cacheKey);
+            $loadTime = round((microtime(true) - $startTime) * 1000, 2);
+            Log::info("Products loaded from CACHE in {$loadTime}ms");
+            return response()->json($products);
+        }
+        
+        // Not cached, query database
+        $queryStart = microtime(true);
+        
+        $query = Product::where('status', 'active')
+            ->select(['id', 'name', 'description', 'price', 'sell_price', 'image', 'categorie_id', 'stock']);
+        
+        // Apply filters
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'ilike', "%{$search}%")
+                  ->orWhere('description', 'ilike', "%{$search}%");
             });
         }
-
-        // Category filter
-        if ($request->has('category')) {
+        
+        if ($request->filled('category')) {
             $query->where('categorie_id', $request->category);
         }
-
-        // Price range filter
-        if ($request->has('min_price')) {
+        
+        if ($request->filled('min_price')) {
             $query->where('price', '>=', $request->min_price);
         }
-        if ($request->has('max_price')) {
+        
+        if ($request->filled('max_price')) {
             $query->where('price', '<=', $request->max_price);
         }
-
-        $products = $query->paginate($perPage);
+        
+        $products = $query->orderBy('id', 'desc')->paginate($perPage);
+        
+        $queryTime = round((microtime(true) - $queryStart) * 1000, 2);
+        Log::info("Database query took {$queryTime}ms");
+        
+        // Cache the result
+        Cache::put($cacheKey, $products, 300);
+        
+        $totalTime = round((microtime(true) - $startTime) * 1000, 2);
+        Log::info("Total request time: {$totalTime}ms");
+        
         return response()->json($products);
+    }
+    
+    // Debug endpoint to check what's slow
+    public function debug()
+    {
+        $results = [];
+        
+        // 1. Check indexes
+        $start = microtime(true);
+        $indexes = DB::select("SELECT indexname FROM pg_indexes WHERE tablename = 'products'");
+        $results['indexes'] = [
+            'time_ms' => round((microtime(true) - $start) * 1000, 2),
+            'count' => count($indexes),
+            'list' => array_column($indexes, 'indexname')
+        ];
+        
+        // 2. Count products
+        $start = microtime(true);
+        $totalProducts = Product::count();
+        $results['total_products'] = [
+            'time_ms' => round((microtime(true) - $start) * 1000, 2),
+            'count' => $totalProducts
+        ];
+        
+        // 3. Count active products
+        $start = microtime(true);
+        $activeProducts = Product::where('status', 'active')->count();
+        $results['active_products'] = [
+            'time_ms' => round((microtime(true) - $start) * 1000, 2),
+            'count' => $activeProducts
+        ];
+        
+        // 4. Test simple query
+        $start = microtime(true);
+        $simpleQuery = Product::where('status', 'active')
+            ->select(['id', 'name', 'price'])
+            ->limit(6)
+            ->get();
+        $results['simple_query'] = [
+            'time_ms' => round((microtime(true) - $start) * 1000, 2),
+            'count' => $simpleQuery->count()
+        ];
+        
+        // 5. Test with pagination
+        $start = microtime(true);
+        $paginatedQuery = Product::where('status', 'active')
+            ->select(['id', 'name', 'description', 'price', 'sell_price', 'image', 'categorie_id', 'stock'])
+            ->orderBy('id', 'desc')
+            ->paginate(6);
+        $results['paginated_query'] = [
+            'time_ms' => round((microtime(true) - $start) * 1000, 2),
+            'count' => $paginatedQuery->count()
+        ];
+        
+        // 6. Test cache
+        $start = microtime(true);
+        Cache::put('debug_test', 'working', 60);
+        $cacheTest = Cache::get('debug_test');
+        $results['cache'] = [
+            'time_ms' => round((microtime(true) - $start) * 1000, 2),
+            'driver' => config('cache.default'),
+            'working' => $cacheTest === 'working'
+        ];
+        
+        return response()->json($results);
     }
     // this show for product manager
     public function ProductShow(){

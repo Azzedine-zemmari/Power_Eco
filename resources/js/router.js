@@ -163,6 +163,10 @@ const routes = [
             role: 1
         },
         name:'facture'
+    },
+    {
+        path:'/debug',
+        component:() => import('./Pages/TestRoute.vue')
     }
 ];
 

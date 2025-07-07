@@ -15,3 +15,5 @@ Route::get('/reset-password/{token}', function ($token) {
 Route::get('/', function () {
     return response()->file(public_path('login.vue'));
 })->name('login');
+
+

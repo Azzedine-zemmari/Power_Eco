@@ -22,6 +22,8 @@ Route::post('/reset-password', [UserController::class, 'resetPassword']);
 Route::get('/featured-products', [ProductController::class, 'getFeaturedProducts']);
 Route::get('/products', [ProductController::class, 'show']);
 Route::get('/product/{id}', [ProductController::class, 'showProductDetails']);
+Route::get('/debug-products', [App\Http\Controllers\ProductController::class, 'debug']);
+
 
 
 // Admin-only routes
