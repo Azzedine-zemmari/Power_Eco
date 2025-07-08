@@ -76,17 +76,14 @@
                             >
                         </div>
                         <h3 class="mt-6 text-sm text-gray-500">
-                            <a :href="`product/${product.id}`" class="hover:text-green-600 transition-colors">
+                            <RouterLink :to="`product/${product.id}`" class="hover:text-green-600 transition-colors">
                                 <span class="absolute inset-0"></span>
                                 {{ product.name }}
-                            </a>
+                            </RouterLink>
                         </h3>
                         <div class="flex items-center space-x-2">
                             <p class="text-base font-semibold text-gray-900">{{ formatPrice(product.sell_price) }} MAD</p>
                         </div>
-                        <p class="mt-1 text-sm text-gray-500">
-                            {{ $t('home.featured_products.stock') }}: 
-                        </p>
                     </div>
                 </div>
 

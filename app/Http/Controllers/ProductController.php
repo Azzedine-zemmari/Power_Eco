@@ -78,7 +78,7 @@ class ProductController extends Controller
         $queryStart = microtime(true);
         
         $query = Product::where('status', 'active')
-            ->select(['id', 'name', 'description', 'price', 'sell_price', 'image', 'categorie_id', 'stock']);
+            ->select(['id', 'name', 'description', 'sell_price', 'image']);
         
         // Apply filters
         if ($request->filled('search')) {

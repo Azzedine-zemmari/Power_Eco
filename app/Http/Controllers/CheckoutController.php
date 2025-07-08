@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Models\Order;
 use App\Models\OrderItem;
 
+use function PHPUnit\Framework\isArray;
+
 class CheckoutController extends Controller
 {
     public function Checkout(Request $request){
@@ -61,6 +63,10 @@ class CheckoutController extends Controller
                 'quantity' => $item->quantity,
                 'price' => $item->product->price
             ]);
+            $product = \App\Models\Product::where('id',$item->product_id)->first();
+            $product->stock -= $item->quantity;
+            $product->save();
+            // \Illuminate\Support\Facades\Log::info('alsdjflks', $product->toArray());
         }
 
         // clear the users cart

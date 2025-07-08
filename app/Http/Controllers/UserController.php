@@ -146,15 +146,16 @@ class UserController extends Controller
         // Revoke previous tokens if needed
         $user->tokens()->delete();
 
-        // Create token with 1-day expiry
-        $token = $user->createToken('auth_token');
-        $accessToken = $token->accessToken;
-        $accessToken->expires_at = now()->addDay(); // Token expires in 1 day
-        $accessToken->save();
-
+        // Create token (Sanctum does not support expiry natively)
+        $tokenResult = $user->createToken('auth_token');
+        $token = $tokenResult->plainTextToken;
+        // Store token expiry in the database or send expiry info to frontend
+        $user->token_expires_at = now()->addHour();
+        $user->save();
         return response()->json([
             'user' => $user,
-            'token' => $token->plainTextToken
+            'token' => $token,
+            'expires_at' => $user->token_expires_at->toDateTimeString()
         ], 200);
     }
 

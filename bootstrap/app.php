@@ -7,6 +7,7 @@ use App\Http\Middleware\RoleMiddleware;
 use Illuminate\Auth\Middleware\Authenticate;
 use App\Http\Middleware\CorsMiddleware;
 use App\Http\Middleware\CookieAuthentication;
+use App\Http\Middleware\TokenExpires;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -20,6 +21,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'role' => RoleMiddleware::class,
             'auth' => Authenticate::class,
             'cookie.auth' => CookieAuthentication::class,
+            'token.expires'=>TokenExpires::class
         ]);
         $middleware->prepend([
             CorsMiddleware::class,
