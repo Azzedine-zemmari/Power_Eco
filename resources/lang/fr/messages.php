@@ -72,6 +72,45 @@ return [
             'title_2' => 'Commencez votre parcours durable dès aujourd\'hui.',
             'shop_products' => 'Acheter des produits',
         ],
+        'aboutUs' => [
+            'title_1' => 'À propos de Mobilesun',
+            'description_1' =>  "La première marketplace marocaine spécialisée dans les solutions d'énergie renouvelable",
+            'big_description' => " Mobilesun est une jeune entreprise marocaine engagée pour un avenir énergétique plus
+                                propre, plus intelligent et plus accessible à tous. Nous avons créé la première
+                                marketplace spécialisée dans les solutions d'énergie renouvelable, réunissant les
+                                meilleurs fournisseurs de panneaux solaires, batteries, régulateurs, onduleurs, kits
+                                solaires, chauffe-eaux solaires, bornes de recharge, et bien plus encore.",
+            'label' => "Démocratiser l'accès à l'énergie solaire au Maroc",
+            'Market100' => "Marketplace 100% verte",
+            'MarketParagh' => "Sélection rigoureuse de fournisseurs et installateurs marocains et internationaux pour des produits fiables et certifiés.",
+            'aiAssistant' => "Assistant intelligent",
+            'aiDescription' => "Solar Nasih, notre chatbot IA, vous guide dans votre transition énergétique.",
+            'localVision' => "Vision locale",
+            'localDescription' => "Une approche adaptée aux réalités marocaines : climat, besoins, infrastructures.",
+            'joinMovement' => "Rejoignez le mouvement",
+            'joinDescription' => "En choisissant Mobilesun, vous contribuez à un avenir plus durable",
+            'reduceCarbon' => "Réduire votre empreinte carbone",
+            'reduceCarbonDesc' => "Participez à la protection de l'environnement",
+            'reduceBills' => "Diminuer vos factures",
+            'reduceBillsDesc' => "Économisez sur vos coûts énergétiques",
+            'energyTransition' => "Transition énergétique",
+            'energyTransitionDesc' => "Contribuez au développement durable du Maroc",
+            'togetherTitle' => "Ensemble, rendons l'énergie propre, mobile et accessible",
+            'email' => "Email",
+            'phone' => "Téléphone",
+            'solarKits' => "Kits solaires clé en main",
+            'recognizedBrands' => "Composants de marques reconnues",
+            'innovativeEquipment' => "Équipements innovants",
+            'moroccanStandards' => "Offres aux normes marocaines",
+            'needsAnalysis' => "Analyse de vos besoins",
+            'technicalGuidance' => "Orientation technique",
+            'detailedExplanations' => "Explications détaillées",
+            'personalizedStudies' => "Pré-études personnalisées",
+            'accessibilityForAll' => "Accessibilité pour tous",
+            'trainingAndAwareness' => "Formation et sensibilisation",
+            'localSkills' => "Valorisation des compétences locales",
+            'moroccanSuppliers' => "Soutien aux fournisseurs marocains"
+        ]
     ],
     'products' => [
         'page_title' => 'Produits',

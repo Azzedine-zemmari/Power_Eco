@@ -581,7 +581,7 @@ const isFormValid = computed(() => {
 const cartItems = async () => {
     loading.value = true;
     try {
-        const response = await api.get(`${API_BASE_URL}/cart`);
+        const response = await api.get(`/cart`);
         
         items.value = response.data.cart_items || [];
         console.log('Cart items loaded:', items.value);
@@ -637,7 +637,7 @@ const checkout = async () => {
     try {
         console.log('Sending checkout request with data:', formData);
         
-        const response = await api.post(`${API_BASE_URL}/checkout`, formData);
+        const response = await api.post(`/checkout`, formData);
         
         console.log('Checkout response:', response.data);
         

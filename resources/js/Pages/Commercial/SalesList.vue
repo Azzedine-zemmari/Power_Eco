@@ -444,10 +444,39 @@ function csvEscape(value) {
     return escaped;
 }
 
-function downloadCSV() {
+async function downloadCSV() {
     try {
-        if (!sale.value || sale.value.length === 0) {
+        if (!token) {
+            alert('Authentication token missing');
+            return;
+        }
+
+        loading.value = true;
+
+        // Fetch all sales (no pagination)
+        const params = {};
+        if (statusFilter.value && statusFilter.value !== '') {
+            params.status = statusFilter.value;
+        }
+
+        const response = await axios.get(`${API_BASE_URL}/api/sales/data`, {
+            params: { ...params, per_page: 1000000 }, // large number to get all
+            headers: {
+                'Accept': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
+        let allSales = [];
+        if (response.data.data) {
+            allSales = response.data.data;
+        } else if (Array.isArray(response.data)) {
+            allSales = response.data;
+        }
+
+        if (!allSales || allSales.length === 0) {
             alert('No data available to download');
+            loading.value = false;
             return;
         }
 
