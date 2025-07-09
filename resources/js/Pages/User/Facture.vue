@@ -12,11 +12,11 @@
                         </div>
                         <!-- Refresh button -->
                         <button 
-                            @click="data"
+                            @click="fetchData"
                             :disabled="loading"
-                            class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                            class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
                         >
-                            <svg :class="loading ? 'animate-spin' : ''" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <svg :class="loading ? 'animate-pulse' : ''" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                             </svg>
                             {{ loading ? $t('invoice.refreshing') : $t('invoice.refresh') }}
@@ -27,14 +27,68 @@
                 <main class="flex-1 relative overflow-y-auto focus:outline-none">
                     <div class="py-4 md:py-6">
                         <div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
-                            <!-- Loading State -->
-                            <div v-if="loading" class="flex justify-center items-center py-12">
-                                <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-green-500"></div>
-                                <span class="ml-3 text-gray-600">{{$t('invoice.loading')}}</span>
+                            <!-- Loading State with Pulse Animation -->
+                            <div v-if="loading" class="bg-white shadow rounded-lg overflow-hidden">
+                                <!-- Header Skeleton -->
+                                <div class="px-4 py-5 sm:px-6 border-b border-gray-200">
+                                    <div class="flex justify-between items-center">
+                                        <div>
+                                            <div class="h-6 bg-gray-200 rounded w-32 mb-2 animate-pulse"></div>
+                                            <div class="h-4 bg-gray-200 rounded w-24 animate-pulse"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Table Skeleton -->
+                                <div class="hidden md:block">
+                                    <!-- Table Header -->
+                                    <div class="bg-gray-50 px-6 py-3 border-b border-gray-200">
+                                        <div class="grid grid-cols-5 gap-4">
+                                            <div class="h-4 bg-gray-200 rounded animate-pulse"></div>
+                                            <div class="h-4 bg-gray-200 rounded animate-pulse"></div>
+                                            <div class="h-4 bg-gray-200 rounded animate-pulse"></div>
+                                            <div class="h-4 bg-gray-200 rounded animate-pulse"></div>
+                                            <div class="h-4 bg-gray-200 rounded animate-pulse"></div>
+                                        </div>
+                                    </div>
+                                    <!-- Table Rows -->
+                                    <div v-for="n in 5" :key="n" class="px-6 py-4 border-b border-gray-200">
+                                        <div class="grid grid-cols-5 gap-4 items-center">
+                                            <div class="h-4 bg-gray-200 rounded animate-pulse" :style="{ animationDelay: n * 100 + 'ms' }"></div>
+                                            <div class="h-4 bg-gray-200 rounded animate-pulse" :style="{ animationDelay: n * 100 + 50 + 'ms' }"></div>
+                                            <div class="h-4 bg-gray-200 rounded animate-pulse" :style="{ animationDelay: n * 100 + 100 + 'ms' }"></div>
+                                            <div class="h-6 bg-gray-200 rounded-full w-20 animate-pulse" :style="{ animationDelay: n * 100 + 150 + 'ms' }"></div>
+                                            <div class="flex space-x-2">
+                                                <div class="h-8 w-8 bg-gray-200 rounded animate-pulse" :style="{ animationDelay: n * 100 + 200 + 'ms' }"></div>
+                                                <div class="h-8 w-8 bg-gray-200 rounded animate-pulse" :style="{ animationDelay: n * 100 + 250 + 'ms' }"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Mobile Cards Skeleton -->
+                                <div class="md:hidden divide-y divide-gray-200">
+                                    <div v-for="n in 3" :key="n" class="p-4">
+                                        <div class="flex justify-between items-start mb-2">
+                                            <div>
+                                                <div class="h-4 bg-gray-200 rounded w-24 mb-1 animate-pulse" :style="{ animationDelay: n * 150 + 'ms' }"></div>
+                                                <div class="h-3 bg-gray-200 rounded w-20 animate-pulse" :style="{ animationDelay: n * 150 + 50 + 'ms' }"></div>
+                                            </div>
+                                            <div class="h-6 bg-gray-200 rounded-full w-16 animate-pulse" :style="{ animationDelay: n * 150 + 100 + 'ms' }"></div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <div class="h-5 bg-gray-200 rounded w-20 animate-pulse" :style="{ animationDelay: n * 150 + 150 + 'ms' }"></div>
+                                        </div>
+                                        <div class="flex space-x-3">
+                                            <div class="flex-1 h-8 bg-gray-200 rounded animate-pulse" :style="{ animationDelay: n * 150 + 200 + 'ms' }"></div>
+                                            <div class="flex-1 h-8 bg-gray-200 rounded animate-pulse" :style="{ animationDelay: n * 150 + 250 + 'ms' }"></div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
 
                             <!-- Error State -->
-                            <div v-else-if="error" class="bg-red-50 border border-red-200 rounded-md p-4 mb-6">
+                            <div v-else-if="error" class="bg-red-50 border border-red-200 rounded-md p-4 mb-6 animate-fade-in">
                                 <div class="flex">
                                     <div class="flex-shrink-0">
                                         <svg class="h-5 w-5 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -47,7 +101,7 @@
                                             <p>{{ error }}</p>
                                         </div>
                                         <div class="mt-4">
-                                            <button @click="data" class="bg-red-100 px-3 py-2 rounded-md text-sm font-medium text-red-800 hover:bg-red-200">
+                                            <button @click="fetchData" class="bg-red-100 px-3 py-2 rounded-md text-sm font-medium text-red-800 hover:bg-red-200 transition-colors duration-200">
                                                 {{$t('invoice.retry')}}
                                             </button>
                                         </div>
@@ -56,7 +110,7 @@
                             </div>
 
                             <!-- Empty State -->
-                            <div v-else-if="!loading && orders.length === 0" class="bg-white shadow rounded-lg">
+                            <div v-else-if="!loading && orders.length === 0" class="bg-white shadow rounded-lg animate-fade-in">
                                 <div class="text-center py-12">
                                     <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -67,7 +121,7 @@
                             </div>
 
                             <!-- Factures List -->
-                            <div v-else class="bg-white shadow rounded-lg overflow-hidden">
+                            <div v-else class="bg-white shadow rounded-lg overflow-hidden animate-fade-in">
                                 <div class="px-4 py-5 sm:px-6 border-b border-gray-200 flex justify-between items-center">
                                     <div>
                                         <h2 class="text-lg font-medium text-gray-900">{{$t('invoice.list.title')}}</h2>
@@ -98,7 +152,9 @@
                                             </tr>
                                         </thead>
                                         <tbody class="bg-white divide-y divide-gray-200">
-                                            <tr v-for="order in orders" :key="order.orderId" class="hover:bg-gray-50 transition-colors duration-150">
+                                            <tr v-for="(order, index) in orders" :key="order.orderId" 
+                                                class="hover:bg-gray-50 transition-all duration-200 animate-slide-up"
+                                                :style="{ animationDelay: index * 100 + 'ms' }">
                                                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                                                     #ORD_{{ order.orderId }}
                                                 </td>
@@ -110,7 +166,7 @@
                                                 </td>
                                                 <td class="px-6 py-4 whitespace-nowrap">
                                                     <span :class="[
-                                                        'px-2 inline-flex text-xs leading-5 font-semibold rounded-full',
+                                                        'px-2 inline-flex text-xs leading-5 font-semibold rounded-full transition-all duration-200',
                                                         order.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
                                                         order.status === 'completed' ? 'bg-green-100 text-green-800' :
                                                         'bg-red-100 text-red-800'
@@ -120,10 +176,10 @@
                                                 </td>
                                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                                     <div class="flex space-x-3">
-                                                        <button 
-                                                            @click="openModal(order)" 
+                                                        <button
+                                                            @click="openModal(order)"
                                                             :disabled="modalLoading"
-                                                            class="text-green-600 hover:text-green-900 disabled:opacity-50 disabled:cursor-not-allowed"
+                                                            class="text-green-600 hover:text-green-900 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 hover:scale-110"
                                                             :title="$t('invoice.list.actions')"
                                                         >
                                                             <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -131,20 +187,20 @@
                                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                                                             </svg>
                                                         </button>
-                                                        <button 
-                                                            @click="downloadPDF(order)" 
+                                                        <button
+                                                            @click="downloadPDF(order)"
                                                             :disabled="downloadingIds.includes(order.orderId)"
-                                                            class="text-blue-600 hover:text-blue-900 disabled:opacity-50 disabled:cursor-not-allowed"
+                                                            class="text-blue-600 hover:text-blue-900 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 hover:scale-110"
                                                             :title="$t('invoice.modal.download')"
                                                         >
-                                                            <svg v-if="downloadingIds.includes(order.orderId)" class="animate-spin h-5 w-5" fill="none" viewBox="0 0 24 24">
-                                                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                                            </svg>
+                                                            <div v-if="downloadingIds.includes(order.orderId)" class="flex items-center space-x-1">
+                                                                <div class="w-1 h-1 bg-blue-600 rounded-full animate-pulse"></div>
+                                                                <div class="w-1 h-1 bg-blue-600 rounded-full animate-pulse" style="animation-delay: 0.2s"></div>
+                                                                <div class="w-1 h-1 bg-blue-600 rounded-full animate-pulse" style="animation-delay: 0.4s"></div>
+                                                            </div>
                                                             <svg v-else class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                                                             </svg>
-                                                            <!-- Only SVG, no text for download -->
                                                         </button>
                                                     </div>
                                                 </td>
@@ -156,14 +212,16 @@
                                 <!-- Mobile Card View -->
                                 <div class="md:hidden">
                                     <div class="divide-y divide-gray-200">
-                                        <div v-for="order in orders" :key="order.orderId" class="p-4 hover:bg-gray-50 transition-colors duration-150">
+                                        <div v-for="(order, index) in orders" :key="order.orderId" 
+                                             class="p-4 hover:bg-gray-50 transition-all duration-200 animate-slide-up"
+                                             :style="{ animationDelay: index * 150 + 'ms' }">
                                             <div class="flex justify-between items-start mb-2">
                                                 <div>
                                                     <p class="text-sm font-medium text-gray-900">#ORD_{{ order.orderId }}</p>
                                                     <p class="text-xs text-gray-500">{{ formatDate(order.created_at) }}</p>
                                                 </div>
                                                 <span :class="[
-                                                    'px-2 inline-flex text-xs leading-5 font-semibold rounded-full',
+                                                    'px-2 inline-flex text-xs leading-5 font-semibold rounded-full transition-all duration-200',
                                                     order.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
                                                     order.status === 'completed' ? 'bg-green-100 text-green-800' :
                                                     'bg-red-100 text-red-800'
@@ -175,10 +233,10 @@
                                                 <p class="text-sm font-semibold text-gray-900">{{ formatPrice(order.totalPrice) }} DH</p>
                                             </div>
                                             <div class="flex space-x-3">
-                                                <button 
-                                                    @click="openModal(order)" 
+                                                <button
+                                                    @click="openModal(order)"
                                                     :disabled="modalLoading"
-                                                    class="flex-1 inline-flex items-center justify-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-green-700 bg-green-100 hover:bg-green-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                                                    class="flex-1 inline-flex items-center justify-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-green-700 bg-green-100 hover:bg-green-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
                                                 >
                                                     <svg class="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -186,19 +244,20 @@
                                                     </svg>
                                                     {{$t('invoice.modal.title')}}
                                                 </button>
-                                                <button 
-                                                    @click="downloadPDF(order)" 
+                                                <button
+                                                    @click="downloadPDF(order)"
                                                     :disabled="downloadingIds.includes(order.orderId)"
-                                                    class="flex-1 inline-flex items-center justify-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-blue-700 bg-blue-100 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                                                    class="flex-1 inline-flex items-center justify-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-blue-700 bg-blue-100 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
                                                 >
-                                                    <svg v-if="downloadingIds.includes(order.orderId)" class="animate-spin h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24">
-                                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                                    </svg>
+                                                    <div v-if="downloadingIds.includes(order.orderId)" class="flex items-center space-x-1 mr-2">
+                                                        <div class="w-1 h-1 bg-blue-700 rounded-full animate-pulse"></div>
+                                                        <div class="w-1 h-1 bg-blue-700 rounded-full animate-pulse" style="animation-delay: 0.2s"></div>
+                                                        <div class="w-1 h-1 bg-blue-700 rounded-full animate-pulse" style="animation-delay: 0.4s"></div>
+                                                    </div>
                                                     <svg v-else class="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                                                     </svg>
-                                                    <!-- Only SVG, no text for download -->
+                                                    {{ downloadingIds.includes(order.orderId) ? $t('invoice.modal.downloading') : $t('invoice.modal.download') }}
                                                 </button>
                                             </div>
                                         </div>
@@ -207,7 +266,7 @@
                             </div>
 
                             <!-- Success Message -->
-                            <div v-if="successMessage" class="mt-6 bg-green-50 border border-green-200 rounded-md p-4">
+                            <div v-if="successMessage" class="mt-6 bg-green-50 border border-green-200 rounded-md p-4 animate-fade-in">
                                 <div class="flex">
                                     <div class="flex-shrink-0">
                                         <svg class="h-5 w-5 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -218,7 +277,7 @@
                                         <p class="text-sm font-medium text-green-800">{{ successMessage }}</p>
                                     </div>
                                     <div class="ml-auto pl-3">
-                                        <button @click="successMessage = ''" class="inline-flex text-green-400 hover:text-green-500">
+                                        <button @click="successMessage = ''" class="inline-flex text-green-400 hover:text-green-500 transition-colors duration-200">
                                             <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                                             </svg>
@@ -233,18 +292,61 @@
         </div>
 
         <!-- Invoice Modal -->
-        <div v-if="showModal" class="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <div v-if="showModal" class="fixed inset-0 z-50 overflow-y-auto animate-fade-in" aria-labelledby="modal-title" role="dialog" aria-modal="true">
             <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
                 <!-- Background overlay -->
                 <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true" @click="closeModal"></div>
-
+                
                 <!-- Modal panel -->
-                <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-4xl sm:w-full">
+                <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-4xl sm:w-full animate-scale-up">
                     <!-- Modal Loading State -->
                     <div v-if="modalLoading" class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                        <div class="flex justify-center items-center py-12">
-                            <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-green-500"></div>
-                            <span class="ml-3 text-gray-600">{{$t('invoice.loading')}}</span>
+                        <div class="space-y-4">
+                            <!-- Header Skeleton -->
+                            <div class="border-b border-gray-200 pb-4 mb-4">
+                                <div class="flex justify-between items-start">
+                                    <div>
+                                        <div class="h-8 bg-gray-200 rounded w-32 mb-2 animate-pulse"></div>
+                                        <div class="h-4 bg-gray-200 rounded w-24 animate-pulse"></div>
+                                    </div>
+                                    <div class="text-right">
+                                        <div class="h-4 bg-gray-200 rounded w-28 mb-1 animate-pulse"></div>
+                                        <div class="h-4 bg-gray-200 rounded w-20 animate-pulse"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Customer Info Skeleton -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                                <div>
+                                    <div class="h-6 bg-gray-200 rounded w-24 mb-2 animate-pulse"></div>
+                                    <div class="space-y-1">
+                                        <div class="h-4 bg-gray-200 rounded w-32 animate-pulse"></div>
+                                        <div class="h-4 bg-gray-200 rounded w-40 animate-pulse"></div>
+                                        <div class="h-4 bg-gray-200 rounded w-28 animate-pulse"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Table Skeleton -->
+                            <div class="space-y-3">
+                                <div class="bg-gray-50 p-3 rounded">
+                                    <div class="grid grid-cols-4 gap-4">
+                                        <div class="h-4 bg-gray-200 rounded animate-pulse"></div>
+                                        <div class="h-4 bg-gray-200 rounded animate-pulse"></div>
+                                        <div class="h-4 bg-gray-200 rounded animate-pulse"></div>
+                                        <div class="h-4 bg-gray-200 rounded animate-pulse"></div>
+                                    </div>
+                                </div>
+                                <div v-for="n in 3" :key="n" class="p-3 border-b">
+                                    <div class="grid grid-cols-4 gap-4">
+                                        <div class="h-4 bg-gray-200 rounded animate-pulse" :style="{ animationDelay: n * 100 + 'ms' }"></div>
+                                        <div class="h-4 bg-gray-200 rounded animate-pulse" :style="{ animationDelay: n * 100 + 50 + 'ms' }"></div>
+                                        <div class="h-4 bg-gray-200 rounded animate-pulse" :style="{ animationDelay: n * 100 + 100 + 'ms' }"></div>
+                                        <div class="h-4 bg-gray-200 rounded animate-pulse" :style="{ animationDelay: n * 100 + 150 + 'ms' }"></div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -304,7 +406,7 @@
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                             {{ formatPrice(product.price) }} DH
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900">
                                             {{ formatPrice(product.price * product.quantity) }} DH
                                         </td>
                                     </tr>
@@ -325,26 +427,27 @@
                     
                     <!-- Modal Footer -->
                     <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                        <button 
-                            type="button" 
-                            @click="downloadPDF(selectedOrder)" 
+                        <button
+                            type="button"
+                            @click="downloadPDF(selectedOrder)"
                             :disabled="downloadingIds.includes(selectedOrder?.orderId)"
-                            class="w-full inline-flex justify-center items-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:ml-3 sm:w-auto sm:text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                            class="w-full inline-flex justify-center items-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:ml-3 sm:w-auto sm:text-sm disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
                         >
-                            <svg v-if="downloadingIds.includes(selectedOrder?.orderId)" class="animate-spin h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24">
-                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                            </svg>
+                            <div v-if="downloadingIds.includes(selectedOrder?.orderId)" class="flex items-center space-x-1 mr-2">
+                                <div class="w-1 h-1 bg-white rounded-full animate-pulse"></div>
+                                <div class="w-1 h-1 bg-white rounded-full animate-pulse" style="animation-delay: 0.2s"></div>
+                                <div class="w-1 h-1 bg-white rounded-full animate-pulse" style="animation-delay: 0.4s"></div>
+                            </div>
                             <svg v-else class="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                             </svg>
                             {{ downloadingIds.includes(selectedOrder?.orderId) ? $t('invoice.modal.downloading') : $t('invoice.modal.download') }}
                         </button>
-                        <button 
-                            type="button" 
-                            @click="closeModal" 
+                        <button
+                            type="button"
+                            @click="closeModal"
                             :disabled="modalLoading"
-                            class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                            class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
                         >
                             {{$t('invoice.modal.close')}}
                         </button>
@@ -362,6 +465,7 @@ import UserSideBar from '../../components/UserSideBar.vue';
 import { jsPDF } from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { useI18n } from 'vue-i18n';
+
 const { t } = useI18n();
 
 const orders = ref([]);
@@ -373,7 +477,7 @@ const downloadingIds = ref([]);
 const error = ref('');
 const successMessage = ref('');
 
-const data = async () => {
+const fetchData = async () => {
     loading.value = true;
     error.value = '';
     
@@ -545,5 +649,66 @@ const downloadPDF = async (order) => {
     }
 };
 
-onMounted(data);
+onMounted(fetchData);
 </script>
+
+<style scoped>
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+@keyframes fade-in {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slide-up {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes scale-up {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.animate-pulse {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.animate-fade-in {
+    animation: fade-in 0.3s ease-out;
+}
+
+.animate-slide-up {
+    animation: slide-up 0.4s ease-out forwards;
+    opacity: 0;
+}
+
+.animate-scale-up {
+    animation: scale-up 0.2s ease-out;
+}
+</style>

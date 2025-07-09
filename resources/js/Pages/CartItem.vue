@@ -193,6 +193,7 @@ import { ref, onMounted, computed } from 'vue';
 import axios from 'axios';
 import { useCartStore } from '../stores/CartStore';
 import { useRouter } from 'vue-router';
+import api from '../axios';
 
 const items = ref([]);
 const loading = ref(false);
@@ -234,11 +235,7 @@ const total = computed(() => {
 const cartItems = async () => {
     loading.value = true;
     try {
-        const response = await axios.get('/api/cart', {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`
-            }
-        });
+        const response = await api.get('/cart');
         
         items.value = response.data.cart_items || [];
         console.log(items.value);
@@ -257,12 +254,8 @@ const updateQuantity = async (item, newQuantity) => {
     try {
         item.quantity = parseInt(newQuantity);
         
-        await axios.put(`/api/cart/${item.product_id}`, {
+        await api.put(`/cart/${item.product_id}`, {
             quantity: parseInt(newQuantity)
-        }, {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`
-            }
         });
         
         console.log('Quantity updated successfully');
@@ -281,11 +274,7 @@ const removeItem = async (item) => {
     
     try {
         console.log(item);
-        await axios.delete(`/api/cart/${item.id}/drop`, {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`
-            }
-        });
+        await api.delete(`/cart/${item.id}/drop`);
         
         // Remove item from local state
         items.value = items.value.filter(cartItem => cartItem.product_id !== item.product_id);

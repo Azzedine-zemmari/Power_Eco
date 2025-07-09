@@ -24,7 +24,8 @@ class User extends Authenticatable
         'email',
         'password',
         'role_id',
-        'set_password_token'
+        'set_password_token',
+        'token_expires_at'
     ];
 
     protected $dates = ['deleted_at'];
@@ -51,4 +52,7 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+    protected $casts = [
+        'token_expires_at' => 'datetime'
+    ];
 }

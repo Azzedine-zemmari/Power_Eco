@@ -146,18 +146,20 @@ class UserController extends Controller
         // Revoke previous tokens if needed
         $user->tokens()->delete();
 
-        // Create token (Sanctum does not support expiry natively)
-        $tokenResult = $user->createToken('auth_token');
-        $token = $tokenResult->plainTextToken;
-        // Store token expiry in the database or send expiry info to frontend
+        // Create token
+        $token = $user->createToken('auth_token')->plainTextToken;
+
+        // Save token expiry manually
         $user->token_expires_at = now()->addHour();
         $user->save();
+
+        // Return response
         return response()->json([
             'user' => $user,
             'token' => $token,
-            'expires_at' => $user->token_expires_at->toDateTimeString()
+            'expires_at' => $user->token_expires_at ? $user->token_expires_at->toDateTimeString() : null
         ], 200);
-    }
+}
 
     public function UserRegistre(Request $request){
         $request->validate([

@@ -132,6 +132,7 @@ import Navbar from '../components/Navbar.vue';
 import Footer from '../components/Footer.vue'
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
+import api from '../axios';
 
 const featuredProducts = ref([]);
 const loading = ref(false);
@@ -158,11 +159,7 @@ const handleImageError = (event) => {
 const fetchFeaturedProducts = async () => {
     loading.value = true;
     try {
-        const response = await axios.get('http://localhost:8000/api/featured-products', {
-            headers: {
-                'Accept': 'application/json'
-            }
-        });
+        const response = await api.get('/featured-products');
         
         // Handle different response structures
         if (response.data && Array.isArray(response.data.data)) {

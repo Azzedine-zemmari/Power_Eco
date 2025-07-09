@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import axios from 'axios'
+import api from '../axios'
 
 export const useCartStore = defineStore('cart', () => {
   const cartCount = ref(0)
@@ -12,9 +12,7 @@ export const useCartStore = defineStore('cart', () => {
       return
     }
     try {
-      const res = await axios.get('http://localhost:8000/api/cart/count', {
-        headers: { Authorization: `Bearer ${token}` }
-      })
+      const res = await api.get('/cart/count')
       cartCount.value = res.data ?? 0
     } catch (error) {
       console.error(error)

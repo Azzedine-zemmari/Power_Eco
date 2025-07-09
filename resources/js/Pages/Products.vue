@@ -235,6 +235,7 @@ import { useCartStore } from '../stores/CartStore';
 import { useRouter, useRoute, RouterLink } from 'vue-router';
 import Notification from '../components/Notification.vue';
 import { useI18n } from 'vue-i18n';
+import api from '../axios';
 
 const { t } = useI18n();
 
@@ -295,12 +296,7 @@ const handleImageError = (event) => {
 const fetchCategories = async () => {
     categoriesLoading.value = true;
     try {
-        const response = await axios.get('http://localhost:8000/api/categories', {
-            headers: {
-                Accept: 'application/json',
-                Authorization: `Bearer ${token}`
-            }
-        });
+        const response = await api.get('/categories');
         
         // Handle different response structures
         if (response.data && Array.isArray(response.data.categories)) {
@@ -343,7 +339,6 @@ const buildQueryParams = () => {
     
     return params.toString();
 };
-
 const fetchProducts = async (page = 1, append = false) => {
     if (page === 1) {
         initialLoading.value = true;
@@ -355,12 +350,7 @@ const fetchProducts = async (page = 1, append = false) => {
         const queryParams = buildQueryParams();
         const url = `http://localhost:8000/api/products?page=${page}&per_page=6${queryParams ? '&' + queryParams : ''}`;
         
-        const response = await axios.get(url, {
-            headers: {
-                Accept: 'application/json',
-                Authorization: `Bearer ${token}`
-            }
-        });
+        const response = await api.get(url);
         
         const newProducts = response.data;
         
@@ -436,13 +426,9 @@ const addToCart = async (product) => {
     addingToCart.value = product.id;
     
     try {
-        await axios.post('/api/cart/add', {
+        await api.post('/cart/add', {
             product_id: product.id,
             quantity: 1
-        }, {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`
-            }
         });
         
         cart.cartCount += 1;

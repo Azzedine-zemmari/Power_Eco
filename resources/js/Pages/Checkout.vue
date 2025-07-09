@@ -430,6 +430,7 @@ import { ref, onMounted, computed, reactive, watch } from 'vue';
 import axios from 'axios';
 import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
+import api from '../axios';
 
 const { t } = useI18n();
 const router = useRouter();
@@ -580,12 +581,7 @@ const isFormValid = computed(() => {
 const cartItems = async () => {
     loading.value = true;
     try {
-        const response = await axios.get(`${API_BASE_URL}/api/cart`, {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`,
-                'Accept': 'application/json'
-            }
-        });
+        const response = await api.get(`${API_BASE_URL}/cart`);
         
         items.value = response.data.cart_items || [];
         console.log('Cart items loaded:', items.value);
@@ -641,13 +637,7 @@ const checkout = async () => {
     try {
         console.log('Sending checkout request with data:', formData);
         
-        const response = await axios.post(`${API_BASE_URL}/api/checkout`, formData, {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`,
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            }
-        });
+        const response = await api.post(`${API_BASE_URL}/checkout`, formData);
         
         console.log('Checkout response:', response.data);
         

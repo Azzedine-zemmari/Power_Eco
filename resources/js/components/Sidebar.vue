@@ -70,8 +70,7 @@ import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import SidebarLink from './SidebarLink.vue'
 import LogoutButton from './LogoutButton.vue'
-import axios from 'axios'
-
+import api from '../axios'
 const route = useRoute()
 const current = route.path
 const isOpen = ref(false)
@@ -80,12 +79,7 @@ const token = localStorage.getItem('token')
 
 async function fetchUserData() {
     try {
-        const response = await axios.get('http://localhost:8000/api/user/data', {
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Accept': 'application/json'
-            }
-        });
+        const response = await api.get('/user/data');
         user.value = response.data;
     } catch (error) {
         console.error('Error fetching user data:', error);

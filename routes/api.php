@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FactureController;
 use App\Http\Controllers\DownloadController;
 
+
 // Public routes (no authentication required)
 Route::post('/login', [UserController::class, 'login']);
 Route::post('/UserRegister', [UserController::class, 'UserRegistre']);
@@ -28,7 +29,7 @@ Route::get('/categories', [CategoryController::class, 'show']);
 
 
 // Admin-only routes
-Route::middleware(['auth:sanctum', 'role:4','token.expires'])->group(function(){
+Route::middleware(['auth:sanctum', 'role:4'])->group(function(){
     Route::delete('/users/{id}/archive', [UserController::class, 'archiveUser']);
     Route::get('/Users', [UserController::class, 'show']);
     Route::post('/users/{id}/active', [UserController::class, 'activeUser']);
@@ -36,7 +37,7 @@ Route::middleware(['auth:sanctum', 'role:4','token.expires'])->group(function(){
 });
 
 // Product Manager-only routes
-Route::middleware(['auth:sanctum', 'role:2','token.expires'])->group(function(){
+Route::middleware(['auth:sanctum', 'role:2'])->group(function(){
     Route::post('/categories/create', [CategoryController::class, 'createCategory']);
     Route::put('/categories/{id}', [CategoryController::class, 'update']);
     Route::post('/products/create', [ProductController::class, 'create']);
@@ -48,13 +49,13 @@ Route::middleware(['auth:sanctum', 'role:2','token.expires'])->group(function(){
 });
 
 // Commercial-only routes
-Route::middleware(['auth:sanctum', 'role:3','token.expires'])->group(function(){
+Route::middleware(['auth:sanctum', 'role:3'])->group(function(){
     Route::get('/sales/data', [CommercialController::class, 'sales']);
     Route::put('/sales/update/{id}', [CommercialController::class, 'update']);
 });
 
 // General authenticated routes (any authenticated user)
-Route::middleware(['auth:sanctum','token.expires'])->group(function () {
+Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/logout', [UserController::class, 'logout']);
     Route::get('/user', function (Request $request) {
         return $request->user();

@@ -129,9 +129,9 @@ const routes = [
         path: '/user/profile',
         component: () => import('./Pages/User/Profile.vue'),
         meta: {
-            title: 'User Profile',
             requiresAuth: true,
-            role: 1
+            role: 1,
+            title: 'User Profile',
         },
         name:'profile'
     },
@@ -185,11 +185,21 @@ async function validateToken(token) {
                 'Accept': 'application/json'
             }
         });
-        return response.ok;
+
+        if (!response.ok) {
+            const data = await response.json();
+            if (data.message === 'Token expired. Please log in again.') {
+                clearAuthData();
+            }
+            return false;
+        }
+
+        return true;
     } catch (error) {
         return false;
     }
 }
+
 
 // Helper function to clear invalid auth data
 function clearAuthData() {

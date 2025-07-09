@@ -42,7 +42,7 @@
                         </RouterLink>
                         <LanguageSwitcher variant="navbar" />
 
-                        <div v-if="isAuthenticated" class="flex items-center space-x-4">
+                        <div v-if="authStore.isAuthenticated" class="flex items-center space-x-4">
                             <RouterLink :to="{name:'profile'}"
                                 class="p-1 rounded-full text-gray-600 hover:text-gray-800 focus:outline-none">
                                 <span class="sr-only">{{ $t('nav.links.profile') }}</span>
@@ -114,7 +114,7 @@
                         </span>
                     </RouterLink>
                     <LanguageSwitcher variant="sidebar" />
-                    <div v-if="isAuthenticated" class="flex items-center space-x-4">
+                    <div v-if="authStore.isAuthenticated" class="flex items-center space-x-4">
                         <RouterLink :to="{name:'profile'}"
                             class="p-1 rounded-full text-gray-600 hover:text-gray-800 focus:outline-none">
                             <span class="sr-only">{{ $t('nav.links.profile') }}</span>
@@ -142,26 +142,23 @@ import { ref, onMounted, computed } from 'vue';
 import axios from 'axios';
 import { useI18n } from 'vue-i18n';
 import LanguageSwitcher from './LanguageSwitcher.vue';
+import api from '../axios';
+import { useAuthStore } from '../stores/AuthStore'
+
 
 
 const cartStore = useCartStore();
+const authStore = useAuthStore()
 const isMobileMenuOpen = ref(false);
 
 
-const isAuthenticated = computed(() => {
-    return !!localStorage.getItem('token');
-} )
+console.log('authStore token:', authStore.token)
+console.log('authStore isAuthenticated:', authStore.isAuthenticated)
 const user = ref({})
-const token = localStorage.getItem('token')
 
 async function fetchUserData() {
     try {
-        const response = await axios.get('http://localhost:8000/api/user/data', {
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Accept': 'application/json'
-            }
-        });
+        const response = await api.get('/user/data');
         user.value = response.data;
         console.log('navbar : ', user.value);
         
@@ -184,7 +181,7 @@ const dashboardLink = computed(() => {
     }
 });
     onMounted(() => {
-        if (isAuthenticated.value) {
+        if (authStore.isAuthenticated) {
         fetchUserData();
     }
         cartStore.fetchCartCount();

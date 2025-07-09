@@ -4,9 +4,12 @@
   </button>
 </template>
 <script setup>
-import axios from 'axios';
+import api from '../axios';
 import { useRouter } from 'vue-router';
 import { computed } from 'vue';
+import { useAuthStore } from '@/stores/AuthStore';
+
+const auth = useAuthStore();
 
 const props = defineProps({
     variant:{
@@ -26,21 +29,7 @@ const computedClass = computed(()=>{
     }
 })
 
-async function logout() {
-    try{
-        const token = localStorage.getItem('token')
-        if (!token) throw new Error('Token not found');
-        await axios.post('http://localhost:8000/api/logout', {}, {
-            headers : {
-                Authorization : `Bearer ${token}`
-            }
-        })
-
-        localStorage.removeItem('token')
-        localStorage.removeItem('role')
-        router.push('/login')
-    }catch(error){
-        console.error('Logout failed: ',error)
+    async function logout() {
+        await auth.logout();
     }
-}
 </script>

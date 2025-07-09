@@ -299,6 +299,7 @@ const productId = route.params.id;
 const showNotification = ref(false);
 const notificationMessage = ref('');
 const { t } = useI18n();
+import api from '../axios';
 
 const isAuthenticated = computed(() => {
     return !!localStorage.getItem('token');
@@ -329,12 +330,7 @@ const fetchProduct = async () => {
     
     try {
         const token = localStorage.getItem('token');
-        const response = await axios.get(`http://localhost:8000/api/product/${productId}`, {
-            headers: {
-                Accept: 'application/json',
-                Authorization: `Bearer ${token}`
-            }
-        });
+        const response = await api.get(`/product/${productId}`);
         
         product.value = response.data.product;
         relatedProducts.value = response.data.relatedProducts || [];
@@ -392,18 +388,12 @@ const addToCart = async () => {
     addingToCart.value = true;
     
     try {
-        await axios.post('http://localhost:8000/api/cart/add', {
+        await api.post('/cart/add', {
             product_id: productId,
             quantity: quantity.value
-        }, {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`,
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            }
         });
         
-        cart.cartCount += quantity.value;
+        cart.cartCount += 1;
         notificationMessage.value = t('cart.added_message', {
             product: product.value.name
         });

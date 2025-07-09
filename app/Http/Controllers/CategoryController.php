@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class CategoryController extends Controller
@@ -23,9 +24,9 @@ class CategoryController extends Controller
         ], 201);
     }
     public function show(){
-        $category = Category::all();
-        Log::info('this is category',$category);
-        return response()->json($category);
+        $categories = DB::table('categories')->get();
+        Log::info('this is category', ['categories' => $categories]);
+        return response()->json($categories);
     }
 
     public function update(Request $request, $id)

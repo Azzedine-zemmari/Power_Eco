@@ -13,7 +13,6 @@
                         </svg>
                     </button>
                 </div>
-
                 <!-- Top header -->
                 <div class="flex-shrink-0 flex h-16 bg-white shadow">
                     <div class="flex-1 px-4 flex justify-between items-center">
@@ -24,27 +23,132 @@
                         <button 
                             @click="fetchDevis"
                             :disabled="loading"
-                            class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                            class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 hover:scale-105 active:scale-95"
                         >
-                            <svg :class="loading ? 'animate-spin' : ''" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <svg :class="loading ? 'animate-pulse' : ''" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                             </svg>
                             {{ loading ? $t('devis.refreshing') : $t('devis.refresh') }}
                         </button>
                     </div>
                 </div>
-
                 <main class="flex-1 relative overflow-y-auto focus:outline-none">
                     <div class="py-4 md:py-6">
                         <div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
                             <!-- Loading State -->
-                            <div v-if="loading" class="flex justify-center items-center py-12">
-                                <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-green-500"></div>
-                                <span class="ml-3 text-gray-600">{{$t('devis.loading')}}</span>
+                            <div v-if="loading" class="bg-white shadow rounded-lg overflow-hidden">
+                                <!-- Header Skeleton -->
+                                <div class="px-4 py-5 sm:px-6 border-b border-gray-200 flex flex-col sm:flex-row justify-between items-start sm:items-center">
+                                    <div class="flex-1">
+                                        <div class="h-6 bg-gray-200 rounded animate-pulse mb-2"></div>
+                                        <div class="h-4 bg-gray-200 rounded animate-pulse w-32"></div>
+                                    </div>
+                                    <div class="mt-4 sm:mt-0">
+                                        <div class="h-4 bg-gray-200 rounded animate-pulse w-24"></div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Desktop Table Skeleton -->
+                                <div class="hidden md:block overflow-x-auto">
+                                    <table class="min-w-full divide-y divide-gray-200">
+                                        <thead class="bg-gray-50">
+                                            <tr>
+                                                <th class="px-6 py-3">
+                                                    <div class="h-4 bg-gray-200 rounded animate-pulse"></div>
+                                                </th>
+                                                <th class="px-6 py-3">
+                                                    <div class="h-4 bg-gray-200 rounded animate-pulse"></div>
+                                                </th>
+                                                <th class="px-6 py-3">
+                                                    <div class="h-4 bg-gray-200 rounded animate-pulse"></div>
+                                                </th>
+                                                <th class="px-6 py-3">
+                                                    <div class="h-4 bg-gray-200 rounded animate-pulse"></div>
+                                                </th>
+                                                <th class="px-6 py-3">
+                                                    <div class="h-4 bg-gray-200 rounded animate-pulse"></div>
+                                                </th>
+                                                <th class="px-6 py-3">
+                                                    <div class="h-4 bg-gray-200 rounded animate-pulse"></div>
+                                                </th>
+                                                <th class="px-6 py-3">
+                                                    <div class="h-4 bg-gray-200 rounded animate-pulse"></div>
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="bg-white divide-y divide-gray-200">
+                                            <tr v-for="i in 5" :key="i" :style="{ animationDelay: `${i * 100}ms` }">
+                                                <td class="px-6 py-4">
+                                                    <div class="h-4 bg-gray-200 rounded animate-pulse"></div>
+                                                </td>
+                                                <td class="px-6 py-4">
+                                                    <div class="h-4 bg-gray-200 rounded animate-pulse"></div>
+                                                </td>
+                                                <td class="px-6 py-4">
+                                                    <div class="h-5 bg-gray-200 rounded animate-pulse mb-1"></div>
+                                                    <div class="h-3 bg-gray-200 rounded animate-pulse w-3/4"></div>
+                                                </td>
+                                                <td class="px-6 py-4">
+                                                    <div class="h-4 bg-gray-200 rounded animate-pulse"></div>
+                                                </td>
+                                                <td class="px-6 py-4">
+                                                    <div class="h-4 bg-gray-200 rounded animate-pulse"></div>
+                                                </td>
+                                                <td class="px-6 py-4">
+                                                    <div class="h-4 bg-gray-200 rounded animate-pulse"></div>
+                                                </td>
+                                                <td class="px-6 py-4">
+                                                    <div class="h-6 bg-gray-200 rounded-full animate-pulse w-16"></div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                
+                                <!-- Mobile Card Skeleton -->
+                                <div class="md:hidden divide-y divide-gray-200">
+                                    <div v-for="i in 3" :key="i" class="p-4" :style="{ animationDelay: `${i * 150}ms` }">
+                                        <div class="flex justify-between items-start mb-2">
+                                            <div class="flex-1">
+                                                <div class="h-4 bg-gray-200 rounded animate-pulse mb-1 w-20"></div>
+                                                <div class="h-3 bg-gray-200 rounded animate-pulse w-24"></div>
+                                            </div>
+                                            <div class="h-6 bg-gray-200 rounded-full animate-pulse w-16"></div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <div class="h-4 bg-gray-200 rounded animate-pulse mb-1"></div>
+                                            <div class="h-3 bg-gray-200 rounded animate-pulse w-3/4"></div>
+                                        </div>
+                                        <div class="grid grid-cols-2 gap-4">
+                                            <div>
+                                                <div class="h-3 bg-gray-200 rounded animate-pulse mb-1 w-16"></div>
+                                                <div class="h-4 bg-gray-200 rounded animate-pulse w-20"></div>
+                                            </div>
+                                            <div>
+                                                <div class="h-3 bg-gray-200 rounded animate-pulse mb-1 w-16"></div>
+                                                <div class="h-4 bg-gray-200 rounded animate-pulse w-12"></div>
+                                            </div>
+                                        </div>
+                                        <div class="mt-3 pt-3 border-t border-gray-100">
+                                            <div class="flex justify-between items-center">
+                                                <div class="h-3 bg-gray-200 rounded animate-pulse w-16"></div>
+                                                <div class="h-4 bg-gray-200 rounded animate-pulse w-20"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Footer Skeleton -->
+                                <div class="bg-gray-50 px-4 py-4 sm:px-6">
+                                    <div class="flex justify-between items-center">
+                                        <div class="h-4 bg-gray-200 rounded animate-pulse w-16"></div>
+                                        <div class="h-6 bg-gray-200 rounded animate-pulse w-24"></div>
+                                    </div>
+                                </div>
                             </div>
-
+                            
                             <!-- Error State -->
-                            <div v-else-if="error" class="bg-red-50 border border-red-200 rounded-md p-4 mb-6">
+                            <div v-else-if="error" class="bg-red-50 border border-red-200 rounded-md p-4 mb-6 transition-all duration-300">
                                 <div class="flex">
                                     <div class="flex-shrink-0">
                                         <svg class="h-5 w-5 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -57,16 +161,16 @@
                                             <p>{{ error }}</p>
                                         </div>
                                         <div class="mt-4">
-                                            <button @click="fetchDevis" class="bg-red-100 px-3 py-2 rounded-md text-sm font-medium text-red-800 hover:bg-red-200">
+                                            <button @click="fetchDevis" class="bg-red-100 px-3 py-2 rounded-md text-sm font-medium text-red-800 hover:bg-red-200 transition-all duration-200 hover:scale-105 active:scale-95">
                                                 {{$t('devis.errors.retry')}}
                                             </button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-
+                            
                             <!-- Empty State -->
-                            <div v-else-if="devis.length === 0" class="bg-white shadow rounded-lg">
+                            <div v-else-if="devis.length === 0" class="bg-white shadow rounded-lg transition-all duration-300 hover:shadow-md">
                                 <div class="text-center py-12">
                                     <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -74,15 +178,15 @@
                                     <h3 class="mt-2 text-sm font-medium text-gray-900">{{$t('devis.empty.title')}}</h3>
                                     <p class="mt-1 text-sm text-gray-500">{{$t('devis.empty.description')}}</p>
                                     <div class="mt-6">
-                                        <a href="/products" class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700">
+                                        <a href="/products" class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 transition-all duration-200 hover:scale-105 active:scale-95">
                                             {{$t('devis.empty.browse')}}
                                         </a>
                                     </div>
                                 </div>
                             </div>
-
+                            
                             <!-- Devis List -->
-                            <div v-else class="bg-white shadow rounded-lg overflow-hidden">
+                            <div v-else class="bg-white shadow rounded-lg overflow-hidden transition-all duration-300 hover:shadow-md">
                                 <div class="px-4 py-5 sm:px-6 border-b border-gray-200 flex flex-col sm:flex-row justify-between items-start sm:items-center">
                                     <div>
                                         <h2 class="text-lg font-medium text-gray-900">{{$t('devis.list.header')}}</h2>
@@ -94,7 +198,7 @@
                                         </span>
                                     </div>
                                 </div>
-                                
+                                                                
                                 <!-- Desktop Table -->
                                 <div class="hidden md:block overflow-x-auto">
                                     <table class="min-w-full divide-y divide-gray-200">
@@ -124,7 +228,9 @@
                                             </tr>
                                         </thead>
                                         <tbody class="bg-white divide-y divide-gray-200">
-                                            <tr v-for="devi in devis" :key="devi.id" class="hover:bg-gray-50 transition-colors duration-150">
+                                            <tr v-for="(devi, index) in devis" :key="devi.id" 
+                                                class="hover:bg-gray-50 transition-all duration-200 hover:scale-[1.01]"
+                                                :style="{ animationDelay: `${index * 100}ms` }">
                                                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                                                     #{{ String(devi.id).padStart(4, '0') }}
                                                 </td>
@@ -145,7 +251,7 @@
                                                     {{ formatPrice(calculateTotal(devi)) }} DH
                                                 </td>
                                                 <td class="px-6 py-4 whitespace-nowrap">
-                                                    <span :class="getStatusClass(devi.status)">
+                                                    <span :class="getStatusClass(devi.status)" class="transition-all duration-200">
                                                         {{ formatStatus(devi.status) }}
                                                     </span>
                                                 </td>
@@ -153,17 +259,19 @@
                                         </tbody>
                                     </table>
                                 </div>
-
+                                
                                 <!-- Mobile Card View -->
                                 <div class="md:hidden">
                                     <div class="divide-y divide-gray-200">
-                                        <div v-for="devi in devis" :key="devi.id" class="p-4 hover:bg-gray-50 transition-colors duration-150">
+                                        <div v-for="(devi, index) in devis" :key="devi.id" 
+                                             class="p-4 hover:bg-gray-50 transition-all duration-200 hover:scale-[1.02]"
+                                             :style="{ animationDelay: `${index * 150}ms` }">
                                             <div class="flex justify-between items-start mb-2">
                                                 <div>
                                                     <p class="text-sm font-medium text-gray-900">#{{ String(devi.id).padStart(4, '0') }}</p>
                                                     <p class="text-xs text-gray-500">{{ formatDate(devi.created_at) }}</p>
                                                 </div>
-                                                <span :class="getStatusClass(devi.status)">
+                                                <span :class="getStatusClass(devi.status)" class="transition-all duration-200">
                                                     {{ formatStatus(devi.status) }}
                                                 </span>
                                             </div>
@@ -190,7 +298,7 @@
                                         </div>
                                     </div>
                                 </div>
-
+                                
                                 <!-- Summary Footer -->
                                 <div class="bg-gray-50 px-4 py-4 sm:px-6">
                                     <div class="flex justify-between items-center">
@@ -216,9 +324,7 @@ import { useI18n } from 'vue-i18n';
 const devis = ref([]);
 const loading = ref(true);
 const error = ref('');
-
 const API_BASE_URL = 'http://localhost:8000';
-
 const { t } = useI18n();
 
 const fetchDevis = async () => {

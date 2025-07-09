@@ -73,7 +73,9 @@
     import { useRouter, useRoute, RouterLink } from 'vue-router';
     import axios from 'axios';
     import LanguageSwitcher from '../components/LanguageSwitcher.vue';
+    import { useAuthStore } from '@/stores/AuthStore';
 
+    const auth = useAuthStore();
     const router = useRouter();
     const route = useRoute();
     let email = ref('');
@@ -99,9 +101,8 @@
             const token = response.data.token
 
             // save token and role to localStorage for later requests
-            localStorage.setItem('token',token)
-            localStorage.setItem('role',role)
-            axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+           auth.setAuth(token, role)
+            // axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
             const redirectPath = route.query.redirect;
             if (redirectPath) {
@@ -127,16 +128,15 @@
             }
         }
         catch (error) {
-            if (error.response && error.response.status === 422) {
-                errors.value = error.response.data.errors;
-            } else if (error.response && error.response.status === 403) {
-                generalError.value = error.response.data.message;
-            } else if (error.response && error.response.status === 401) {
-                generalError.value = error.response.data.message;
+            if (error.response?.status === 422) {
+                errors.value = error.response.data.errors
+            } else if ([401, 403].includes(error.response?.status)) {
+                auth.clearAuth()
+                generalError.value = error.response.data.message
             } else {
-                generalError.value = 'An unexpected error occurred. Please try again.';
-                console.error('login failed', error);
+                generalError.value = 'An unexpected error occurred.'
             }
+
         }
     }
-</script>
+</script>   

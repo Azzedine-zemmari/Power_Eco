@@ -61,7 +61,7 @@ import { RouterLink, useRoute } from 'vue-router'
 import SidebarLink from './SidebarLink.vue'
 import LogoutButton from './LogoutButton.vue'
 import { onMounted, ref } from 'vue'
-import axios from 'axios'
+import api from '../axios'
 import LanguageSwitcher from './LanguageSwitcher.vue'
 import { useI18n } from 'vue-i18n'
 import Sidebar from './Sidebar.vue'
@@ -74,11 +74,7 @@ const { t } = useI18n()
 
 const userData = async () =>{
     try{
-        const response = await axios.get('http://localhost:8000/api/user/data',{
-            headers:{
-                Authorization: `Bearer ${localStorage.getItem('token')}`
-            }
-        })
+        const response = await api.get('/user/data')
         user.value = response.data
         console.log(user.value);
         
