@@ -1,0 +1,38 @@
+version: '3.8'             # Use Docker Compose file format version 3.8
+
+services:
+  app:                    # Define the Laravel app service
+    build: .              # Build Docker image from current directory using Dockerfile
+    container_name: laravel_app
+    volumes:
+      - .:/var/www        # Mount current directory into container at /var/www (sync code)
+    ports:
+      - "8000:8000"       # Map host port 8000 to container port 8000 (Laravel serve)
+    depends_on:
+      - db                # This service depends on the 'db' service being started first
+    environment:           # Environment variables accessible by the container (Laravel DB config)
+      DB_CONNECTION: pgsql
+      DB_HOST: db         # hostname to connect to the db service (Docker network)
+      DB_PORT: 5432
+      DB_DATABASE: ${DB_DATABASE}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+    command: php artisan serve --host=0.0.0.0 --port=8000
+  # Run Laravel development server accessible on all interfaces
+
+  db:                     # Define the PostgreSQL database service
+    image: postgres:15     # Use official Postgres version 15 image
+    container_name: pg_db
+    restart: always        # Always restart the container if it stops/crashes
+    environment:           # Postgres database config
+      DB_DATABASE: ${DB_DATABASE}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "5432:5432"       # Map host port 5432 to container port 5432 (default Postgres port)
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+# Persist database data in Docker volume named 'pgdata'
+
+volumes:
+  pgdata:                  # Declare named volume 'pgdata' for persistent DB storage

@@ -1,0 +1,36 @@
+# Node modules (will be installed inside container)
+node_modules
+npm-debug.log
+
+# Vendor directory (PHP dependencies installed inside container)
+vendor
+
+# Laravel environment file (you might want to handle this carefully)
+.env
+.env.local
+.env.*.backup
+
+# Logs and caches
+storage/logs
+storage/framework/cache
+storage/framework/sessions
+storage/framework/views
+
+# Git files
+.git
+.gitignore
+
+# Docker files
+docker-compose.override.yml
+Dockerfile.*
+
+# IDE/editor config files
+.vscode
+.idea
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Build output folders if any (like dist folder for Vue, if you want to rebuild always)
+dist
