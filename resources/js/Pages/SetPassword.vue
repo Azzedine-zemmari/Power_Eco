@@ -29,7 +29,6 @@ const submitPassword = async () => {
         return;
     }
 
-    console.log(password.value, "", confirmPassword.value)
     try {
         await axios.post('http://localhost:8000/api/set-password', {
             token: token,

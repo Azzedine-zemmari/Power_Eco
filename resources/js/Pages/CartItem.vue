@@ -238,7 +238,6 @@ const cartItems = async () => {
         const response = await api.get('/cart');
         
         items.value = response.data.cart_items || [];
-        console.log(items.value);
     } catch (error) {
         console.error(error);
         alert('Failed to load cart');
@@ -258,7 +257,6 @@ const updateQuantity = async (item, newQuantity) => {
             quantity: parseInt(newQuantity)
         });
         
-        console.log('Quantity updated successfully');
     } catch (error) {
         console.error(error);
         alert('Failed to update quantity');
@@ -273,13 +271,11 @@ const removeItem = async (item) => {
     removingItem.value = item.product_id;
     
     try {
-        console.log(item);
         await api.delete(`/cart/${item.id}/drop`);
         
         // Remove item from local state
         items.value = items.value.filter(cartItem => cartItem.product_id !== item.product_id);
         cart.cartCount -= 1;
-        console.log('Item removed successfully');
     } catch (error) {
         console.error(error);
         alert('Failed to remove item');

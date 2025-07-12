@@ -120,6 +120,7 @@ export default {
         add_to_cart: "Add to Cart",
         previous: "Previous",
         next: "Next",
+        category:"Category"
     },
     product_detail: {
         breadcrumb: {
@@ -317,5 +318,12 @@ export default {
         home_title: 'Sign in to your account',
         or: 'Or',
         and:'and'
+    },
+    // Pagination
+    pagination: {
+        previous: 'Previous',
+        next: 'Next',
+        page_info: 'Page {current} of {total}',
+        showing: 'Showing {from} to {to} of {total} results'
     }
 }

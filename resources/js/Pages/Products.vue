@@ -167,10 +167,10 @@
                                     <h3 class="text-lg font-semibold text-gray-900 hover:text-green-600 transition-colors duration-200 line-clamp-2">{{ product.name }}</h3>
                                 </RouterLink>
                                 <p class="mt-1 text-sm text-gray-500 line-clamp-2">{{ product.description }}</p>
+                                <p v-if="product.category"  class="mt-1 text-xs text-green-700 font-medium">{{ $t('products.category') }}: {{ product.category.name }}</p>
                                 <div class="mt-4 flex justify-between items-center">
                                     <div class="flex flex-col">
-                                        <p class="text-lg font-bold text-gray-900">{{ formatPrice(product.sell_price || product.price) }} MAD</p>
-                                        <p v-if="product.sell_price && product.price !== product.sell_price" class="text-sm text-gray-500 line-through">{{ formatPrice(product.price) }} MAD</p>
+                                        <p class="text-lg font-bold text-gray-900">{{ formatPrice(product.sell_price ) }} MAD</p>
                                     </div>
                                     <button 
                                         @click="addToCart(product)" 
@@ -309,7 +309,6 @@ const fetchCategories = async () => {
             categories.value = [];
         }
         
-        console.log('Categories loaded:', categories.value);
     } catch (error) {
         console.error('Error fetching categories:', error);
         categories.value = [];
@@ -320,40 +319,43 @@ const fetchCategories = async () => {
 
 const buildQueryParams = () => {
     const params = new URLSearchParams();
-    
+
     if (filters.value.search) {
         params.append('search', filters.value.search);
     }
-    
+
+    // The backend now supports multiple categories
     if (filters.value.categories.length > 0) {
-        params.append('category', filters.value.categories.join(','));
+        params.append('categories', filters.value.categories.join(','));
     }
-    
+
     if (filters.value.minPrice) {
         params.append('min_price', filters.value.minPrice);
     }
-    
+
     if (filters.value.maxPrice) {
         params.append('max_price', filters.value.maxPrice);
     }
-    
+
     return params.toString();
 };
+
 const fetchProducts = async (page = 1, append = false) => {
     if (page === 1) {
         initialLoading.value = true;
     } else {
         loadingMore.value = true;
     }
-    
+
     try {
         const queryParams = buildQueryParams();
         const url = `http://localhost:8000/api/products?page=${page}&per_page=6${queryParams ? '&' + queryParams : ''}`;
-        
+
         const response = await api.get(url);
-        
+        console.log('products',response);
+
         const newProducts = response.data;
-        
+
         if (append && page > 1) {
             // Smooth append for infinite scroll
             setTimeout(() => {

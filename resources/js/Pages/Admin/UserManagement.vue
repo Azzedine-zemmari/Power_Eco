@@ -637,7 +637,6 @@ const submitForm = async () => {
         email: email.value,
         role_id: parseInt(role_id.value)
     }
-    console.log(formData)
 
     try {
         isLoading.value = true

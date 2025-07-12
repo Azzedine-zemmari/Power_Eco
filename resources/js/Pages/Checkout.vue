@@ -584,7 +584,6 @@ const cartItems = async () => {
         const response = await api.get(`/cart`);
         
         items.value = response.data.cart_items || [];
-        console.log('Cart items loaded:', items.value);
     } catch (error) {
         console.error('Failed to load cart:', error);
         showToast(t('checkout.toast_load_cart_failed'), 'error');
@@ -608,11 +607,9 @@ const showToast = (message, type = 'success') => {
 
 // Update the checkout function
 const checkout = async () => {
-    console.log('Checkout function called');
     
     // Prevent double submission
     if (isProcessing.value) {
-        console.log('Already processing, returning');
         return;
     }
     
@@ -635,12 +632,9 @@ const checkout = async () => {
     isProcessing.value = true;
     
     try {
-        console.log('Sending checkout request with data:', formData);
         
         const response = await api.post(`/checkout`, formData);
-        
-        console.log('Checkout response:', response.data);
-        
+                
         // Handle successful checkout
         if (response.data.success || response.data.message) {
             showToast(t('checkout.toast_order_success'), 'success');

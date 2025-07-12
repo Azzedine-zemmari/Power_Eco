@@ -332,7 +332,6 @@ const fetchDevis = async () => {
     error.value = '';
     
     try {
-        console.log('Fetching devis data...');
         
         const token = localStorage.getItem('token');
         if (!token) {
@@ -346,7 +345,6 @@ const fetchDevis = async () => {
             }
         });
 
-        console.log('API response:', response.data);
 
         // Handle different response structures
         let devisData;
@@ -361,7 +359,6 @@ const fetchDevis = async () => {
         }
 
         devis.value = devisData;
-        console.log('Devis loaded:', devis.value);
 
     } catch (err) {
         console.error('Error fetching devis:', err);

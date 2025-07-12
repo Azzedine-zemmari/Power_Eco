@@ -265,6 +265,90 @@
                                 </div>
                             </div>
 
+                            <!-- Pagination -->
+                            <div v-if="!loading && orders.length > 0 && lastPage > 1" class="mt-6 bg-white shadow rounded-lg">
+                                <div class="px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
+                                    <!-- Mobile pagination info -->
+                                    <div class="flex-1 flex justify-between items-center sm:hidden">
+                                        <button
+                                            @click="changePage(currentPage - 1)"
+                                            :disabled="currentPage === 1"
+                                            class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+                                        >
+                                            {{ $t('pagination.previous') }}
+                                        </button>
+                                        <div class="text-sm text-gray-700">
+                                            {{ $t('pagination.page_info', { current: currentPage, total: lastPage }) }}
+                                        </div>
+                                        <button
+                                            @click="changePage(currentPage + 1)"
+                                            :disabled="currentPage === lastPage"
+                                            class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+                                        >
+                                            {{ $t('pagination.next') }}
+                                        </button>
+                                    </div>
+                                    
+                                    <!-- Desktop pagination -->
+                                    <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+                                        <div>
+                                            <p class="text-sm text-gray-700">
+                                                {{ $t('pagination.showing', { from: ((currentPage - 1) * perPage) + 1, to: Math.min(currentPage * perPage, total), total: total }) }}
+                                            </p>
+                                        </div>
+                                        <div>
+                                            <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+                                                <!-- Previous button -->
+                                                <button
+                                                    @click="changePage(currentPage - 1)"
+                                                    :disabled="currentPage === 1"
+                                                    class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+                                                >
+                                                    <span class="sr-only">{{ $t('pagination.previous') }}</span>
+                                                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                                                    </svg>
+                                                </button>
+                                                
+                                                <!-- Page numbers -->
+                                                <template v-for="page in getPageNumbers()" :key="page">
+                                                    <button
+                                                        v-if="page !== '...'"
+                                                        @click="changePage(page)"
+                                                        :class="[
+                                                            'relative inline-flex items-center px-4 py-2 border text-sm font-medium transition-all duration-200',
+                                                            page === currentPage
+                                                                ? 'z-10 bg-green-50 border-green-500 text-green-600'
+                                                                : 'bg-white border-gray-300 text-gray-500 hover:bg-gray-50'
+                                                        ]"
+                                                    >
+                                                        {{ page }}
+                                                    </button>
+                                                    <span
+                                                        v-else
+                                                        class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700"
+                                                    >
+                                                        ...
+                                                    </span>
+                                                </template>
+                                                
+                                                <!-- Next button -->
+                                                <button
+                                                    @click="changePage(currentPage + 1)"
+                                                    :disabled="currentPage === lastPage"
+                                                    class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+                                                >
+                                                    <span class="sr-only">{{ $t('pagination.next') }}</span>
+                                                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                                                    </svg>
+                                                </button>
+                                            </nav>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                             <!-- Success Message -->
                             <div v-if="successMessage" class="mt-6 bg-green-50 border border-green-200 rounded-md p-4 animate-fade-in">
                                 <div class="flex">
@@ -477,18 +561,44 @@ const downloadingIds = ref([]);
 const error = ref('');
 const successMessage = ref('');
 
-const fetchData = async () => {
-    loading.value = true;
+// Pagination state
+const currentPage = ref(1);
+const lastPage = ref(1);
+const perPage = ref(10);
+const total = ref(0);
+const loadingMore = ref(false);
+
+const fetchData = async (page = 1, append = false) => {
+    if (page === 1) {
+        loading.value = true;
+    } else {
+        loadingMore.value = true;
+    }
     error.value = '';
     
     try {
-        const response = await axios.get('http://localhost:8000/api/factures', {
+        const response = await axios.get(`http://localhost:8000/api/factures?page=${page}&per_page=${perPage.value}`, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}`
             }
         });
-        orders.value = response.data.data || [];
-        console.log('Orders data:', orders.value);
+        
+        const responseData = response.data;
+        
+        if (append && page > 1) {
+            // Append new data for infinite scroll or pagination
+            orders.value.push(...(responseData.data || []));
+        } else {
+            // Replace data for first page or filter changes
+            orders.value = responseData.data || [];
+        }
+        
+        // Update pagination info
+        currentPage.value = responseData.current_page || page;
+        lastPage.value = responseData.last_page || 1;
+        total.value = responseData.total || 0;
+        perPage.value = responseData.per_page || 10;
+        
     } catch (err) {
         console.error('Error fetching orders:', err);
         
@@ -507,6 +617,7 @@ const fetchData = async () => {
         }
     } finally {
         loading.value = false;
+        loadingMore.value = false;
     }
 };
 
@@ -647,6 +758,34 @@ const downloadPDF = async (order) => {
         // Remove order ID from downloading list
         downloadingIds.value = downloadingIds.value.filter(id => id !== order.orderId);
     }
+};
+
+const changePage = (page) => {
+    if (page >= 1 && page <= lastPage.value) {
+        fetchData(page);
+    }
+};
+
+const getPageNumbers = () => {
+    const pages = [];
+    if (lastPage.value <= 5) {
+        for (let i = 1; i <= lastPage.value; i++) {
+            pages.push(i);
+        }
+    } else {
+        pages.push(1);
+        if (currentPage.value > 3) {
+            pages.push('...');
+        }
+        for (let i = Math.max(1, currentPage.value - 1); i <= Math.min(lastPage.value, currentPage.value + 1); i++) {
+            pages.push(i);
+        }
+        if (currentPage.value < lastPage.value - 2) {
+            pages.push('...');
+        }
+        pages.push(lastPage.value);
+    }
+    return pages;
 };
 
 onMounted(fetchData);

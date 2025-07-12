@@ -334,7 +334,6 @@ const fetchProduct = async () => {
         
         product.value = response.data.product;
         relatedProducts.value = response.data.relatedProducts || [];
-        console.log('Product loaded:', product.value);
     } catch (err) {
         console.error('Error fetching product:', err);
         if (err.response?.status === 404) {

@@ -95,7 +95,6 @@
                 email:email.value,
                 password:password.value
             })
-            console.log(response.data)
 
             const role = response.data.user.role_id
             const token = response.data.token

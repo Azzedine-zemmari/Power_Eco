@@ -115,8 +115,7 @@ async function fetchUserData() {
     loading.value = true
     error.value = null
     
-    console.log('Fetching user data...')
-    console.log('Token exists:', !!token)
+    
     
     try {
         if (!token) {
@@ -131,7 +130,6 @@ async function fetchUserData() {
             }
         })
         
-        console.log(' User data response:', response.data)
         user.value = response.data
         
     } catch (err) {
@@ -152,7 +150,6 @@ async function fetchUserData() {
 }
 
 onMounted(() => {
-    console.log('CommercialSideBar mounted')
     fetchUserData()
 })
 </script>

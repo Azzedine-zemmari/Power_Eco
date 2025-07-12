@@ -491,7 +491,6 @@ async function fetchCategories() {
     error.value = null;
     
     try {
-        console.log('Fetching categories...');
         
         if (!token) {
             throw new Error('Token d\'authentification manquant. Veuillez vous reconnecter.');
@@ -508,7 +507,6 @@ async function fetchCategories() {
             });
         } catch (err) {
             // Try alternative endpoint
-            console.log('First endpoint failed, trying /api/categories/list');
             response = await axios.get(`${API_BASE_URL}/api/categories/list`, {
                 headers: {
                     'Accept': 'application/json',
@@ -517,7 +515,6 @@ async function fetchCategories() {
             });
         }
 
-        console.log('Categories API response:', response.data);
 
         // Handle different response structures
         let categoriesData;
@@ -534,7 +531,6 @@ async function fetchCategories() {
         }
 
         categories.value = Array.isArray(categoriesData) ? categoriesData : [];
-        console.log('Categories loaded:', categories.value);
 
     } catch (err) {
         console.error('Error fetching categories:', err);
@@ -568,7 +564,6 @@ async function submitCategory() {
     errors.value = {};
     
     try {
-        console.log('Creating category:', { name: name.value, description: description.value });
         
         if (!token) {
             throw new Error('Token d\'authentification manquant.');
@@ -596,7 +591,6 @@ async function submitCategory() {
             }
         );
 
-        console.log('Category created:', response.data);
         
         closeModal();
         await fetchCategories();
@@ -629,7 +623,6 @@ async function updateCategory() {
     errors.value = {};
     
     try {
-        console.log('Updating category:', editingCategory.value.id, { name: name.value, description: description.value });
         
         if (!token) {
             throw new Error('Token d\'authentification manquant.');
@@ -657,7 +650,6 @@ async function updateCategory() {
             }
         );
 
-        console.log('Category updated:', response.data);
         
         closeEditModal();
         await fetchCategories();

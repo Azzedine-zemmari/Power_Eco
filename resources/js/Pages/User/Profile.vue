@@ -288,7 +288,6 @@ const fetchProfile = async () => {
     error.value = '';
     
     try {
-        console.log('Fetching profile data...');
         
         const token = localStorage.getItem('token');
         if (!token) {
@@ -307,7 +306,6 @@ const fetchProfile = async () => {
             });
         } catch (err) {
             // If that fails, try the user endpoint
-            console.log('First endpoint failed, trying /api/user');
             response = await axios.get(`${API_BASE_URL}/api/user`, {
                 headers: {
                     'Accept': 'application/json',
@@ -316,7 +314,6 @@ const fetchProfile = async () => {
             });
         }
         
-        console.log('API response:', response.data);
         
         // Handle different response structures
         let userData;
@@ -328,7 +325,6 @@ const fetchProfile = async () => {
             userData = response.data;
         }
         
-        console.log('User data:', userData);
         
         // Update profile with fetched data
         Object.assign(profile, {
@@ -348,7 +344,6 @@ const fetchProfile = async () => {
             email: profile.email,
         });
         
-        console.log('Profile updated:', profile);
     } catch (err) {
         console.error('Error fetching profile:', err);
         
@@ -421,7 +416,6 @@ const saveProfile = async () => {
     error.value = '';
     
     try {
-        console.log('Saving profile:', editProfile);
         
         const token = localStorage.getItem('token');
         if (!token) {
@@ -444,7 +438,6 @@ const saveProfile = async () => {
             });
         } catch (err) {
             // Try alternative endpoint
-            console.log('First update endpoint failed, trying /api/user/update');
             response = await axios.put(`${API_BASE_URL}/api/user/update`, {
                 firstName: editProfile.firstName.trim(),
                 lastName: editProfile.lastName.trim(),
@@ -458,7 +451,6 @@ const saveProfile = async () => {
             });
         }
         
-        console.log('Update response:', response.data);
         
         // Update the main profile with edited values
         Object.assign(profile, {

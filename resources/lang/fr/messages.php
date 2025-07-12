@@ -125,6 +125,7 @@ return [
         'add_to_cart' => 'Ajouter au panier',
         'previous' => 'Précédent',
         'next' => 'next',
+        'category' => "Categorie"
     ],
     'product_detail' => [
         'breadcrumb' => [
@@ -322,4 +323,11 @@ return [
         'or' => 'Ou',
         'and' => 'et',
     ],
+    // Pagination
+    'pagination' => [
+        'previous' => 'Précédent',
+        'next' => 'Suivant',
+        'page_info' => 'Page :current sur :total',
+        'showing' => 'Affichage de :from à :to sur :total résultats'
+    ]
 ];

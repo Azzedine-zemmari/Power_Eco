@@ -573,7 +573,6 @@ const sales = async () => {
             params.status = statusFilter.value;
         }
 
-        console.log('🔄 Fetching sales data with params:', params);
 
         const response = await axios.get(`${API_BASE_URL}/api/sales/data`, {
             params: params,
@@ -582,8 +581,6 @@ const sales = async () => {
                 'Authorization': `Bearer ${token}`
             }
         });
-
-        console.log('✅ Sales API response:', response.data);
 
         // Handle different response structures
         if (response.data.data) {
@@ -597,13 +594,11 @@ const sales = async () => {
             totalItems.value = 0;
         }
 
-        console.log('✅ Processed sales data:', sale.value);
-        console.log('📊 Total items:', totalItems.value);
 
     } catch (err) {
-        console.error('❌ Error fetching sales:', err);
-        console.error('❌ Status:', err.response?.status);
-        console.error('❌ Response:', err.response?.data);
+        console.error('Error fetching sales:', err);
+        console.error('Status:', err.response?.status);
+        console.error('Response:', err.response?.data);
         if (err.response?.status === 401) {
             error.value = 'Session expired. Please log in again.';
         } else if (err.response?.status === 403) {
@@ -624,7 +619,6 @@ const updateSale = async (item) => {
             throw new Error('Authentication token missing');
         }
 
-        console.log('🔄 Updating sale status:', { orderId, status: item.status });
 
         const response = await axios.put(`${API_BASE_URL}/api/sales/update/${orderId}`, {
             status: item.status
@@ -636,14 +630,13 @@ const updateSale = async (item) => {
             }
         });
 
-        console.log('✅ Sale updated successfully:', response.data);
         showSuccess(`Order #${orderId} status updated to ${formatStatus(item.status)}`);
         // Refresh the current page data
         await sales();
 
     } catch (err) {
-        console.error('❌ Error updating sale:', err);
-        console.error('❌ Response:', err.response?.data);
+        console.error('Error updating sale:', err);
+        console.error('Response:', err.response?.data);
         if (err.response?.status === 401) {
             error.value = 'Session expired. Please log in again.';
         } else if (err.response?.status === 403) {
@@ -667,7 +660,6 @@ const fetchUserData = async () => {
             return;
         }
 
-        console.log('🔄 Fetching user data...');
 
         const response = await axios.get(`${API_BASE_URL}/api/user/data`, {
             headers: {
@@ -677,12 +669,11 @@ const fetchUserData = async () => {
         });
 
         user.value = response.data;
-        console.log('✅ User data:', user.value);
 
     } catch (err) {
-        console.error('❌ Error fetching user data:', err);
-        console.error('❌ Status:', err.response?.status);
-        console.error('❌ Response:', err.response?.data);
+        console.error(' Error fetching user data:', err);
+        console.error(' Status:', err.response?.status);
+        console.error(' Response:', err.response?.data);
         // Don't show error for user data fetch failure
         // as it's not critical for the sales list functionality
     }
@@ -696,7 +687,6 @@ const refreshData = async () => {
 };
 
 const applyFilter = () => {
-    console.log('🔍 Applying filter:', statusFilter.value);
     currentPage.value = 1; // Reset to first page when filtering
     sales();
 };
@@ -713,7 +703,6 @@ watch(currentPage, () => {
 });
 
 watch(statusFilter, () => {
-    console.log('🔍 Status filter changed:', statusFilter.value);
     applyFilter();
 });
 

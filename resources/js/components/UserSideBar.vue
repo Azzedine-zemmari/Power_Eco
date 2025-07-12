@@ -76,7 +76,6 @@ const userData = async () =>{
     try{
         const response = await api.get('/user/data')
         user.value = response.data
-        console.log(user.value);
         
     }catch(error){
         console.error(error);      

@@ -156,7 +156,6 @@ const fetchStats = async () => {
                 Authorization: `Bearer ${localStorage.getItem('token')}`
             }
         });
-        console.log('Stats Response:', response.data);
         stats.value = response.data;
     } catch (error) {
         console.error('Error fetching stats:', error.response?.data || error.message);
@@ -172,7 +171,6 @@ async function fetchUserData() {
             }
         });
         user.value = response.data;
-        console.log("user data " , response.data)
     } catch (error) {
         console.error('Error fetching user data:', error);
     }

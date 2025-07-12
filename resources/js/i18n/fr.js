@@ -120,6 +120,7 @@ export default {
         add_to_cart: "Ajouter au panier",
         previous: "Précédent",
         next: "Suivant",
+        category:"Categorie"
     },
     product_detail: {
         breadcrumb: {
@@ -316,5 +317,12 @@ export default {
         home_title: 'Connectez-vous à votre compte',
         or: 'Ou',
         and:'et'
+    },
+    // Pagination
+    pagination: {
+        previous: 'Précédent',
+        next: 'Suivant',
+        page_info: 'Page {current} sur {total}',
+        showing: 'Affichage de {from} à {to} sur {total} résultats'
     }
 }

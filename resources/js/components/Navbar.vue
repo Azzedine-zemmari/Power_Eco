@@ -152,15 +152,12 @@ const authStore = useAuthStore()
 const isMobileMenuOpen = ref(false);
 
 
-console.log('authStore token:', authStore.token)
-console.log('authStore isAuthenticated:', authStore.isAuthenticated)
 const user = ref({})
 
 async function fetchUserData() {
     try {
         const response = await api.get('/user/data');
         user.value = response.data;
-        console.log('navbar : ', user.value);
         
     } catch (error) {
         console.error('Error fetching user data:', error);

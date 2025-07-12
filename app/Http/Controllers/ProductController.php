@@ -78,7 +78,8 @@ class ProductController extends Controller
         $queryStart = microtime(true);
         
         $query = Product::where('status', 'active')
-            ->select(['id', 'name', 'description', 'sell_price', 'image']);
+            ->with('category:id,name') 
+            ->select(['id', 'name', 'description', 'sell_price', 'image', 'categorie_id']);
         
         // Apply filters
         if ($request->filled('search')) {
@@ -89,16 +90,17 @@ class ProductController extends Controller
             });
         }
         
-        if ($request->filled('category')) {
-            $query->where('categorie_id', $request->category);
+        if ($request->filled('categories')) {
+            $categories = explode(',', $request->categories);
+            $query->whereIn('categorie_id', $categories);
         }
         
         if ($request->filled('min_price')) {
-            $query->where('price', '>=', $request->min_price);
+            $query->where('sell_price', '>=', $request->min_price);
         }
         
         if ($request->filled('max_price')) {
-            $query->where('price', '<=', $request->max_price);
+            $query->where('sell_price', '<=', $request->max_price);
         }
         
         $products = $query->orderBy('id', 'desc')->paginate($perPage);
