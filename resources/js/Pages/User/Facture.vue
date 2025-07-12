@@ -549,6 +549,7 @@ import UserSideBar from '../../components/UserSideBar.vue';
 import { jsPDF } from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { useI18n } from 'vue-i18n';
+import api from '../../axios';
 
 const { t } = useI18n();
 
@@ -577,11 +578,7 @@ const fetchData = async (page = 1, append = false) => {
     error.value = '';
     
     try {
-        const response = await axios.get(`http://localhost:8000/api/factures?page=${page}&per_page=${perPage.value}`, {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`
-            }
-        });
+        const response = await api.get(`/factures?page=${page}&per_page=${perPage.value}`);
         
         const responseData = response.data;
         

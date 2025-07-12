@@ -13,7 +13,7 @@
                         </div>
                         
                         <!-- CSV Download button -->
-                        <button @click="downloadCSV" :disabled="loading || sale.length === 0"
+                        <button @click.prevent="downloadCSV" :disabled="loading || sale.length === 0"
                             class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-50 disabled:cursor-not-allowed">
                             <svg class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -23,7 +23,7 @@
                         </button>
 
                         <!-- Refresh button -->
-                        <button @click="refreshData" :disabled="loading"
+                        <button @click.prevent="refreshData" :disabled="loading"
                             class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-50">
                             <svg :class="loading ? 'animate-spin' : ''" class="h-4 w-4 mr-2" fill="none"
                                 viewBox="0 0 24 24" stroke="currentColor">
@@ -98,10 +98,10 @@
                                                 <p>{{ error }}</p>
                                             </div>
                                             <div class="mt-4">
-                                                <button @click="refreshData"
-                                                    class="bg-red-100 px-3 py-2 rounded-md text-sm font-medium text-red-800 hover:bg-red-200">
-                                                    Try Again
-                                                </button>
+                                                                                            <button @click.prevent="refreshData"
+                                                class="bg-red-100 px-3 py-2 rounded-md text-sm font-medium text-red-800 hover:bg-red-200">
+                                                Try Again
+                                            </button>
                                             </div>
                                         </div>
                                     </div>
@@ -223,7 +223,7 @@
                                         {{ statusFilter ? `No orders found with status "${statusFilter}"` : 'No sales orders found for the current period.' }}
                                     </p>
                                     <div class="mt-6">
-                                        <button @click="refreshData"
+                                        <button @click.prevent="refreshData"
                                             class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
                                             Refresh Data
                                         </button>
@@ -311,12 +311,13 @@
 <script setup>
 import CommercialSideBar from '../../components/CommercialSideBar.vue';
 import { onMounted, ref, computed, watch } from 'vue';
-import axios from 'axios';
+import api from '../../axios';
+import { useAuthStore } from '../../stores/AuthStore';
 
 // State variables
 const sale = ref([]);
 const user = ref(null);
-const token = localStorage.getItem('token');
+const auth = useAuthStore();
 const currentPage = ref(1);
 const itemsPerPage = 10;
 const totalItems = ref(0);
@@ -326,8 +327,7 @@ const successMessage = ref('');
 const statusFilter = ref('');
 const updatingStatus = ref(null);
 
-// API configuration
-const API_BASE_URL = 'http://localhost:8000';
+// API configuration - using api instance instead
 
 // Computed properties
 const totalPages = computed(() => Math.ceil(totalItems.value / itemsPerPage));
@@ -446,8 +446,8 @@ function csvEscape(value) {
 
 async function downloadCSV() {
     try {
-        if (!token) {
-            alert('Authentication token missing');
+        if (!auth.isAuthenticated) {
+            alert('Authentication required');
             return;
         }
 
@@ -459,12 +459,8 @@ async function downloadCSV() {
             params.status = statusFilter.value;
         }
 
-        const response = await axios.get(`${API_BASE_URL}/api/sales/data`, {
-            params: { ...params, per_page: 1000000 }, // large number to get all
-            headers: {
-                'Accept': 'application/json',
-                'Authorization': `Bearer ${token}`
-            }
+        const response = await api.get(`/sales/data`, {
+            params: { ...params, per_page: 1000000 } // large number to get all
         });
 
         let allSales = [];
@@ -493,7 +489,7 @@ async function downloadCSV() {
         ];
 
         // Convert data to CSV format
-        const csvData = sale.value.map(item => {
+        const csvData = allSales.map(item => {
             // Format products list with '|' as separator
             let productsText = '';
             if (item.products && item.products.length > 0) {
@@ -549,7 +545,15 @@ async function downloadCSV() {
         }
     } catch (error) {
         console.error('Error downloading CSV:', error);
-        alert('Error downloading CSV file. Please try again.');
+        if (error.response?.status === 401) {
+            alert('Session expired. Please log in again.');
+            auth.clearAuth();
+            window.location.href = '/login';
+        } else {
+            alert('Error downloading CSV file. Please try again.');
+        }
+    } finally {
+        loading.value = false;
     }
 }
 
@@ -558,8 +562,8 @@ const sales = async () => {
     loading.value = true;
     error.value = null;
     try {
-        if (!token) {
-            throw new Error('Authentication token missing');
+        if (!auth.isAuthenticated) {
+            throw new Error('Authentication required');
         }
 
         // Build query parameters
@@ -573,13 +577,8 @@ const sales = async () => {
             params.status = statusFilter.value;
         }
 
-
-        const response = await axios.get(`${API_BASE_URL}/api/sales/data`, {
-            params: params,
-            headers: {
-                'Accept': 'application/json',
-                'Authorization': `Bearer ${token}`
-            }
+        const response = await api.get(`/sales/data`, {
+            params: params
         });
 
         // Handle different response structures
@@ -601,6 +600,9 @@ const sales = async () => {
         console.error('Response:', err.response?.data);
         if (err.response?.status === 401) {
             error.value = 'Session expired. Please log in again.';
+            // Clear auth and redirect to login
+            auth.clearAuth();
+            window.location.href = '/login';
         } else if (err.response?.status === 403) {
             error.value = 'Access denied. You do not have permission to view sales data.';
         } else {
@@ -615,19 +617,12 @@ const updateSale = async (item) => {
     const orderId = item.orderId || item.id;
     updatingStatus.value = orderId;
     try {
-        if (!token) {
-            throw new Error('Authentication token missing');
+        if (!auth.isAuthenticated) {
+            throw new Error('Authentication required');
         }
 
-
-        const response = await axios.put(`${API_BASE_URL}/api/sales/update/${orderId}`, {
+        const response = await api.put(`/sales/update/${orderId}`, {
             status: item.status
-        }, {
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            }
         });
 
         showSuccess(`Order #${orderId} status updated to ${formatStatus(item.status)}`);
@@ -639,6 +634,9 @@ const updateSale = async (item) => {
         console.error('Response:', err.response?.data);
         if (err.response?.status === 401) {
             error.value = 'Session expired. Please log in again.';
+            // Clear auth and redirect to login
+            auth.clearAuth();
+            window.location.href = '/login';
         } else if (err.response?.status === 403) {
             error.value = 'Access denied. You do not have permission to update sales.';
         } else if (err.response?.status === 404) {
@@ -655,18 +653,12 @@ const updateSale = async (item) => {
 
 const fetchUserData = async () => {
     try {
-        if (!token) {
-            console.warn('No authentication token found');
+        if (!auth.isAuthenticated) {
+            console.warn('User not authenticated');
             return;
         }
 
-
-        const response = await axios.get(`${API_BASE_URL}/api/user/data`, {
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Accept': 'application/json'
-            }
-        });
+        const response = await api.get(`/user/data`);
 
         user.value = response.data;
 
@@ -707,7 +699,11 @@ watch(statusFilter, () => {
 });
 
 // Lifecycle
-onMounted(() => {
+onMounted(async () => {
+    // Ensure auth is checked before loading data
+    if (!auth.authChecked) {
+        await auth.fetchUser();
+    }
     refreshData();
 });
 </script>

@@ -236,6 +236,7 @@ import { useRouter, useRoute, RouterLink } from 'vue-router';
 import Notification from '../components/Notification.vue';
 import { useI18n } from 'vue-i18n';
 import api from '../axios';
+import { useAuthStore } from '../stores/AuthStore';
 
 const { t } = useI18n();
 
@@ -265,14 +266,14 @@ const route = useRoute();
 const router = useRouter();
 const showNotification = ref(false);
 const notificationMessage = ref('');
+const auth = useAuthStore();
 
-const isAuthenticated = computed(() => {
-    return !!localStorage.getItem('token');
-});
+const isAuthenticated = computed(() => auth.isAuthenticated);
+
 
 const hasMore = computed(() => products.value.current_page < products.value.last_page);
 
-const token = localStorage.getItem('token');
+// const token = localStorage.getItem('token');
 
 // Utility functions
 const formatPrice = (price) => {

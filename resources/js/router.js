@@ -1,5 +1,7 @@
 import { compile } from "vue";
 import { createRouter, createWebHistory } from "vue-router";
+import { useAuthStore } from '@/stores/AuthStore';
+
 
 const routes = [
     {
@@ -176,89 +178,38 @@ const router = createRouter({
     routes
 });
 
-// Helper function to validate token
-async function validateToken(token) {
-    try {
-        const response = await fetch('/api/user', {
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Accept': 'application/json'
-            }
-        });
-
-        if (!response.ok) {
-            const data = await response.json();
-            if (data.message === 'Token expired. Please log in again.') {
-                clearAuthData();
-            }
-            return false;
-        }
-
-        return true;
-    } catch (error) {
-        return false;
-    }
-}
-
-
-// Helper function to clear invalid auth data
-function clearAuthData() {
-    localStorage.removeItem('token');
-    localStorage.removeItem('role');
-}
 
 router.beforeEach(async (to, from, next) => {
-    const token = localStorage.getItem('token');
-    const userRole = localStorage.getItem('role');
+  const auth = useAuthStore();
 
-    // Handle guest-only routes (login, register)
-    if (to.meta.requiresGuest) {
-        if (token) {
-            // If user is authenticated, validate token first
-            const isValidToken = await validateToken(token);
-            if (isValidToken) {
-                // Redirect to appropriate dashboard based on role
-                switch (userRole) {
-                    case 4:
-                        return next('/admin/users/management');
-                    case 2:
-                        return next('/productManager/dashboard');
-                    case 3:
-                        return next('/saleList');
-                    case 1:
-                        return next('/');
-                    default:
-                        return next('/');
-                }
-            } else {
-                // Token is invalid, clear it and allow access to login
-                clearAuthData();
-                return next();
-            }
-        }
-        return next();
+  if (!auth.authChecked) {
+    await auth.fetchUser();
+  }
+
+  const isAuthenticated = auth.isAuthenticated;
+  const userRole = auth.user?.role_id || null;
+
+  if (to.meta.requiresGuest && isAuthenticated) {
+    // redirect logged-in users away from guest pages
+    switch (userRole) {
+      case 4: return next('/admin/users/management');
+      case 2: return next('/productManager/dashboard');
+      case 3: return next('/saleList');
+      case 1: return next('/');
+      default: return next('/');
     }
+  }
 
-    // Handle protected routes
-    if (to.meta.requiresAuth) {
-        if (!token) {
-            return next("/");
-        }
+  if (to.meta.requiresAuth && !isAuthenticated) {
+    return next('/login');
+  }
 
-        // Validate token before proceeding
-        const isValidToken = await validateToken(token);
-        if (!isValidToken) {
-            clearAuthData();
-            return next("/");
-        }
+  if (to.meta.requiresAuth && to.meta.role && Number(to.meta.role) !== Number(userRole)) {
+    return next('/unauthorized');
+  }
 
-        // Check role authorization
-        if (to.meta.role && Number(to.meta.role) !== Number(userRole)) {
-            return next('/unauthorized');
-        }
-    }
-
-    next();
+  next();
 });
+
 
 export default router;

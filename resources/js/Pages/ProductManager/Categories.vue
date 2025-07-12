@@ -392,7 +392,8 @@
 
 <script setup>
 import { onMounted, ref, computed } from 'vue';
-import axios from 'axios';
+import api from '../../axios';
+import { useAuthStore } from '../../stores/AuthStore';
 import Sidebar from '../../components/Sidebar.vue';
 
 // State management
@@ -410,8 +411,7 @@ const successMessage = ref('');
 const searchTerm = ref('');
 
 // API configuration
-const API_BASE_URL = 'http://localhost:8000';
-const token = localStorage.getItem('token');
+const auth = useAuthStore();
 
 // Computed properties
 const filteredCategories = computed(() => {
@@ -491,28 +491,17 @@ async function fetchCategories() {
     error.value = null;
     
     try {
-        
-        if (!token) {
-            throw new Error('Token d\'authentification manquant. Veuillez vous reconnecter.');
+        if (!auth.isAuthenticated) {
+            throw new Error('Authentication required. Please log in again.');
         }
 
         // Try multiple possible endpoints
         let response;
         try {
-            response = await axios.get(`${API_BASE_URL}/api/categories`, {
-                headers: {
-                    'Accept': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                }
-            });
+            response = await api.get('/categories');
         } catch (err) {
             // Try alternative endpoint
-            response = await axios.get(`${API_BASE_URL}/api/categories/list`, {
-                headers: {
-                    'Accept': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                }
-            });
+            response = await api.get('/categories/list');
         }
 
 
@@ -537,20 +526,23 @@ async function fetchCategories() {
         
         if (err.response) {
             if (err.response.status === 401) {
-                error.value = 'Session expirée. Veuillez vous reconnecter.';
+                error.value = 'Session expired. Please log in again.';
+                // Clear auth and redirect to login
+                auth.clearAuth();
+                window.location.href = '/login';
             } else if (err.response.status === 404) {
-                error.value = 'Endpoint des catégories non trouvé. Vérifiez la configuration de l\'API.';
+                error.value = 'Categories endpoint not found. Check API configuration.';
             } else if (err.response.status === 500) {
-                error.value = 'Erreur serveur. Veuillez réessayer plus tard.';
+                error.value = 'Server error. Please try again later.';
             } else {
-                error.value = err.response.data?.message || 'Erreur lors du chargement des catégories.';
+                error.value = err.response.data?.message || 'Error loading categories.';
             }
         } else if (err.code === 'ERR_NETWORK') {
-            error.value = 'Impossible de se connecter au serveur. Vérifiez que le backend est démarré.';
+            error.value = 'Cannot connect to server. Check that the backend is running.';
         } else if (err.message) {
             error.value = err.message;
         } else {
-            error.value = 'Erreur réseau. Vérifiez votre connexion.';
+            error.value = 'Network error. Check your connection.';
         }
     } finally {
         loading.value = false;
@@ -564,32 +556,14 @@ async function submitCategory() {
     errors.value = {};
     
     try {
-        
-        if (!token) {
-            throw new Error('Token d\'authentification manquant.');
+        if (!auth.isAuthenticated) {
+            throw new Error('Authentication required.');
         }
 
-        // Try to get CSRF cookie first (if using Sanctum)
-        try {
-            await axios.get(`${API_BASE_URL}/sanctum/csrf-cookie`, { withCredentials: true });
-        } catch (csrfError) {
-            console.log('CSRF cookie not available, continuing without it');
-        }
-
-        const response = await axios.post(
-            `${API_BASE_URL}/api/categories/create`,
-            {
-                name: name.value.trim(),
-                description: description.value.trim()
-            },
-            {
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                }
-            }
-        );
+        const response = await api.post('/categories/create', {
+            name: name.value.trim(),
+            description: description.value.trim()
+        });
 
         
         closeModal();
@@ -604,12 +578,15 @@ async function submitCategory() {
                 // Validation errors
                 errors.value = err.response.data.errors || {};
             } else if (err.response.status === 401) {
-                error.value = 'Session expirée. Veuillez vous reconnecter.';
+                error.value = 'Session expired. Please log in again.';
+                // Clear auth and redirect to login
+                auth.clearAuth();
+                window.location.href = '/login';
             } else {
-                error.value = err.response.data?.message || 'Erreur lors de la création de la catégorie.';
+                error.value = err.response.data?.message || 'Error creating category.';
             }
         } else {
-            error.value = 'Erreur réseau. Veuillez réessayer.';
+            error.value = 'Network error. Please try again.';
         }
     } finally {
         submitting.value = false;
@@ -623,32 +600,14 @@ async function updateCategory() {
     errors.value = {};
     
     try {
-        
-        if (!token) {
-            throw new Error('Token d\'authentification manquant.');
+        if (!auth.isAuthenticated) {
+            throw new Error('Authentication required.');
         }
 
-        // Try to get CSRF cookie first (if using Sanctum)
-        try {
-            await axios.get(`${API_BASE_URL}/sanctum/csrf-cookie`, { withCredentials: true });
-        } catch (csrfError) {
-            console.log('CSRF cookie not available, continuing without it');
-        }
-
-        const response = await axios.put(
-            `${API_BASE_URL}/api/categories/${editingCategory.value.id}`,
-            {
-                name: name.value.trim(),
-                description: description.value.trim()
-            },
-            {
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                }
-            }
-        );
+        const response = await api.put(`/categories/${editingCategory.value.id}`, {
+            name: name.value.trim(),
+            description: description.value.trim()
+        });
 
         
         closeEditModal();
@@ -663,14 +622,17 @@ async function updateCategory() {
                 // Validation errors
                 errors.value = err.response.data.errors || {};
             } else if (err.response.status === 401) {
-                error.value = 'Session expirée. Veuillez vous reconnecter.';
+                error.value = 'Session expired. Please log in again.';
+                // Clear auth and redirect to login
+                auth.clearAuth();
+                window.location.href = '/login';
             } else if (err.response.status === 404) {
-                error.value = 'Catégorie non trouvée.';
+                error.value = 'Category not found.';
             } else {
-                error.value = err.response.data?.message || 'Erreur lors de la mise à jour de la catégorie.';
+                error.value = err.response.data?.message || 'Error updating category.';
             }
         } else {
-            error.value = 'Erreur réseau. Veuillez réessayer.';
+            error.value = 'Network error. Please try again.';
         }
     } finally {
         submitting.value = false;
@@ -679,7 +641,11 @@ async function updateCategory() {
 
 
 // Initialize component
-onMounted(() => {
+onMounted(async () => {
+    // Ensure auth is checked before loading data
+    if (!auth.authChecked) {
+        await auth.fetchUser();
+    }
     fetchCategories();
 });
 </script>

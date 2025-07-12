@@ -30,6 +30,14 @@ const computedClass = computed(()=>{
 })
 
     async function logout() {
-        await auth.logout();
+        try {
+            await auth.logout();
+            // Redirect to login page after successful logout
+            router.push('/login');
+        } catch (error) {
+            console.error('Logout error:', error);
+            // Even if there's an error, redirect to login
+            router.push('/login');
+        }
     }
 </script>

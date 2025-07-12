@@ -4,39 +4,30 @@ import { useAuthStore } from '../js/stores/AuthStore'
 
 const api = axios.create({
     baseURL:'http://localhost:8000/api',
+    withCredentials: true, // This is crucial for sending cookies!
     headers:{
         Accept:'application/json'
     }
 })
 
-// automatic add token to requests 
-api.interceptors.request.use(config=>{
-    const token = localStorage.getItem('token');
-    if(token){
-        config.headers.Authorization = `Bearer ${token}`
-    }
-    return config;
-})
-
-// Interceptor to handle token expiration 
+// Interceptor to handle authentication errors
 api.interceptors.response.use(
     response => response,
     error => {
         const originalRequest = error.config;
 
-        //if token expired , logout and redirect
+        // Handle 401 Unauthorized errors
         if(error.response && error.response.status === 401){
             const message = error.response.data.message;
 
             if(message && message.toLowerCase().includes('token expired')){
-                // clear auth info
+                // Clear auth info
                 const authStore = useAuthStore();
-                authStore.clearAuth(); 
-                delete api.defaults.headers.common['Authorization'];
+                authStore.clearAuth();
 
-                // redirect to login 
-                router.push('/')
-                return Promise.reject(error)
+                // Redirect to login
+                router.push('/login');
+                return Promise.reject(error);
             }
         }
         return Promise.reject(error);

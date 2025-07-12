@@ -153,13 +153,20 @@ class UserController extends Controller
         $user->token_expires_at = now()->addHour();
         $user->save();
 
-        // Return response
+        // Return response with httpOnly cookie
         return response()->json([
             'user' => $user,
-            'token' => $token,
             'expires_at' => $user->token_expires_at ? $user->token_expires_at->toDateTimeString() : null
-        ], 200);
-}
+        ], 200)->cookie(
+            'auth_token',    // Cookie name
+            $token,          // Value = the token
+            60,              // Expiration in minutes
+            '/',             // Path
+            null,            // Domain (null = current host)
+            false,           // Secure: false for localhost
+            true             // HttpOnly: true for security
+        );
+    }
 
     public function UserRegistre(Request $request){
         $request->validate([
@@ -210,11 +217,19 @@ class UserController extends Controller
         ],201);
     }
     public function logout(Request $request){
-        $request->user()->currentAccessToken()->delete();
+        $user = $request->user();
+        
+        if ($user) {
+            // Revoke all tokens for the user
+            $user->tokens()->delete();
+            
+            // Clear token expiry
+            $user->token_expires_at = null;
+            $user->save();
+        }
 
-        return response()->json([
-            'message'=> 'logged out succesfully'
-    ]);
+        return response()->json(['message' => 'Logged out'])
+            ->cookie('auth_token', '', -1); // Remove the httpOnly cookie
     }
     public function forgotPassword(Request $request){
         $request->validate(['email'=>'required|email']);

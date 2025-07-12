@@ -194,6 +194,7 @@ import axios from 'axios';
 import { useCartStore } from '../stores/CartStore';
 import { useRouter } from 'vue-router';
 import api from '../axios';
+import { useAuthStore } from '../stores/AuthStore';
 
 const items = ref([]);
 const loading = ref(false);
@@ -202,9 +203,9 @@ const removingItem = ref(null);
 const cart = useCartStore();
 const router = useRouter();
 
-const isAuthenticated = computed(() => {
-    return !!localStorage.getItem('token');
-});
+const auth = useAuthStore();
+
+const isAuthenticated = computed(() => auth.isAuthenticated);
 
 // Utility functions
 const formatPrice = (price) => {

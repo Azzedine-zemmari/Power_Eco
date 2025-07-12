@@ -46,12 +46,12 @@
                 <!-- User Info -->
                 <div class="flex items-center flex-shrink-0 px-4 py-4 border-b border-green-700">
                     <!-- Debug info (remove after fixing) -->
-                    <div v-if="!user && !loading" class="text-red-300 text-xs mb-2">
+                    <div v-if="!user && !auth.user && !loading" class="text-red-300 text-xs mb-2">
                         Debug: {{ error || 'No user data' }}
                     </div>
                     
                     <!-- Loading state -->
-                    <div v-if="loading" class="flex items-center">
+                    <div v-if="loading || !auth.authChecked" class="flex items-center">
                         <div class="h-10 w-10 rounded-full bg-green-700 animate-pulse"></div>
                         <div class="ml-3">
                             <div class="h-4 bg-green-700 rounded animate-pulse mb-1"></div>
@@ -60,13 +60,13 @@
                     </div>
                     
                     <!-- User data -->
-                    <div v-else-if="user" class="flex items-center">
+                    <div v-else-if="user || auth.user" class="flex items-center">
                         <div class="ml-3">
                             <p class="text-base font-medium text-white">
-                                {{ user?.firstName || user?.firstname || user?.name || 'User' }} 
-                                {{ user?.lastName || user?.lastname || '' }}
+                                {{ (user || auth.user)?.firstName || (user || auth.user)?.firstname || (user || auth.user)?.name || 'User' }} 
+                                {{ (user || auth.user)?.lastName || (user || auth.user)?.lastname || '' }}
                             </p>
-                            <p class="text-sm font-medium text-green-200">{{ user?.role || 'Commercial' }}</p>
+                            <p class="text-sm font-medium text-green-200">{{ (user || auth.user)?.role || 'Commercial' }}</p>
                         </div>
                     </div>
                     
@@ -101,7 +101,8 @@ import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import SidebarLink from './SidebarLink.vue'
 import LogoutButton from './LogoutButton.vue'
-import axios from 'axios'
+import api from '../axios'
+import { useAuthStore } from '../stores/AuthStore'
 
 const route = useRoute()
 const current = route.path
@@ -109,26 +110,18 @@ const isOpen = ref(false)
 const user = ref(null)
 const loading = ref(false)
 const error = ref(null)
-const token = localStorage.getItem('token')
+const auth = useAuthStore()
 
 async function fetchUserData() {
     loading.value = true
     error.value = null
     
-    
-    
     try {
-        if (!token) {
-            throw new Error('No authentication token found')
+        if (!auth.isAuthenticated) {
+            throw new Error('User not authenticated')
         }
 
-        const response = await axios.get('http://localhost:8000/api/user/data', {
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            }
-        })
+        const response = await api.get('/user/data')
         
         user.value = response.data
         
@@ -139,6 +132,9 @@ async function fetchUserData() {
         
         if (err.response?.status === 401) {
             error.value = 'Authentication failed'
+            // Clear auth and redirect to login
+            auth.clearAuth()
+            window.location.href = '/login'
         } else if (err.response?.status === 404) {
             error.value = 'User endpoint not found'
         } else {
@@ -149,7 +145,11 @@ async function fetchUserData() {
     }
 }
 
-onMounted(() => {
+onMounted(async () => {
+    // Ensure auth is checked before loading user data
+    if (!auth.authChecked) {
+        await auth.fetchUser()
+    }
     fetchUserData()
 })
 </script>

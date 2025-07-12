@@ -253,6 +253,7 @@ import { ref, reactive, onMounted } from 'vue';
 import UserSideBar from '../../components/UserSideBar.vue';
 import axios from 'axios';
 import { useI18n } from 'vue-i18n';
+import api from '../../axios';
 
 const { t } = useI18n();
 
@@ -288,32 +289,8 @@ const fetchProfile = async () => {
     error.value = '';
     
     try {
-        
-        const token = localStorage.getItem('token');
-        if (!token) {
-            throw new Error('No authentication token found. Please log in again.');
-        }
-
-        // Try multiple possible endpoints
-        let response;
-        try {
-            // First try the user data endpoint
-            response = await axios.get(`${API_BASE_URL}/api/user/data`, {
-                headers: {
-                    'Accept': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                }
-            });
-        } catch (err) {
-            // If that fails, try the user endpoint
-            response = await axios.get(`${API_BASE_URL}/api/user`, {
-                headers: {
-                    'Accept': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                }
-            });
-        }
-        
+        // Use the api instance which handles cookies automatically
+        const response = await api.get('/user/data');
         
         // Handle different response structures
         let userData;
@@ -324,7 +301,6 @@ const fetchProfile = async () => {
         } else {
             userData = response.data;
         }
-        
         
         // Update profile with fetched data
         Object.assign(profile, {
@@ -416,41 +392,12 @@ const saveProfile = async () => {
     error.value = '';
     
     try {
-        
-        const token = localStorage.getItem('token');
-        if (!token) {
-            throw new Error('No authentication token found');
-        }
-
-        // Try different possible update endpoints
-        let response;
-        try {
-            response = await axios.put(`${API_BASE_URL}/api/user/data/update`, {
-                firstName: editProfile.firstName.trim(),
-                lastName: editProfile.lastName.trim(),
-                email: editProfile.email.trim(),
-            }, {
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                }
-            });
-        } catch (err) {
-            // Try alternative endpoint
-            response = await axios.put(`${API_BASE_URL}/api/user/update`, {
-                firstName: editProfile.firstName.trim(),
-                lastName: editProfile.lastName.trim(),
-                email: editProfile.email.trim(),
-            }, {
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                }
-            });
-        }
-        
+        // Use the api instance which handles cookies automatically
+        const response = await api.put('/user/data/update', {
+            firstName: editProfile.firstName.trim(),
+            lastName: editProfile.lastName.trim(),
+            email: editProfile.email.trim(),
+        });
         
         // Update the main profile with edited values
         Object.assign(profile, {

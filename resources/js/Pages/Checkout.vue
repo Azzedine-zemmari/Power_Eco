@@ -583,10 +583,24 @@ const cartItems = async () => {
     try {
         const response = await api.get(`/cart`);
         
-        items.value = response.data.cart_items || [];
+        // Handle different response structures
+        if (response.data.cart_items) {
+            items.value = response.data.cart_items;
+        } else if (response.data.items) {
+            items.value = response.data.items;
+        } else if (Array.isArray(response.data)) {
+            items.value = response.data;
+        } else {
+            items.value = [];
+        }
     } catch (error) {
         console.error('Failed to load cart:', error);
-        showToast(t('checkout.toast_load_cart_failed'), 'error');
+        if (error.response?.status === 401) {
+            showToast(t('checkout.toast_login_required'), 'error');
+            router.push('/login');
+        } else {
+            showToast(t('checkout.toast_load_cart_failed'), 'error');
+        }
     } finally {
         loading.value = false;
     }
@@ -648,6 +662,8 @@ const checkout = async () => {
             setTimeout(() => {
                 router.push('/');
             }, 2000);
+        } else {
+            showToast(response.data.message || t('checkout.toast_checkout_failed'), 'error');
         }
         
     } catch (error) {

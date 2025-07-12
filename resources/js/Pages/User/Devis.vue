@@ -320,6 +320,7 @@ import { onMounted, ref } from 'vue';
 import axios from 'axios';
 import UserSideBar from '../../components/UserSideBar.vue';
 import { useI18n } from 'vue-i18n';
+import api from '../../axios';
 
 const devis = ref([]);
 const loading = ref(true);
@@ -332,19 +333,8 @@ const fetchDevis = async () => {
     error.value = '';
     
     try {
-        
-        const token = localStorage.getItem('token');
-        if (!token) {
-            throw new Error(t('devis.errors.expired'));
-        }
-
-        const response = await axios.get(`${API_BASE_URL}/api/devis`, {
-            headers: {
-                'Accept': 'application/json',
-                'Authorization': `Bearer ${token}`
-            }
-        });
-
+        // Use the api instance which handles cookies automatically
+        const response = await api.get('/devis');
 
         // Handle different response structures
         let devisData;

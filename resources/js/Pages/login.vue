@@ -86,56 +86,67 @@
 
 
     async function login(){
-        // Reset errors
-        errors.value = {};
-        generalError.value = '';
+    // Reset errors
+    errors.value = {};
+    generalError.value = '';
 
-        try{
-            const response = await axios.post(`${API_BASE_URL}/api/login`,{
-                email:email.value,
-                password:password.value
-            })
+    try {
+        // First, get CSRF cookie from Sanctum
+        await axios.get(`${API_BASE_URL}/sanctum/csrf-cookie`, {
+            withCredentials: true
+        });
 
-            const role = response.data.user.role_id
-            const token = response.data.token
-
-            // save token and role to localStorage for later requests
-           auth.setAuth(token, role)
-            // axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-
-            const redirectPath = route.query.redirect;
-            if (redirectPath) {
-                router.push(redirectPath);
-                return;
+        // Then login
+        const response = await axios.post(
+            `${API_BASE_URL}/api/login`,
+            {
+                email: email.value,
+                password: password.value
+            },
+            {
+                withCredentials: true 
             }
-            
-            switch (role) {
-                case 4:
-                    router.push('/admin/users/management');
-                    break;
-                case 1:
-                    router.push('/');
-                    break;
-                case 3:
-                    router.push('/saleList');
-                    break;
-                case 2:
-                    router.push('/productManager/dashboard');
-                    break;
-                default:
-                    console.log('unknown role');
-            }
+        );
+
+        const role = response.data.user.role_id;
+
+        // Store user info using the new method
+        auth.setUser(response.data.user);
+
+        // Redirect based on role
+        const redirectPath = route.query.redirect;
+        if (redirectPath) {
+            router.push(redirectPath);
+            return;
         }
-        catch (error) {
-            if (error.response?.status === 422) {
-                errors.value = error.response.data.errors
-            } else if ([401, 403].includes(error.response?.status)) {
-                auth.clearAuth()
-                generalError.value = error.response.data.message
-            } else {
-                generalError.value = 'An unexpected error occurred.'
-            }
 
+        switch (role) {
+            case 4:
+                router.push('/admin/users/management');
+                break;
+            case 1:
+                router.push('/');
+                break;
+            case 3:
+                router.push('/saleList');
+                break;
+            case 2:
+                router.push('/productManager/dashboard');
+                break;
+            default:
+                console.log('unknown role');
+        }
+    } catch (error) {
+        console.error('Login error:', error);
+        if (error.response?.status === 422) {
+            errors.value = error.response.data.errors;
+        } else if ([401, 403].includes(error.response?.status)) {
+            auth.clearAuth();
+            generalError.value = error.response.data.message;
+        } else {
+            generalError.value = 'An unexpected error occurred.';
         }
     }
+}
+
 </script>   

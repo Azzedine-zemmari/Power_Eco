@@ -136,6 +136,7 @@ export default {
             in_stock: 'In stock and ready to ship',
         },
         related_products: 'Related Products',
+        out_of_stock:"Out of stock"
     },
     cart: {
         page_title: 'Your Cart',

@@ -26,10 +26,17 @@ Route::get('/product/{id}', [ProductController::class, 'showProductDetails']);
 Route::get('/debug-products', [App\Http\Controllers\ProductController::class, 'debug']);
 Route::get('/categories', [CategoryController::class, 'show']);
 
-
+// Test route for debugging
+Route::get('/test-auth', function (Request $request) {
+    return response()->json([
+        'authenticated' => $request->user() !== null,
+        'user' => $request->user(),
+        'cookies' => $request->cookies->all()
+    ]);
+});
 
 // Admin-only routes
-Route::middleware(['auth:sanctum', 'role:4'])->group(function(){
+Route::middleware(['cookie.auth', 'role:4'])->group(function(){
     Route::delete('/users/{id}/archive', [UserController::class, 'archiveUser']);
     Route::get('/Users', [UserController::class, 'show']);
     Route::post('/users/{id}/active', [UserController::class, 'activeUser']);
@@ -37,7 +44,7 @@ Route::middleware(['auth:sanctum', 'role:4'])->group(function(){
 });
 
 // Product Manager-only routes
-Route::middleware(['auth:sanctum', 'role:2'])->group(function(){
+Route::middleware(['cookie.auth', 'role:2'])->group(function(){
     Route::post('/categories/create', [CategoryController::class, 'createCategory']);
     Route::put('/categories/{id}', [CategoryController::class, 'update']);
     Route::post('/products/create', [ProductController::class, 'create']);
@@ -49,13 +56,13 @@ Route::middleware(['auth:sanctum', 'role:2'])->group(function(){
 });
 
 // Commercial-only routes
-Route::middleware(['auth:sanctum', 'role:3'])->group(function(){
+Route::middleware(['cookie.auth', 'role:3'])->group(function(){
     Route::get('/sales/data', [CommercialController::class, 'sales']);
     Route::put('/sales/update/{id}', [CommercialController::class, 'update']);
 });
 
 // General authenticated routes (any authenticated user)
-Route::middleware(['auth:sanctum'])->group(function () {
+Route::middleware(['cookie.auth'])->group(function () {
     Route::post('/logout', [UserController::class, 'logout']);
     Route::get('/user', function (Request $request) {
         return $request->user();
@@ -64,11 +71,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::put('/user/data/update', [UserController::class, 'update']);
 });
 
-// All authenticated user can access 
-// Route::middleware(['auth:sanctum'])->group(function(){
-    // });
 // User-only routes
-Route::middleware(['auth:sanctum', 'role:1','token.expires'])->group(function(){
+Route::middleware(['cookie.auth', 'role:1'])->group(function(){
     Route::post('/cart/add', [CartController::class, 'addToCart']);
     Route::get('/cart', [CartController::class, 'getCartItem']);
     Route::put('/cart/{productId}', [CartController::class, 'update']);
@@ -78,4 +82,5 @@ Route::middleware(['auth:sanctum', 'role:1','token.expires'])->group(function(){
     Route::get('/devis', [DevisController::class, 'show']);
     Route::get('/factures', [FactureController::class, 'show']);
 });
+
 Route::get('/download-excel/{filename}', [DownloadController::class, 'downloadExcel'])->name('download.excel');

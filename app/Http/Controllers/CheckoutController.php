@@ -11,11 +11,18 @@ use function PHPUnit\Framework\isArray;
 
 class CheckoutController extends Controller
 {
-    public function Checkout(Request $request){
-        $user = auth()->user();
+    public function checkout(Request $request)
+    {
+        $user = $request->user();
+        
+        if (!$user) {
+            return response()->json(['message' => 'Unauthenticated'], 401);
+        }
 
-        //validate request
+        // Log the request data for debugging
+        \Illuminate\Support\Facades\Log::info('Checkout request data:', $request->all());
 
+        // Validate form data
         $validated = $request->validate([
             'email' => 'required|email',
             'first_name' => 'required|string|max:255',
@@ -28,17 +35,24 @@ class CheckoutController extends Controller
             'notes' => 'nullable|string',
         ]);
 
-        // Get all cart items fot the user
-        $cartItems = CartItem::where('user_id',$user->id)->get();
+        // Get all cart items for the user
+        $cartItems = CartItem::where('user_id',$user->id)
+            ->join('products', 'cart_items.product_id', '=', 'products.id')
+            ->select(
+                'cart_items.*',
+                'products.name as product_name',
+                'products.price as product_price',
+                'products.stock as product_stock'
+            )
+            ->get();
 
         if($cartItems->isEmpty()){
             return response()->json(['message' => 'Cart is empty'],400);
         }
 
         // Calculate total price
-
         $totalPrice = $cartItems->sum(function($item){
-            return $item->product->price * $item->quantity;
+            return $item->product_price * $item->quantity;
         });
 
         // create order with customer and shipping details
@@ -61,19 +75,24 @@ class CheckoutController extends Controller
                 'order_id' => $order->id,
                 'product_id' => $item->product_id,
                 'quantity' => $item->quantity,
-                'price' => $item->product->price
+                'price' => $item->product_price
             ]);
+            
+            // Update product stock
             $product = \App\Models\Product::where('id',$item->product_id)->first();
-            $product->stock -= $item->quantity;
-            $product->save();
-            // \Illuminate\Support\Facades\Log::info('alsdjflks', $product->toArray());
+            if ($product) {
+                $product->stock -= $item->quantity;
+                $product->save();
+            }
         }
 
         // clear the users cart
         CartItem::where('user_id',$user->id)->delete();
 
         return response()->json([
-            'message' => 'chekout successful'
+            'success' => true,
+            'message' => 'Checkout successful',
+            'order_id' => $order->id
         ]);
     }
 }

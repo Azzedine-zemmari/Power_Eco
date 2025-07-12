@@ -121,14 +121,29 @@
                             <h1 class="text-2xl sm:text-3xl font-bold text-gray-900">User Management</h1>
                             <p class="text-gray-600 mt-1">Manage system users and their roles</p>
                         </div>
-                        <button @click="openModal"
-                            class="w-full sm:w-auto inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors duration-200">
-                            <svg class="-ml-1 mr-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                            </svg>
-                            Create User
-                        </button>
+                        <div class="flex items-center space-x-3">
+                            <!-- Refresh button -->
+                            <button 
+                                @click="fetchUsers(currentPage)"
+                                :disabled="isLoading"
+                                class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                                <svg :class="isLoading ? 'animate-spin' : ''" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
+                                </svg>
+                                {{ isLoading ? 'Refreshing...' : 'Refresh' }}
+                            </button>
+                            
+                            <!-- Create User button -->
+                            <button @click="openModal"
+                                class="w-full sm:w-auto inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors duration-200">
+                                <svg class="-ml-1 mr-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                                </svg>
+                                Create User
+                            </button>
+                        </div>
                     </div>
                 </div>
 
@@ -140,14 +155,29 @@
                                 <h1 class="text-xl font-bold text-gray-900">User Management</h1>
                                 <p class="text-gray-600 text-sm">Manage system users</p>
                             </div>
-                            <button @click="openModal"
-                                class="w-full sm:w-auto inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
-                                <svg class="-ml-1 mr-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                                </svg>
-                                Create User
-                            </button>
+                            <div class="flex items-center space-x-2">
+                                <!-- Refresh button for mobile -->
+                                <button 
+                                    @click="fetchUsers(currentPage)"
+                                    :disabled="isLoading"
+                                    class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                                >
+                                    <svg :class="isLoading ? 'animate-spin' : ''" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
+                                    </svg>
+                                    {{ isLoading ? 'Refreshing...' : 'Refresh' }}
+                                </button>
+                                
+                                <!-- Create User button for mobile -->
+                                <button @click="openModal"
+                                    class="w-full sm:w-auto inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                                    <svg class="-ml-1 mr-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                                    </svg>
+                                    Create User
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -196,8 +226,75 @@
 
                             <!-- Users List -->
                             <div class="bg-white shadow overflow-hidden sm:rounded-md">
+                                <!-- Loading State -->
+                                <div v-if="isLoading" class="p-6">
+                                    <!-- Desktop Loading Skeleton -->
+                                    <div class="hidden md:block">
+                                        <div class="animate-pulse">
+                                            <!-- Table Header Skeleton -->
+                                            <div class="bg-gray-50 px-6 py-3">
+                                                <div class="grid grid-cols-6 gap-4">
+                                                    <div class="h-4 bg-gray-200 rounded w-16"></div>
+                                                    <div class="h-4 bg-gray-200 rounded w-20"></div>
+                                                    <div class="h-4 bg-gray-200 rounded w-12"></div>
+                                                    <div class="h-4 bg-gray-200 rounded w-16"></div>
+                                                    <div class="h-4 bg-gray-200 rounded w-20"></div>
+                                                    <div class="h-4 bg-gray-200 rounded w-16"></div>
+                                                </div>
+                                            </div>
+                                            
+                                            <!-- Table Rows Skeleton -->
+                                            <div class="divide-y divide-gray-200">
+                                                <div v-for="n in 6" :key="n" class="px-6 py-4">
+                                                    <div class="flex items-center justify-between">
+                                                        <div class="flex items-center space-x-4">
+                                                            <div class="h-10 w-10 bg-gray-200 rounded-full"></div>
+                                                            <div class="space-y-2">
+                                                                <div class="h-4 bg-gray-200 rounded w-32"></div>
+                                                                <div class="h-3 bg-gray-200 rounded w-24"></div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="flex items-center space-x-4">
+                                                            <div class="h-4 bg-gray-200 rounded w-20"></div>
+                                                            <div class="h-4 bg-gray-200 rounded w-16"></div>
+                                                            <div class="h-4 bg-gray-200 rounded w-20"></div>
+                                                            <div class="flex space-x-2">
+                                                                <div class="h-5 w-5 bg-gray-200 rounded"></div>
+                                                                <div class="h-5 w-5 bg-gray-200 rounded"></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Mobile Loading Skeleton -->
+                                    <div class="md:hidden">
+                                        <div class="animate-pulse space-y-4">
+                                            <div v-for="n in 4" :key="n" class="border-b border-gray-200 pb-4">
+                                                <div class="flex items-center space-x-3">
+                                                    <div class="h-10 w-10 bg-gray-200 rounded-full"></div>
+                                                    <div class="flex-1 space-y-2">
+                                                        <div class="h-4 bg-gray-200 rounded w-32"></div>
+                                                        <div class="h-3 bg-gray-200 rounded w-24"></div>
+                                                        <div class="flex space-x-2">
+                                                            <div class="h-5 bg-gray-200 rounded-full w-16"></div>
+                                                            <div class="h-5 bg-gray-200 rounded-full w-16"></div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="flex space-x-2">
+                                                        <div class="h-5 w-5 bg-gray-200 rounded"></div>
+                                                        <div class="h-5 w-5 bg-gray-200 rounded"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <!-- Desktop Table View -->
-                                <div class="hidden md:block">
+                                <div v-else-if="!isLoading" class="hidden md:block">
                                     <table class="min-w-full divide-y divide-gray-200">
                                         <thead class="bg-gray-50">
                                             <tr>
@@ -275,7 +372,7 @@
                                 </div>
 
                                 <!-- Mobile Card View -->
-                                <div class="md:hidden">
+                                <div v-else-if="!isLoading" class="md:hidden">
                                     <ul class="divide-y divide-gray-200">
                                         <li v-for="user in filteredUsers" :key="user.id" class="px-4 py-4">
                                             <div class="flex items-center justify-between">
@@ -321,7 +418,7 @@
                                 </div>
 
                                 <!-- Empty State -->
-                                <div v-if="filteredUsers.length === 0" class="text-center py-12">
+                                <div v-if="!isLoading && filteredUsers.length === 0" class="text-center py-12">
                                     <svg class="mx-auto h-12 w-12 text-gray-400" viewBox="0 0 24 24" fill="none"
                                         xmlns="http://www.w3.org/2000/svg" stroke="#949494">
                                         <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
@@ -499,7 +596,8 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import axios from 'axios'
+import api from '../../axios'
+import { useAuthStore } from '../../stores/AuthStore'
 import LogoutButton from '@/components/LogoutButton.vue'
 
 // Reactive data
@@ -526,6 +624,9 @@ const toast = ref({
     message: '',
     type: 'success'
 })
+
+// Auth store
+const auth = useAuthStore()
 
 // Computed properties
 const filteredUsers = computed(() => {
@@ -607,19 +708,27 @@ const resetForm = () => {
 const fetchUsers = async (page = 1) => {
     try {
         isLoading.value = true
-        const response = await axios.get(`http://localhost:8000/api/Users?page=${page}&per_page=${perPage.value}`, {
-            headers: {
-                'Authorization': `Bearer ${localStorage.getItem('token')}`,
-                'Accept': 'application/json'
-            }
-        })
+        
+        if (!auth.isAuthenticated) {
+            throw new Error('Authentication required. Please log in again.');
+        }
+        
+        const response = await api.get(`/Users?page=${page}&per_page=${perPage.value}`)
 
         users.value = response.data.data || []
         currentPage.value = response.data.current_page || 1
         totalPages.value = response.data.last_page || 1
     } catch (error) {
         console.error('Error fetching users:', error)
-        showToast('Failed to fetch users', 'error')
+        
+        if (error.response?.status === 401) {
+            showToast('Session expired. Please log in again.', 'error')
+            // Clear auth and redirect to login
+            auth.clearAuth()
+            window.location.href = '/login'
+        } else {
+            showToast(error.response?.data?.message || 'Failed to fetch users', 'error')
+        }
     } finally {
         isLoading.value = false
     }
@@ -640,20 +749,28 @@ const submitForm = async () => {
 
     try {
         isLoading.value = true
-            // Create new user
-            await axios.post('http://localhost:8000/api/register', formData, {
-                headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
-                    'Accept': 'application/json'
-                }
-            })
-            showToast('User created successfully!')
+        
+        if (!auth.isAuthenticated) {
+            throw new Error('Authentication required.');
+        }
+        
+        // Create new user
+        await api.post('/register', formData)
+        showToast('User created successfully!')
 
         closeModal()
         await fetchUsers(currentPage.value)
     } catch (error) {
         console.error('Error saving user:', error)
-        showToast(error.response?.data?.message || 'Failed to save user', 'error')
+        
+        if (error.response?.status === 401) {
+            showToast('Session expired. Please log in again.', 'error')
+            // Clear auth and redirect to login
+            auth.clearAuth()
+            window.location.href = '/login'
+        } else {
+            showToast(error.response?.data?.message || 'Failed to save user', 'error')
+        }
     } finally {
         isLoading.value = false
     }
@@ -661,17 +778,25 @@ const submitForm = async () => {
 const archiveUser = async (user) => {
     try {
         isLoading.value = true;
-        await axios.delete(`http://localhost:8000/api/users/${user.id}/archive`, {
-            headers: {
-                'Authorization': `Bearer ${localStorage.getItem('token')}`,
-                'Accept': 'application/json'
-            }
-        });
+        
+        if (!auth.isAuthenticated) {
+            throw new Error('Authentication required.');
+        }
+        
+        await api.delete(`/users/${user.id}/archive`);
         showToast('User archived successfully!');
         await fetchUsers(currentPage.value);
     } catch (error) {
         console.error('Error archiving user:', error);
-        showToast(error.response?.data?.message || 'Failed to archive user', 'error');
+        
+        if (error.response?.status === 401) {
+            showToast('Session expired. Please log in again.', 'error')
+            // Clear auth and redirect to login
+            auth.clearAuth()
+            window.location.href = '/login'
+        } else {
+            showToast(error.response?.data?.message || 'Failed to archive user', 'error');
+        }
     } finally {
         isLoading.value = false;
     }
@@ -679,17 +804,25 @@ const archiveUser = async (user) => {
 const activeUser = async (user) => {
     try {
         isLoading.value = true;
-        await axios.post(`http://localhost:8000/api/users/${user.id}/active`, {}, {
-            headers: {
-                'Authorization': `Bearer ${localStorage.getItem('token')}`,
-                'Accept': 'application/json'
-            }
-        });
+        
+        if (!auth.isAuthenticated) {
+            throw new Error('Authentication required.');
+        }
+        
+        await api.post(`/users/${user.id}/active`, {});
         showToast('User activated successfully!');
         await fetchUsers(currentPage.value);
     } catch (error) {
         console.error('Error activate user:', error);
-        showToast(error.response?.data?.message || 'Failed to active user', 'error');
+        
+        if (error.response?.status === 401) {
+            showToast('Session expired. Please log in again.', 'error')
+            // Clear auth and redirect to login
+            auth.clearAuth()
+            window.location.href = '/login'
+        } else {
+            showToast(error.response?.data?.message || 'Failed to active user', 'error');
+        }
     } finally {
         isLoading.value = false;
     }
@@ -700,7 +833,11 @@ const changePage = (page) => {
 }
 
 // Lifecycle
-onMounted(() => {
+onMounted(async () => {
+    // Ensure auth is checked before loading data
+    if (!auth.authChecked) {
+        await auth.fetchUser();
+    }
     fetchUsers()
 })
 </script>

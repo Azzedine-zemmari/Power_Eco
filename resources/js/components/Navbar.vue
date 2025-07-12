@@ -152,35 +152,27 @@ const authStore = useAuthStore()
 const isMobileMenuOpen = ref(false);
 
 
-const user = ref({})
-
-async function fetchUserData() {
-    try {
-        const response = await api.get('/user/data');
-        user.value = response.data;
-        
-    } catch (error) {
-        console.error('Error fetching user data:', error);
-    }
-}
-
 const dashboardLink = computed(() => {                                                          
-    if (!user.value?.selectedRole) return null;
-    switch (user.value.selectedRole) {
-        case 'admin':
+    if (!authStore.user?.role_id) return null;
+    switch (authStore.user.role_id) {
+        case 4:
             return '/admin/users/management';
-        case 'product-manager':
+        case 2:
             return '/productManager/dashboard';
-        case 'commercial':
+        case 3:
             return '/saleList';
         default:
             return null;
     }
 });
-    onMounted(() => {
-        if (authStore.isAuthenticated) {
-        fetchUserData();
+
+onMounted(async () => {
+    // Fetch user data if not already checked
+    if (!authStore.authChecked) {
+        await authStore.fetchUser();
     }
-        cartStore.fetchCartCount();
-    });
+    
+    // Fetch cart count
+    cartStore.fetchCartCount();
+});
 </script>

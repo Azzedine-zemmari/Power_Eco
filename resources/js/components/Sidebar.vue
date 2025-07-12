@@ -75,7 +75,7 @@ const route = useRoute()
 const current = route.path
 const isOpen = ref(false)
 const user = ref(null)
-const token = localStorage.getItem('token')
+// const token = localStorage.getItem('token')
 
 async function fetchUserData() {
     try {

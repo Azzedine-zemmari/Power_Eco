@@ -141,6 +141,7 @@ return [
             'in_stock' => 'En stock et prêt à être expédié',
         ],
         'related_products' => 'Produits associés',
+        'out_of_stock' => 'en rupture de stock'
     ],
     'cart' => [
         'page_title' => 'Votre Panier',

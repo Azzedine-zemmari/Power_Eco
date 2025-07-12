@@ -660,7 +660,8 @@
 
 <script setup>
 import { ref, onMounted, reactive, computed, watch } from 'vue';
-import axios from 'axios';
+import api from '../../axios';
+import { useAuthStore } from '../../stores/AuthStore';
 import Sidebar from '../../components/Sidebar.vue';
 
 // API Configuration
@@ -707,8 +708,8 @@ const productForm = reactive({
     status: 'active'
 });
 
-// Get token from localStorage
-const token = localStorage.getItem('token');
+// Auth store
+const auth = useAuthStore();
 
 // Import error management functions
 function clearImportErrors() {
@@ -765,18 +766,20 @@ const importProducts = async () => {
     formData.append('excel_file', file.value);
 
     try {
-        const response = await fetch(`${API_BASE_URL}/api/import-products`, {
-            method: 'POST',
+        if (!auth.isAuthenticated) {
+            throw new Error('Authentication required.');
+        }
+
+        const response = await api.post('/import-products', formData, {
             headers: {
                 'Accept': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: formData,
+                'Content-Type': 'multipart/form-data'
+            }
         });
 
-        const data = await response.json();
+        const data = response.data;
         
-        if (response.ok) {
+        if (response.status === 200) {
             file.value = null;
             showImportSection.value = false;
             successMessage.value = data.message || 'Products imported successfully!';
@@ -800,7 +803,24 @@ const importProducts = async () => {
         }
     } catch (err) {
         console.error('Import error:', err);
-        setImportErrors(['Network error occurred while importing products']);
+        
+        if (err.response?.status === 401) {
+            setImportErrors(['Session expired. Please log in again.']);
+            auth.clearAuth();
+            window.location.href = '/login';
+        } else if (err.response?.data?.errors) {
+            const errorMessages = [];
+            Object.keys(err.response.data.errors).forEach(key => {
+                if (Array.isArray(err.response.data.errors[key])) {
+                    errorMessages.push(...err.response.data.errors[key]);
+                } else {
+                    errorMessages.push(err.response.data.errors[key]);
+                }
+            });
+            setImportErrors(errorMessages);
+        } else {
+            setImportErrors([err.response?.data?.message || 'Network error occurred while importing products']);
+        }
     } finally {
         importing.value = false;
     }
@@ -898,16 +918,11 @@ async function fetchProducts() {
     loading.value = true;
     error.value = null;
     try {
-        if (!token) {
-            throw new Error("Authentication token is missing. Please log in.");
+        if (!auth.isAuthenticated) {
+            throw new Error('Authentication required. Please log in again.');
         }
         
-        const response = await axios.get(`${API_BASE_URL}/api/product-manager/products`, {
-            headers: {
-                'Accept': 'application/json',
-                'Authorization': `Bearer ${token}`
-            }
-        });
+        const response = await api.get('/product-manager/products');
 
         let productsData;
         if (response.data && Array.isArray(response.data.products)) {
@@ -928,6 +943,9 @@ async function fetchProducts() {
         if (err.response) {
             if (err.response.status === 401) {
                 error.value = 'Session expired. Please log in again.';
+                // Clear auth and redirect to login
+                auth.clearAuth();
+                window.location.href = '/login';
             } else if (err.response.status === 403) {
                 error.value = 'Access denied. You do not have permission to view products.';
             } else {
@@ -945,12 +963,11 @@ async function fetchProducts() {
 
 async function fetchCategories() {
     try {
-        const response = await axios.get(`${API_BASE_URL}/api/categories`, {
-            headers: {
-                'Accept': 'application/json',
-                'Authorization': `Bearer ${token}`
-            }
-        });
+        if (!auth.isAuthenticated) {
+            throw new Error('Authentication required.');
+        }
+
+        const response = await api.get('/categories');
         
         let categoriesData;
         if (response.data && Array.isArray(response.data.categories)) {
@@ -966,6 +983,10 @@ async function fetchCategories() {
 
     } catch (err) {
         console.error('Failed to load categories:', err);
+        if (err.response?.status === 401) {
+            auth.clearAuth();
+            window.location.href = '/login';
+        }
     }
 }
 
@@ -973,6 +994,10 @@ async function submitProduct() {
     try {
         submitting.value = true;
         errors.value = {};
+
+        if (!auth.isAuthenticated) {
+            throw new Error('Authentication required.');
+        }
 
         const formData = new FormData();
         formData.append('name', productForm.name);
@@ -992,21 +1017,19 @@ async function submitProduct() {
         
         if (isEditing.value) {
             formData.append('_method', 'PUT');
-            const updateUrl = `${API_BASE_URL}/api/products/${productForm.id}/update`;
+            const updateUrl = `/products/${productForm.id}/update`;
             
-            response = await axios.post(updateUrl, formData, {
+            response = await api.post(updateUrl, formData, {
                 headers: {
-                    'Authorization': `Bearer ${token}`,
                     'Accept': 'application/json',
                     'Content-Type': 'multipart/form-data'
                 }
             });
         } else {
-            const createUrl = `${API_BASE_URL}/api/products/create`;
+            const createUrl = '/products/create';
             
-            response = await axios.post(createUrl, formData, {
+            response = await api.post(createUrl, formData, {
                 headers: {
-                    'Authorization': `Bearer ${token}`,
                     'Accept': 'application/json',
                     'Content-Type': 'multipart/form-data'
                 }
@@ -1027,20 +1050,23 @@ async function submitProduct() {
             const data = err.response.data;
             
             if (status === 401) {
-                errors.value = { general: ['Authentication failed. Please log in again.'] };
+                error.value = 'Session expired. Please log in again.';
+                // Clear auth and redirect to login
+                auth.clearAuth();
+                window.location.href = '/login';
             } else if (status === 403) {
-                errors.value = { general: ['Access denied. You do not have permission to perform this action.'] };
+                error.value = 'Access denied. You do not have permission to perform this action.';
             } else if (status === 422 && data.errors) {
                 errors.value = data.errors;
             } else if (data.message) {
-                errors.value = { general: [data.message] };
+                error.value = data.message;
             } else {
-                errors.value = { general: [`Server error (${status}). Please try again.`] };
+                error.value = `Server error (${status}). Please try again.`;
             }
         } else if (err.request) {
-            errors.value = { general: ['Network error. Please check your connection.'] };
+            error.value = 'Network error. Please check your connection.';
         } else {
-            errors.value = { general: ['An unexpected error occurred.'] };
+            error.value = err.message || 'An unexpected error occurred.';
         }
     } finally {
         submitting.value = false;
@@ -1140,8 +1166,12 @@ function resetFilters() {
     searchQuery.value = '';
 }
 
-// Cleanup function for timeouts
-onMounted(() => {
+// Initialize component
+onMounted(async () => {
+    // Ensure auth is checked before loading data
+    if (!auth.authChecked) {
+        await auth.fetchUser();
+    }
     fetchProducts();
     fetchCategories();
 });

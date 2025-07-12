@@ -12,6 +12,12 @@ class FactureController extends Controller
     $perPage = $request->get('per_page', 10);
     $page = $request->get('page', 1);
 
+    $user = $request->user();
+    
+    if (!$user) {
+        return response()->json(['message' => 'Unauthenticated'], 401);
+    }
+
     $query = DB::table('orders')
         ->join('order_items', 'orders.id', '=', 'order_items.order_id')
         ->select(
@@ -26,7 +32,7 @@ class FactureController extends Controller
             'orders.last_name as lastname',
             'orders.first_name as firstname' ,
             'orders.created_at as created_at'           
-        )->where('orders.user_id',auth()->user()->id)
+        )->where('orders.user_id', $user->id)
         ->orderBy('orders.id', 'desc');
 
     // Get total count before pagination
