@@ -675,7 +675,7 @@ const downloadPDF = async (order) => {
         
         // Add company logo or header
         doc.setFontSize(20);
-        doc.text('EcoMove - ' + t('invoice.modal.title'), 105, 20, { align: 'center' });
+        doc.text('MOBILESUN - ' + t('invoice.modal.title'), 105, 20, { align: 'center' });
         
         // Add order information
         doc.setFontSize(12);

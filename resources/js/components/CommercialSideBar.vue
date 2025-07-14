@@ -19,9 +19,8 @@
             <div class="relative flex-1 flex flex-col max-w-xs w-full bg-green-800">
                 <div class="flex-1 h-0 pt-5 pb-4 overflow-y-auto">
                     <div class="flex-shrink-0 flex items-center px-4">
-                        <span class="text-white font-bold text-xl">
-                            Eco<span class="text-green-300">Move</span>
-                        </span>
+                        <span class="text-blue-500 font-bold text-xl uppercase">Mobile<span
+                                class="text-green-400 uppercase">Sun</span></span>
                     </div>
                     <nav class="mt-5 px-2 space-y-1">
                         <SidebarLink to="salesList" icon="cube" label="Sales list" :active="current === '/saleList'" />
@@ -37,9 +36,8 @@
         <div class="flex flex-col w-64 bg-green-800">
             <!-- Logo -->
             <div class="flex items-center h-16 flex-shrink-0 px-4 bg-green-900">
-                <span class="text-white font-bold text-xl">
-                    Eco<span class="text-green-300">Move</span>
-                </span>
+                <span class="text-blue-500 font-bold text-xl uppercase">Mobile<span
+                                class="text-green-400 uppercase">Sun</span></span>
             </div>
 
             <div class="h-0 flex-1 flex flex-col overflow-y-auto">

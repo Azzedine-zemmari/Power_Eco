@@ -7,7 +7,7 @@
                 <div class="flex justify-between h-16">
                     <div class="flex items-center">
                         <a href="/" class="flex-shrink-0 flex items-center">
-                            <span class="text-white font-bold text-xl">Eco<span class="text-green-300">Move</span></span>
+                            <span class="text-white font-bold text-xl">MOBILE<span class="text-green-300">SUN</span></span>
                         </a>
                     </div>
                     <div class="flex items-center">

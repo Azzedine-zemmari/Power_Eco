@@ -13,7 +13,7 @@
                     </div>
                     <div class="ml-3">
                         <h1 class="text-3xl font-bold text-gray-900">
-                            Eco<span class="text-green-600">Move</span>
+                            MOBILE<span class="text-green-600">SUN</span>
                         </h1>
                     </div>
                 </div>

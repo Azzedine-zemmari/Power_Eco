@@ -19,9 +19,8 @@
             <div class="flex flex-col w-64 bg-green-800 h-full">
                 <!-- Logo -->
                 <RouterLink :to="{name:'Home'}" class="flex items-center h-16 flex-shrink-0 px-4 bg-green-900">
-                    <span class="text-white font-bold text-xl">
-                        Eco<span class="text-green-300">Move</span>
-                    </span>
+                            <span class="text-blue-500 font-bold text-xl uppercase">Mobile<span
+                                class="text-green-400 uppercase">Sun</span></span>
                 </RouterLink>
                 
                 <div class="h-0 flex-1 flex flex-col overflow-y-auto">

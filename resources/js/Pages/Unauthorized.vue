@@ -7,7 +7,7 @@
                 <div class="flex justify-between h-16">
                     <div class="flex items-center">
                         <a href="/" class="flex-shrink-0 flex items-center">
-                            <span class="text-white font-bold text-xl">Eco<span class="text-green-300">Move</span></span>
+                            <span class="text-white font-bold text-xl">MOBILE<span class="text-green-300">SUN</span></span>
                         </a>
                     </div>
                     <div class="flex items-center">
@@ -55,7 +55,7 @@
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                     <div class="mt-8 md:mt-0 md:order-1">
                         <p class="text-center text-base text-green-200">
-                            &copy; 2023 EcoMove, Inc. All rights reserved.
+                            &copy; 2025 MOBILESUN, Inc. All rights reserved.
                         </p>
                     </div>
             </div>

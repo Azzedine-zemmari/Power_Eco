@@ -12,8 +12,8 @@
                                 d="M4 6h16M4 12h16M4 18h16" />
                         </svg>
                     </button>
-                    <span class="text-white font-bold text-xl">Eco<span class="text-green-300">Move</span></span>
-                </div>
+<span class="text-blue-500 font-bold text-xl uppercase">Mobile<span
+                                class="text-green-400 uppercase">Sun</span></span>                </div>
             </div>
         </div>
 
@@ -37,8 +37,8 @@
                     <!-- Mobile Sidebar Content -->
                     <div class="flex-1 h-0 pt-5 pb-4 overflow-y-auto">
                         <div class="flex-shrink-0 flex items-center px-4 mb-8">
-                            <span class="text-white font-bold text-xl">Eco<span
-                                    class="text-green-300">Move</span></span>
+                           <span class="text-blue-500 font-bold text-xl uppercase">Mobile<span
+                                class="text-green-400 uppercase">Sun</span></span>
                         </div>
 
                         <!-- User Info Section for Mobile -->
