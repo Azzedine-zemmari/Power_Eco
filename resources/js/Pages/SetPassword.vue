@@ -36,8 +36,8 @@ const submitPassword = async () => {
         });
 
         success.value = "Password set successfully. You can now log in.";
-        localStorage.removeItem('token');
-        localStorage.removeItem('role');
+        // localStorage.removeItem('token');
+        // localStorage.removeItem('role');
         router.push('/login');
     } catch (e) {
         error.value = e.response?.data?.message || "Error setting password.";

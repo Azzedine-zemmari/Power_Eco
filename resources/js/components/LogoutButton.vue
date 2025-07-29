@@ -33,11 +33,11 @@ const computedClass = computed(()=>{
         try {
             await auth.logout();
             // Redirect to login page after successful logout
-            router.push('/login');
+            router.push('/');
         } catch (error) {
             console.error('Logout error:', error);
             // Even if there's an error, redirect to login
-            router.push('/login');
+            router.push('/');
         }
     }
 </script>

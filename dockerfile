@@ -34,11 +34,11 @@ WORKDIR /var/www
 COPY --from=node-builder /app /var/www
 
 # Install Laravel PHP dependencies
-RUN composer install
+# RUN composer install
 
 # Set proper ownership
 RUN chown -R www-data:www-data /var/www
 
 EXPOSE 9000
 
-CMD ["php-fpm"]
+CMD ["php-fpm"]

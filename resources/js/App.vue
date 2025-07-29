@@ -6,5 +6,5 @@
     </router-view>
 </template>
 <script setup>
-  window.appLocale = "{{ app()->getLocale() }}";
+window.appLocale = "{{ app()->getLocale() }}";
 </script>

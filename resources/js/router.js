@@ -167,10 +167,6 @@ const routes = [
         },
         name:'facture'
     },
-    {
-        path:'/debug',
-        component:() => import('./Pages/TestRoute.vue')
-    }
 ];
 
 const router = createRouter({
@@ -201,7 +197,7 @@ router.beforeEach(async (to, from, next) => {
   }
 
   if (to.meta.requiresAuth && !isAuthenticated) {
-    return next('/login');
+    return next('/');
   }
 
   if (to.meta.requiresAuth && to.meta.role && Number(to.meta.role) !== Number(userRole)) {

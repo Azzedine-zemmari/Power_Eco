@@ -79,7 +79,7 @@ class ProductController extends Controller
         
         $query = Product::where('status', 'active')
             ->with('category:id,name') 
-            ->select(['id', 'name', 'description', 'sell_price', 'image', 'categorie_id']);
+            ->select(['id', 'name', 'description', 'sell_price', 'image', 'categorie_id','stock']);
         
         // Apply filters
         if ($request->filled('search')) {

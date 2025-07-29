@@ -174,7 +174,7 @@
                                     </div>
                                     <button 
                                         @click="addToCart(product)" 
-                                        :disabled="addingToCart === product.id"
+                                        :disabled="addingToCart === product.id || product.stock <= 0"
                                         type="button" 
                                         class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 transform hover:scale-105"
                                     >
@@ -182,7 +182,12 @@
                                             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                                             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                                         </svg>
-                                        {{ addingToCart === product.id ? 'Adding...' : $t('products.add_to_cart') }}
+                                        <template v-if="product.stock <= 0">
+                                            Out of Stock
+                                        </template>
+                                        <template v-else>
+                                            {{ addingToCart === product.id ? 'Adding...' : $t('products.add_to_cart') }}
+                                        </template>
                                     </button>
                                 </div>
                             </div>
@@ -285,13 +290,16 @@ const formatPrice = (price) => {
 };
 
 const getImageUrl = (imagePath) => {
-    if (!imagePath) return '/placeholder.svg?height=200&width=200';
+    if (!imagePath) return '/placeholder.png?height=200&width=200';
     if (imagePath.startsWith('http')) return imagePath;
     return `http://localhost:8000/storage/${imagePath}`;
 };
 
 const handleImageError = (event) => {
-    event.target.src = '/placeholder.svg?height=200&width=200';
+    // Prevent infinite loop: only set if not already the placeholder
+    if (!event.target.src.includes('placeholder.png')) {
+        event.target.src = '/placeholder.png';
+    }
 };
 
 const fetchCategories = async () => {
