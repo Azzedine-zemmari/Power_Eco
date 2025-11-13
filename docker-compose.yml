@@ -1,34 +1,36 @@
+version: "3.8"
+
 services:
   app:
     build: .
     container_name: laravel_app
-    volumes:
-      - .:/var/www
     ports:
-      - "8000:8000"
-    depends_on:
-      - db
+      - "8000:80"  # maps container port 80 to host 8000
     environment:
       DB_CONNECTION: pgsql
-      DB_HOST: db
+      DB_HOST: db.fsurhjoskpqwqayyggyb.supabase.co
       DB_PORT: 5432
-      DB_DATABASE: xxx #DB should be same as .env
-      DB_USERNAME: xxxx #user should be same as .env
-      DB_PASSWORD: xxxx #password should be same as .env
-    command: php-fpm
+      DB_DATABASE: postgres
+      DB_USERNAME: postgres
+      DB_PASSWORD: Azzedine2004@
+      DB_SCHEMA: public
+    volumes:
+      - .:/var/www/html
+    depends_on:
+      - db  # optional if you also want a local PostgreSQL
 
+# Optional local PostgreSQL if you want
   db:
     image: postgres:15
     container_name: pg_db
-    restart: always
     environment:
-      POSTGRES_DB: xxx #DB should be same as .env
-      POSTGRES_USER: xxxx #user should be same as .env
-      POSTGRES_PASSWORD: xxxx #password should be same as .env
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Azzedine2004@
     ports:
       - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
 
 volumes:
-  pgdata:
+  pgdata:
