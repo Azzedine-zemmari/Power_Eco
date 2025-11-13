@@ -3,6 +3,8 @@ import { ref, onMounted, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import axios from 'axios';
 import { watch } from 'vue';
+import api from '../axios'; 
+ 
 
 const route = useRoute();
 const router = useRouter();
@@ -30,7 +32,7 @@ const submitPassword = async () => {
     }
 
     try {
-        await axios.post('http://localhost:8000/api/set-password', {
+        await api.post('/set-password', {
             token: token,
             password: password.value
         });

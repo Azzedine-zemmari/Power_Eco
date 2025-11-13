@@ -665,7 +665,7 @@ import { useAuthStore } from '../../stores/AuthStore';
 import Sidebar from '../../components/Sidebar.vue';
 
 // API Configuration
-const API_BASE_URL = 'http://localhost:8000';
+const API_BASE_URL = 'https://powerEco.onrender.com';
 
 // State variables
 const isModalOpen = ref(false);

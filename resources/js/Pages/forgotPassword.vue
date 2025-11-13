@@ -209,6 +209,7 @@
 import { ref, computed, onUnmounted } from 'vue'
 import axios from 'axios'
 import { RouterLink } from 'vue-router'
+import api from '../axios'
 
 const email = ref('')
 const message = ref('')
@@ -232,7 +233,7 @@ const submitEmail = async () => {
     message.value = ''
 
     try {
-        const res = await axios.post('/api/forgot-password', { email: email.value })
+        const res = await api.post('/forgot-password', { email: email.value })
         message.value = res.data.status || 'Reset link sent successfully!'
         emailSent.value = true
         startResendCooldown()

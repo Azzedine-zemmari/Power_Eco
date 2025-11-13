@@ -688,7 +688,7 @@ const getImageUrl = (imagePath) => {
 
     if (imagePath.startsWith('http')) return imagePath;
 
-    return `http://localhost:8000/storage/${imagePath}`;
+    return `https://powerEco.onrender.com/storage/${imagePath}`;
 
 };
 

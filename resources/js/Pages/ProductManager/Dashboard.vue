@@ -139,6 +139,7 @@
 import { ref, onMounted } from 'vue';
 import Sidebar from '../../components/Sidebar.vue';
 import axios from 'axios';
+import api from '../../axios';
 
 const stats = ref({
     totalProducts: 0,
@@ -151,7 +152,7 @@ const token = localStorage.getItem('token');
 
 const fetchStats = async () => {
     try {
-        const response = await axios.get('/api/product-manager/stats', {
+        const response = await api.get('/product-manager/stats', {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}`
             }
@@ -164,7 +165,7 @@ const fetchStats = async () => {
 
 async function fetchUserData() {
     try {
-        const response = await axios.get('http://localhost:8000/api/user/data', {
+        const response = await api.get('/user/data', {
             headers: {
                 'Authorization': `Bearer ${token}`,
                 'Accept': 'application/json'

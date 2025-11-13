@@ -358,7 +358,7 @@ const fetchProducts = async (page = 1, append = false) => {
 
     try {
         const queryParams = buildQueryParams();
-        const url = `http://localhost:8000/api/products?page=${page}&per_page=6${queryParams ? '&' + queryParams : ''}`;
+        const url = `https://powerEco.onrender.com/api/products?page=${page}&per_page=6${queryParams ? '&' + queryParams : ''}`;
 
         const response = await api.get(url);
         console.log('products',response);
