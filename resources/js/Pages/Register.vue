@@ -121,7 +121,7 @@
 </template>
 <script setup>
 import { ref } from 'vue';
-import axios from 'axios';
+import api from '../axios'; 
 import { RouterLink, useRouter } from 'vue-router';
 import LanguageSwitcher from '../components/LanguageSwitcher.vue';
 
@@ -142,7 +142,7 @@ async function register() {
     successMessage.value = '';
 
     try {
-        const response = await axios.post('http://localhost:8000/api/UserRegister', {
+        const response = await api.post('/UserRegister', {
             firstName: firstName.value,
             lastName: lastName.value,
             email: email.value,
