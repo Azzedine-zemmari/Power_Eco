@@ -1,0 +1,22 @@
+{
+    "version": 2,
+    "framework": null,
+    "builds": [
+        {
+            "src": "public/index.php",
+            "use": "vercel-php@0.7.3",
+            "config": {
+                "phpVersion": "8.3",
+                "installCommand": "curl -sS https://getcomposer.org/installer | php && mv composer.phar /usr/local/bin/composer && composer install --no-dev --optimize-autoloader"
+            }
+        }
+    ],
+    "routes": [
+        {
+            "src": "/(.*)",
+            "dest": "/public/index.php"
+        }
+    ],
+    "outputDirectory": "public",
+    "buildCommand": "mkdir -p /tmp/laravel_cache /tmp/laravel_views && chmod -R 777 /tmp/laravel_cache /tmp/laravel_views && php artisan migrate --force && php artisan config:cache && php artisan route:cache && echo 'Production build completed successfully'"
+}
