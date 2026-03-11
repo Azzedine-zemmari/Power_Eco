@@ -687,8 +687,9 @@ const getImageUrl = (imagePath) => {
     if (!imagePath) return '/placeholder.svg?height=320&width=320';
 
     if (imagePath.startsWith('http')) return imagePath;
+    console.log("http://localhost:8000" , imagePath)
 
-    return `https://powerEco.onrender.com/storage/${imagePath}`;
+    return `http://localhost:8000/storage/${imagePath}`;
 
 };
 

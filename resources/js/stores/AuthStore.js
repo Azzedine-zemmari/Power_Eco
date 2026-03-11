@@ -14,7 +14,7 @@ export const useAuthStore = defineStore('auth', () => {
     try {
       console.log('Fetching user data...');
       const res = await api.get('/user/data');
-      console.log("auth.store user ", res);
+      console.log("auth.store user ", res); 
       
       // Extract the user data from the response
       user.value = res.data;

@@ -219,7 +219,7 @@ const formatPrice = (price) => {
 const getImageUrl = (imagePath) => {
     if (!imagePath) return '/placeholder.svg?height=128&width=128';
     if (imagePath.startsWith('http')) return imagePath;
-    return `https://powerEco.onrender.com/storage/${imagePath}`;
+    return `http://localhost:8000/storage/${imagePath}`;
 };
 
 const handleImageError = (event) => {

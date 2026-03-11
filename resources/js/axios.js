@@ -3,7 +3,7 @@ import router from './router';
 import { useAuthStore } from '../js/stores/AuthStore'
 
 const api = axios.create({
-    baseURL:'https://powerEco.onrender.com/api',
+    baseURL:'http://localhost:8000/api',
     withCredentials: true, // This is crucial for sending cookies!
     headers:{
         Accept:'application/json'

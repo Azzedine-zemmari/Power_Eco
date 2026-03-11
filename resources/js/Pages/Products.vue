@@ -306,18 +306,7 @@ const fetchCategories = async () => {
     categoriesLoading.value = true;
     try {
         const response = await api.get('/categories');
-        
-        // Handle different response structures
-        if (response.data && Array.isArray(response.data.categories)) {
-            categories.value = response.data.categories;
-        } else if (response.data && Array.isArray(response.data.data)) {
-            categories.value = response.data.data;
-        } else if (Array.isArray(response.data)) {
-            categories.value = response.data;
-        } else {
-            categories.value = [];
-        }
-        
+        categories.value = response.data;
     } catch (error) {
         console.error('Error fetching categories:', error);
         categories.value = [];
@@ -358,7 +347,7 @@ const fetchProducts = async (page = 1, append = false) => {
 
     try {
         const queryParams = buildQueryParams();
-        const url = `https://powerEco.onrender.com/api/products?page=${page}&per_page=6${queryParams ? '&' + queryParams : ''}`;
+        const url = `http://localhost:8000/api/products?page=${page}&per_page=6${queryParams ? '&' + queryParams : ''}`;
 
         const response = await api.get(url);
         console.log('products',response);

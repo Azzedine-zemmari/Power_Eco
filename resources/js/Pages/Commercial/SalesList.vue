@@ -8,22 +8,24 @@
                 <!-- Top header -->
                 <div class="flex-shrink-0 flex h-16 bg-white shadow">
                     <div class="flex-1 px-4 flex gap-2 items-center">
-                        <div class="flex">
+                        <div class="flex-1 items-center">
                             <h1 class="text-xl sm:text-2xl font-semibold text-gray-900 self-center">Sales List</h1>
                         </div>
-                        
+                        <div>
+
+                            <button @click.prevent="downloadCSV" :disabled="loading || sale.length === 0"
+                                class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-50 disabled:cursor-not-allowed">
+                                <svg class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                </svg>
+                                Download CSV
+                            </button>
+                        </div>
                         <!-- CSV Download button -->
-                        <button @click.prevent="downloadCSV" :disabled="loading || sale.length === 0"
-                            class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-50 disabled:cursor-not-allowed">
-                            <svg class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                            </svg>
-                            Download CSV
-                        </button>
 
                         <!-- Refresh button -->
-                        <button @click.prevent="refreshData" :disabled="loading"
+                        <!-- <button @click.prevent="refreshData" :disabled="loading"
                             class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-50">
                             <svg :class="loading ? 'animate-spin' : ''" class="h-4 w-4 mr-2" fill="none"
                                 viewBox="0 0 24 24" stroke="currentColor">
@@ -31,7 +33,7 @@
                                     d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                             </svg>
                             {{ loading ? 'Refreshing...' : 'Refresh' }}
-                        </button>
+                        </button> -->
                     </div>
                 </div>
 
